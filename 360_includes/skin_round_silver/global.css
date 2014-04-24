@@ -1,0 +1,150 @@
+/* Main settings */
+*{
+	margin:0px;
+	padding:0px;
+}
+
+.blue{
+	color:#0095db;
+}
+
+.boldDark{
+	color:#444444;
+	font-weight:bold;
+}
+
+/* Main info window */
+.infoDiv{
+	font-family:Arial;
+	font-size:12px;
+	background:url("css_graphics/info-bg.png") repeat;
+	padding:14px;
+	padding-top:8px;
+	padding-bottom:8px;
+	line-height:18px;
+	border-radius:16px 16px 16px 16px;
+	text-align:justify;
+	color:#585858;
+}
+
+.infoDiv a:link {color:#333333;}   
+.infoDiv a:visited {color:#444444;}
+.infoDiv a:hover {color:#0095db;}
+.infoDiv a:active {color:#333333;}
+
+.largeLabel{
+	font-size:14px;
+	color:#0095db;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+.leftImage{
+	float:left;
+	margin-right:10px;
+	margin-top:4px;
+}
+
+.separator{
+	clear:both;
+	height:2px;
+	background-color:#FFFFFF;
+	margin-top:15px;
+	margin-bottom:15px;
+}
+
+.columns p{
+	float:left;
+	margin:0;
+	padding:0;
+	width:30%;
+	margin-bottom:15px;
+}
+
+div  .columnsFirstParagraph{
+	margin-right:5%;
+}
+
+div .columnsLastParagraph{
+	float:right;
+}
+
+.columnsSeparator{
+	clear:both;
+	height:2px;
+	background-color:#FFFFFF;
+	margin-top:15px;
+	margin-bottom:15px;
+}
+
+.rightImage{
+	float:right;
+	margin-left:10px;
+	margin-top:4px;
+}
+
+.youtubeVideo{
+	float:left;
+	width:60%;
+	height:306px;
+	margin-right:10px;
+	margin-top:5px;
+	border-style:solid;
+	border-width:2px;
+	border-color:#FFFFFF;
+}
+
+.lastParagraph{
+	margin-bottom:5px;
+}
+
+/* Marker tool tip windows*/
+.markerToolTipInfoDiv{
+	font-family:Arial;
+	font-size:12px;
+	text-align:justify;
+	background-color:#d1cfcf;
+	padding:8px;
+	line-height:18px;
+	border-radius:16px 16px 16px 16px;
+	border-style:solid;
+	border-width:1px;
+	border-color:#8f8d8d;
+	color:#585858;
+}
+
+.imgHd180{
+	width:100%;
+	max-width:248px !important;
+    height:auto;
+}
+
+.youtubeVideo2{
+	width:99%;
+	height:180px;
+	margin-left:-1px;
+	border-style:solid;
+	border-width:2px;
+	border-color:#FFFFFF;
+}
+
+/* Media Queries */
+@media screen and (max-width: 480px) {
+
+	.youtubeVideo{
+		width:100%;
+		clear:both;
+	}
+	
+	.lastParagraph{
+		clear:both;
+		margin-bottom:10px;
+		padding-top:10px;
+	}
+	
+	.columns, .columnsSeparator{
+		display:none;
+	}
+
+	
+}

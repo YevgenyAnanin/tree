@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+	<meta name="msapplication-tap-highlight" content="no"/>
+	
+	<title></title>
+	
+	<link rel="stylesheet" type="text/css"  href="skin_round_silver/global.css"/>
+	<script type="text/javascript" src="java/FWDViewer.js"></script>
+	
+	<style type="text/css">
+		html, body{
+			background-color:transparent;
+			margin: 0px;
+			padding: 0px;
+			width:100%;
+			height:100%;
+		}
+	</style>
+	
+	<script type="text/javascript">
+	
+		FWDUtils.onReady(function(){
+			var viewer =  new FWDViewer({
+				//----main----//
+				divHolderId:"holder360",
+				playListAndSkinId:"viewerPlaylistAndSkin",
+				displayType:"responsive",
+				preloaderText:"Loading 3D object:",
+				startDraggingMode:"rotate",
+				showLargeImageVersionOnZoom:"yes",
+				useEntireScreenFor3dObject:"no",
+				stopRotationAtEnds:"no",
+				addCorrectionForWebKit:"yes",
+				addDragAndSpinSupport:"yes",
+				startAtImage:0,
+				imageWidth:500,
+				imageHeight:500,
+				zoomFactor:3,
+				dragRotationSpeed:.7,
+				dragAndSpinSpeed:.6,
+				buttonsRotationSpeed:300,
+				slideShowDelay:300,
+				backgroundColor:"#FFFFFF",
+				preloaderFontColor:"#585858",
+				preloaderBackgroundColor:"#FFFFFF",
+				//----lightbox-----//
+				lightBoxWidth:800,
+				lightBoxHeight:550,
+				lightBoxBackgroundOpacity:.8,
+				lightBoxBackgroundColor:"#000000",
+				//----controller----//
+				buttons:"rotate, pan, roteteleft, rotateright, scrollbar, play, info, link, fullscreen",
+				buttonsToolTips:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom level: , Play/Pause, Info, Custom link, Full screen/Normal screen",
+				controllerPosition:"bottom",
+				inverseNextAndPrevRotation:"yes",
+				addKeyboardSupport:"yes",
+				slideShowAutoPlay:"no",
+				startSpaceBetweenButtons:10,
+				spaceBetweenButtons:10,
+				startSpaceForScrollBarButtons:20,
+				startSpaceForScrollBar:6,
+				hideControllerDelay:3,
+				controllerMaxWidth:900,
+				controllerBackgroundOpacity:1,
+				controllerOffsetY:0,
+				scrollBarOffsetX:0,
+				scrollBarHandlerToolTipOffsetY:4,
+				zoomInAndOutToolTipOffsetY:-4,
+				buttonsToolTipOffsetY:0,
+				link:"http://www.google.com",
+				buttonToolTipFontColor:"#585858",
+				//----navigator----//
+				showNavigator:"yes",
+				navigatorPosition:"topleft",
+				navigatorOffsetX:6,
+				navigatorOffsetY:6,
+				navigatorHandlerColor:"#FF0000",
+				navigatorBorderColor:"#AAAAAA",
+				//----info window----//
+				infoWindowBackgroundOpacity:.6,
+				infoWindowBackgroundColor:"#FFFFFF",
+				infoWindowScrollBarColor:"#585858",
+				//----markers-----//
+				showMarkersInfo:"no",
+				markerToolTipOffsetY:2,
+				toolTipWindowMaxWidth:500,
+				//----context menu----//
+				showScriptDeveloper:"yes",
+				contextMenuLabels:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom in/Zoom out, Play/Pause, Info, Custom link, Full screen/Normal screen",
+				contextMenuBackgroundColor:"#d1cfcf",
+				contextMenuBorderColor:"#8f8d8d",
+				contextMenuSpacerColor:"#acacac",
+				contextMenuItemNormalColor:"#585858",
+				contextMenuItemSelectedColor:"#FFFFFF",
+				contextMenuItemDisabledColor:"#b7b4b4"
+			});
+		});
+
+	</script>
+		
+</head>
+
+<body>
+
+<!-- div used as a holder for the viewer -->
+<div id="holder360" style="width:100%; height:100%"></div>
+
+	<!-- start viewer, display:none is added in case that js is disabled! -->
+	<div id="viewerPlaylistAndSkin" style="display:none">
+
+		<!-- skin -->
+		<ul data-skin="">
+			<li data-preloader-path="skin_round_silver/skin/preloader.png"></li>
+			<li data-hand-move-path="skin_round_silver/skin/handmove.cur"></li>
+			<li data-hand-grab-path="skin_round_silver/skin/handgrab.cur"></li>
+			<li data-hand-rotate-path="skin_round_silver/skin/handrotate.cur"></li>
+			<li data-main-lightbox-close-button-normal-path="skin_round_silver/skin/close-icon.png"></li>
+			<li data-main-lightbox-close-button-selected-path="skin_round_silver/skin/close-icon-rollover.png"></li>
+			<li data-controller-background-left-path="skin_round_silver/skin/bg-bar-left.png"></li>
+			<li data-controller-background-center-path="skin_round_silver/skin/bg-bar-middle.png"></li>
+			<li data-controller-background-right-path="skin_round_silver/skin/bg-bar-right.png"></li>
+			<li data-controller-pan-button-normal-state-path="skin_round_silver/skin/move-icon.png"></li>
+			<li data-controller-pan-button-selected-state-path="skin_round_silver/skin/move-icon-rollover.png"></li>
+			<li data-controller-rotate-button-normal-state-path="skin_round_silver/skin/rotate-icon.png"></li>
+			<li data-controller-rotate-button-selected-state-path="skin_round_silver/skin/rotate-icon-rollover.png"></li>
+			<li data-controller-next-button-normal-state-path="skin_round_silver/skin/right-icon.png"></li>
+			<li data-controller-next-button-selected-state-path="skin_round_silver/skin/right-icon-rollover.png"></li>
+			<li data-controller-prev-button-normal-state-path="skin_round_silver/skin/left-icon.png"></li>
+			<li data-controller-prev-button-selected-state-path="skin_round_silver/skin/left-icon-rollover.png"></li>
+			<li data-controller-play-button-normal-state-path="skin_round_silver/skin/play-icon.png"></li>
+			<li data-controller-play-button-selected-state-path="skin_round_silver/skin/play-icon-rollover.png"></li>
+			<li data-controller-pause-button-normal-state-path="skin_round_silver/skin/pause-icon.png"></li>
+			<li data-controller-pause-button-selected-state-path="skin_round_silver/skin/pause-icon-rollover.png"></li>
+			<li data-controller-info-button-normal-state-path="skin_round_silver/skin/info-icon.png"></li>
+			<li data-controller-info-button-selected-state-path="skin_round_silver/skin/info-icon-rollover.png"></li>
+			<li data-controller-link-button-normal-state-path="skin_round_silver/skin/link-icon.png"></li>
+			<li data-controller-link-button-selected-state-path="skin_round_silver/skin/link-icon-rollover.png"></li>
+			<li data-controller-fullscreen-full-button-normal-state-path="skin_round_silver/skin/fullscr-full-icon.png"></li>
+			<li data-controller-fullscreen-full-button-selected-state-path="skin_round_silver/skin/fullscr-full-icon-rollover.png"></li>
+			<li data-controller-fullscreen-normal-button-normal-state-path="skin_round_silver/skin/fullscr-normal-icon.png"></li>
+			<li data-controller-fullscreen-normal-button-selected-state-path="skin_round_silver/skin/fullscr-normal-icon-rollover.png"></li>
+			<li data-controller-zoomin-button-normal-state-path="skin_round_silver/skin/zoomin.png"></li>
+			<li data-controller-zoomin-button-slected-state-path="skin_round_silver/skin/zoomin-rollover.png"></li>
+			<li data-controller-zoomout-button-normal-state-path="skin_round_silver/skin/zoomout.png"></li>
+			<li data-controller-zoomout-button-slected-state-path="skin_round_silver/skin/zoomout-rollover.png"></li>
+			<li data-controller-scrollba-background-left-path="skin_round_silver/skin/scrool-left.png"></li>
+			<li data-controller-scrollbar-background-middle-path="skin_round_silver/skin/scrool-middle.png"></li>
+			<li data-controller-scrollbar-background-right-path="skin_round_silver/skin/scrool-right.png"></li>
+			<li data-controller-scrollbar-handler-normal-state-path="skin_round_silver/skin/handler.png"></li>
+			<li data-controller-scrollbar-handler-selected-state-path="skin_round_silver/skin/handler-rollover.png"></li>
+			<li data-button-tooltip-bottom-pointer-path="skin_round_silver/skin/button-tool-tip-down-pointer.png"></li>
+			<li data-button-tooltip-top-pointer-path="skin_round_silver/skin/button-tool-tip-top-pointer.png"></li>
+			<li data-button-tooltip-left-path="skin_round_silver/skin/button-tool-tip-left.png"></li>
+			<li data-button-tooltip-middle-path="skin_round_silver/skin/button-tool-tip-middle.png"></li>
+			<li data-button-tooltip-right-path="skin_round_silver/skin/button-tool-tip-right.png"></li>
+			<li data-info-window-close-button-normal-state-path="skin_round_silver/skin/close-icon.png"></li>
+			<li data-info-window-close-button-selected-state-path="skin_round_silver/skin/close-icon-rollover.png"></li>
+		</ul>
+    
+		<!-- info window-->
+		<ul data-info="">
+
+		</ul>
+    
+		<!-- markers -->
+		<ul data-markers="">
+			
+		</ul>
+    
+    <!-- playlist -->
+    <ul data-paylist="">
+      <?php foreach($this->data['files'] as $key => $value): ?>
+        <ul>
+          <li data-small-image-path="skin_round_silver/small_images/<?php echo $value['small']['filename']; ?>"></li>
+          <li data-large-image-path="skin_round_silver/large_images/<?php echo $value['large']['filename']; ?>"></li>
+          <li data-navigator-image-path="skin_round_silver/navigator_images/<?php echo $value['nav']['filename']; ?>"></li>
+        </ul>
+      <?php endforeach; ?>
+    </ul>
+    
+  </div>	
+	
+</body>
+</html>

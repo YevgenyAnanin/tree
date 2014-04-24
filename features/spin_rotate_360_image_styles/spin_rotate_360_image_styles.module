@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Spin Rotate 360 Image Styles feature.
+ */
+
+include_once 'spin_rotate_360_image_styles.features.inc';

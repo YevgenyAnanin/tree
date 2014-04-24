@@ -1,0 +1,9 @@
+name = Spin Rotate 360 Image Styles
+core = 7.x
+package = Features
+php = 5.2.4
+dependencies[] = image
+features[features_api][] = api:1
+features[image][] = 360_width_110
+features[image][] = 360_width_500
+features[image][] = three_sixty_gallery

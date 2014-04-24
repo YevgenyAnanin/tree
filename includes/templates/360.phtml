@@ -1,0 +1,83 @@
+<!-- div used as a holder for the viewer -->
+<div id="holder360" style="width:100%; height:100%"></div>
+
+	<!-- start viewer, display:none is added in case that js is disabled! -->
+	<div id="viewerPlaylistAndSkin" style="display:none">
+
+		<!-- skin -->
+		<ul data-skin="">
+			<li data-preloader-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/preloader.png"></li>
+			<li data-hand-move-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/handmove.cur"></li>
+			<li data-hand-grab-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/handgrab.cur"></li>
+			<li data-hand-rotate-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/handrotate.cur"></li>
+			<li data-main-lightbox-close-button-normal-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/close-icon.png"></li>
+			<li data-main-lightbox-close-button-selected-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/close-icon-rollover.png"></li>
+			<li data-controller-background-left-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/bg-bar-left.png"></li>
+			<li data-controller-background-center-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/bg-bar-middle.png"></li>
+			<li data-controller-background-right-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/bg-bar-right.png"></li>
+			<li data-controller-pan-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/move-icon.png"></li>
+			<li data-controller-pan-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/move-icon-rollover.png"></li>
+			<li data-controller-rotate-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/rotate-icon.png"></li>
+			<li data-controller-rotate-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/rotate-icon-rollover.png"></li>
+			<li data-controller-next-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/right-icon.png"></li>
+			<li data-controller-next-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/right-icon-rollover.png"></li>
+			<li data-controller-prev-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/left-icon.png"></li>
+			<li data-controller-prev-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/left-icon-rollover.png"></li>
+			<li data-controller-play-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/play-icon.png"></li>
+			<li data-controller-play-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/play-icon-rollover.png"></li>
+			<li data-controller-pause-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/pause-icon.png"></li>
+			<li data-controller-pause-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/pause-icon-rollover.png"></li>
+			<li data-controller-info-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/info-icon.png"></li>
+			<li data-controller-info-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/info-icon-rollover.png"></li>
+			<li data-controller-link-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/link-icon.png"></li>
+			<li data-controller-link-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/link-icon-rollover.png"></li>
+			<li data-controller-fullscreen-full-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/fullscr-full-icon.png"></li>
+			<li data-controller-fullscreen-full-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/fullscr-full-icon-rollover.png"></li>
+			<li data-controller-fullscreen-normal-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/fullscr-normal-icon.png"></li>
+			<li data-controller-fullscreen-normal-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/fullscr-normal-icon-rollover.png"></li>
+			<li data-controller-zoomin-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/zoomin.png"></li>
+			<li data-controller-zoomin-button-slected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/zoomin-rollover.png"></li>
+			<li data-controller-zoomout-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/zoomout.png"></li>
+			<li data-controller-zoomout-button-slected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/zoomout-rollover.png"></li>
+			<li data-controller-scrollba-background-left-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/scrool-left.png"></li>
+			<li data-controller-scrollbar-background-middle-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/scrool-middle.png"></li>
+			<li data-controller-scrollbar-background-right-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/scrool-right.png"></li>
+			<li data-controller-scrollbar-handler-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/handler.png"></li>
+			<li data-controller-scrollbar-handler-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/handler-rollover.png"></li>
+			<li data-button-tooltip-bottom-pointer-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/button-tool-tip-down-pointer.png"></li>
+			<li data-button-tooltip-top-pointer-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/button-tool-tip-top-pointer.png"></li>
+			<li data-button-tooltip-left-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/button-tool-tip-left.png"></li>
+			<li data-button-tooltip-middle-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/button-tool-tip-middle.png"></li>
+			<li data-button-tooltip-right-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/button-tool-tip-right.png"></li>
+			<li data-info-window-close-button-normal-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/close-icon.png"></li>
+			<li data-info-window-close-button-selected-state-path="<?php echo $this->data['360_includes']['path']; ?>/skin_round_silver/skin/close-icon-rollover.png"></li>
+		</ul>
+    
+		<!-- info window-->
+		<ul data-info="">
+      <div class="infoDiv">
+        <?php if(isset($this->data['deckhead'])): ?>
+          <p class="info-deckhead">
+           <?php echo($this->data['deckhead']); ?>
+         </p>
+        <?php endif; ?>
+      </div>
+		</ul>
+    
+		<!-- markers -->
+		<ul data-markers="">
+			
+		</ul>
+    
+    <!-- playlist -->
+    <ul data-paylist="">
+      <?php foreach($this->data['files'] as $key => $value): ?>
+        <ul>
+          <li data-small-image-path="<?php echo $value['small']['path']; ?>"></li>
+          <li data-large-image-path="<?php echo $value['large']['path']; ?>"></li>
+          <li data-navigator-image-path="<?php echo $value['nav']['path']; ?>"></li>
+        </ul>
+      <?php endforeach; ?>
+    </ul>
+    
+  </div>

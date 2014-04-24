@@ -1,0 +1,4 @@
+name = SMG Global 
+description = Any functionality or modifications that can be shared across sites.
+package = SMG
+core = 7.x
