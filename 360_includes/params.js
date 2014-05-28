@@ -28,8 +28,8 @@ FWDUtils.onReady(function(){
 		lightBoxBackgroundOpacity:.8,
 		lightBoxBackgroundColor:"#000000",
 		//----controller----//
-		buttons:"rotate, pan, roteteleft, rotateright, scrollbar, play, info, link, fullscreen",
-		buttonsToolTips:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom level: , Play/Pause, Info, Custom link, Full screen/Normal screen",
+		buttons:"rotate, pan, roteteleft, rotateright, scrollbar, play, info, fullscreen",
+		buttonsToolTips:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom level: , Play/Pause, Info, Full screen/Normal screen",
 		controllerPosition:"bottom",
 		inverseNextAndPrevRotation:"yes",
 		addKeyboardSupport:"yes",
@@ -65,7 +65,7 @@ FWDUtils.onReady(function(){
 		toolTipWindowMaxWidth:500,
 		//----context menu----//
 		showScriptDeveloper:"yes",
-		contextMenuLabels:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom in/Zoom out, Play/Pause, Info, Custom link, Full screen/Normal screen",
+		contextMenuLabels:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom in/Zoom out, Play/Pause, Info, Full screen/Normal screen",
 		contextMenuBackgroundColor:"#d1cfcf",
 		contextMenuBorderColor:"#8f8d8d",
 		contextMenuSpacerColor:"#acacac",

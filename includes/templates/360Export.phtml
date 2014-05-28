@@ -52,8 +52,8 @@
 				lightBoxBackgroundOpacity:.8,
 				lightBoxBackgroundColor:"#000000",
 				//----controller----//
-				buttons:"rotate, pan, roteteleft, rotateright, scrollbar, play, info, link, fullscreen",
-				buttonsToolTips:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom level: , Play/Pause, Info, Custom link, Full screen/Normal screen",
+				buttons:"rotate, pan, roteteleft, rotateright, scrollbar, play, info",
+				buttonsToolTips:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom level: , Play/Pause, Info, Full screen/Normal screen",
 				controllerPosition:"bottom",
 				inverseNextAndPrevRotation:"yes",
 				addKeyboardSupport:"yes",
@@ -89,7 +89,7 @@
 				toolTipWindowMaxWidth:500,
 				//----context menu----//
 				showScriptDeveloper:"yes",
-				contextMenuLabels:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom in/Zoom out, Play/Pause, Info, Custom link, Full screen/Normal screen",
+				contextMenuLabels:"Rotate, Move/Pan, Rotate left, Rotate right, Zoom in/Zoom out, Play/Pause, Info, Full screen/Normal screen",
 				contextMenuBackgroundColor:"#d1cfcf",
 				contextMenuBorderColor:"#8f8d8d",
 				contextMenuSpacerColor:"#acacac",
@@ -162,7 +162,13 @@
     
 		<!-- info window-->
 		<ul data-info="">
-
+      <div class="infoDiv">
+        <?php if(isset($this->node->field_deckhead['und'][0]['value'])): ?>
+          <p class="info-deckhead" style="padding:10px 30px 10px 30px;">
+           <?php echo($this->node->field_deckhead['und'][0]['value']); ?>
+         </p>
+        <?php endif; ?>
+      </div>
 		</ul>
     
 		<!-- markers -->

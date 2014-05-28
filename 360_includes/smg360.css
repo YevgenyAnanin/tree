@@ -4,5 +4,6 @@
 .infoDiv .info-deckhead {padding-top:20px;}
 
 @media (min-width: 640px) {
-  .page-node #content .node .content, .page-node .node .form-item, .page-node #holder360 {min-height:500px;}
+  .page-node #content .node .content {}
+  .page-node .node .form-item, .page-node #holder360 {min-height:500px;}
 }

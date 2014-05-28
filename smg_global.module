@@ -187,25 +187,40 @@ function smg_global_custom_theme(){
  */
 function smg_global_form_alter(&$form, &$form_state, $form_id){
 
-  if(isset($form['#node']) && $form['#node']->type == 'mobile_webform' && (strstr($form_id, 'webform_client_form') != false)){
+  // Go through form and see if one of the fields is an smg_password field
+  $has_password = false;
+  if(isset($form['submitted'])){    
+    foreach($form['submitted'] as $key => $value){
+      if(is_array($value) && array_key_exists('#webform_component', $value) && $value['#webform_component']['type'] == 'smg_password'){
+        $has_password = true;
+      }
+    }
+  }
+  // Is this a mobile webform?
+  $is_mobile = (isset($form['#node']) && $form['#node']->type == 'mobile_webform') ? true : false;
+
+  if(isset($form['#node']) && ($is_mobile || $has_password) && (strstr($form_id, 'webform_client_form') != false)){
     $webform_nid = $form['#node']->nid;
-    if(isset($_SESSION['app_registration_'.$webform_nid]) && $_SESSION['app_registration_'.$webform_nid] == 'submitted'){
+    
+    if(isset($_SESSION['app_registration_'.$webform_nid]) && $_SESSION['app_registration_'.$webform_nid] == 'submitted' && $is_mobile){
       unset($_SESSION['app_registration_'.$webform_nid]);
       drupal_goto('app-registration/thank-you');
     }
-    $form['#attributes']['class'][] = 'mobile-webform';
+    
     $index = array_search('webform_client_form_submit', $form['#submit']);
     array_splice($form['#submit'], $index, 0, 'app_registration_form_pre_submit');
     $form['#submit'][] = 'app_registration_form_post_submit';
     
-    foreach($form['submitted'] as $form_key => &$value){
-      if(is_array($value) && array_key_exists('password_fieldset', $value)){
-        $fieldset_weight = $value['password_fieldset']['#weight'];
-        $value['#weight'] = $fieldset_weight;
+    if($is_mobile){
+      $form['#attributes']['class'][] = 'mobile-webform';
+      foreach($form['submitted'] as $form_key => &$value){
+        if(is_array($value) && array_key_exists('password_fieldset', $value)){
+          $fieldset_weight = $value['password_fieldset']['#weight'];
+          $value['#weight'] = $fieldset_weight;
+        }      
       }
-      
     }
-    //dpm($form);
+    
   }
   
   if(array_key_exists('#node_edit_form', $form) && $form['#node_edit_form'] && isset($form['type']['#value']) && $form['type']['#value'] == '360_package_spin_rotate'){
@@ -215,6 +230,11 @@ function smg_global_form_alter(&$form, &$form_state, $form_id){
 
 function smg_global_form_webform_client_form_alter(&$form, &$form_state, $form_id){
   if(isset($form['#node']) && $form['#node']->type == 'mobile_webform'){
+    
+    if(isset($form['#node']) && $form['#node']->title == 'Create an account'){
+      $form['#attributes']['autocomplete'] = 'off';
+    }
+    
     foreach($form['submitted'] as $form_key => &$value){
       
       if(is_array($value) && array_key_exists('#type', $value)){
@@ -226,6 +246,10 @@ function smg_global_form_webform_client_form_alter(&$form, &$form_state, $form_i
             $value['#attributes']['data-native-menu'] = 'false';
           }
         }
+        if(is_array($value) && array_key_exists('#webform_component', $value) && $value['#webform_component']['type'] == 'smg_password'){          
+          $value['password_primary']['#attributes']['autocomplete'] = 'off';          
+          $value['verify_password']['#attributes']['autocomplete'] = 'off';
+        }        
       }
     }
   }
@@ -257,7 +281,7 @@ function smg_global_node_insert($node){
   // method of pointing to an uploaded directory, then we move the file(s) into a subdirectory of
   // 360_gallery based on the node id, and we also generate small images and navigator images using
   // image styles
-  if($node->type == '360_package_spin_rotate'){
+  if($node->type == '360_package_spin_rotate' && !(isset($node->field_360_images['und']) && count($node->field_360_images['und']) > 0)){    
     smg_global_360_process_images($node);
   }
 }
@@ -299,20 +323,25 @@ function smg_global_360_process_images(&$node){
         
         // Now Add a field collection for this file
         $fc_item = entity_create("field_collection_item", array("field_name" => "field_360_images"));
-        $fc_item->setHostEntity('node', $node);
+        $fc_item->setHostEntity('node', $node, LANGUAGE_NONE, FALSE);
         $fc_item->field_360_fc_large["und"][$key] = (array)$large_file;
         $fc_item->field_360_fc_small["und"][$key] = (array)$small_file;
         $fc_item->field_360_fc_nav["und"][$key] = (array)$nav_file;
         $fc_item->save(true);
-        $node->field_360_images['und'][$key] = array('value'=>$fc_item->item_id);
         
+        $node->field_360_images['und'][$key] = array('value'=>$fc_item->item_id, 'revision_id'=>$fc_item->revision_id);
+        
+        /*
         $new_file = (array)$new_file;
         $new_file += array("display"=>1, "description"=>"");  // Multi upload widget expects these, file_move removes it for some reason so we add it back
         $node->field_360_multi_upload["und"][$key] = $new_file;
+        */
+                 
+        //field_attach_update('node',$node);
                 
-        field_attach_update('node',$node);
       }
-    }
+    } // End foreach
+    field_attach_update('node',$node);
   }
 }
 
@@ -329,10 +358,10 @@ function smg_global_node_update($node){
  * Implements hook_node_view(&$node, $view_mode, $langcode)
  */
 function smg_global_node_view($node, $view_mode, $langcode){
-  
+
   if($node->type == '360_package_spin_rotate'){
     if(!isset($node->field_gallery_360_field_location['und']) && isset($node->field_360_images['und']) && $view_mode != 'teaser'){
-
+      
       include_once(drupal_get_path('module', 'smg_global').'/includes/templateController.php');
       
       drupal_add_css(drupal_get_path('module','smg_global') . '/360_includes/skin_round_silver/global.css', array('type'=>'file', 'group'=>CSS_DEFAULT));
