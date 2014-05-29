@@ -405,6 +405,42 @@ EOS;
       
     }
   }
+  
+  
+  // #2301 Add inline javascript to call Silverpop's page view event
+  // Create an array that we will convert to json later, and set as 
+  // the "Name" field of Silverpop's web tracking event
+  $silverpop_tracking = array();
+  $silverpop_tracking['nid'] = $node->nid;
+  // Add companies
+  if(isset($node->field_companies['und'])){
+    $silverpop_tracking['companies'] = array();
+    foreach($node->field_companies['und'] as $comp_nid){
+      $silverpop_tracking['companies'][] = $comp_nid['nid'];
+    }
+  }
+  $silverpop_tracking['content_type'] = $node->type;
+  // Get the subtype
+  if(isset($node->field_term_subtype['und'])){
+    $silverpop_tracking['subtype'] = $node->field_term_subtype['und'][0]['tid'];
+  }
+  // Get the source type
+  if(isset($node->field_term_source_type['und'])){
+    $silverpop_tracking['source_type'] = $node->field_term_source_type['und'][0]['tid'];
+  }
+  // Check for modules that implement silverpop_tracking_add
+  foreach(module_implements('silverpop_tracking_add') as $module){
+    $function = $module . '_silverpop_tracking_add';
+    $function($node, $silverpop_tracking);
+  }  
+  $silverpop_tracking = json_encode($silverpop_tracking); 
+  $silverpop_tracking_js = <<<EJS
+    <script type="text/javascript">
+    var ewt_pagename = '$silverpop_tracking';
+    </script>
+EJS;
+  drupal_add_js($silverpop_tracking_js, array('type'=>'inline', 'scope'=>'footer'));
+ 
 }
 
 /**
@@ -447,3 +483,4 @@ function smg_global_360_get_template_data($node){
   
   return $data;
 }
+
