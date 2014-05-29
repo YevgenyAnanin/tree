@@ -406,8 +406,17 @@ EOS;
     }
   }
   
-  if($view_mode == 'full'){
-    // #2301 Add inline javascript to call Silverpop's page view event
+  // #2301 Add inline javascript to call Silverpop's page view event
+  $menu_object = menu_get_object();
+  if($menu_object->nid == $node->nid){
+    // Check to see if this is legacy content
+    $legacy = false;
+    if(property_exists($node, 'field_legacy')){
+      if(isset($node->field_legacy['und']) && $node->field_legacy['und'][0]['value'] == '1'){
+        $legacy = true;
+      }
+    }
+    
     // Create an array that we will convert to json later, and set as 
     // the "Name" field of Silverpop's web tracking event
     $silverpop_tracking = array();
@@ -428,11 +437,15 @@ EOS;
     if(isset($node->field_term_source_type['und'])){
       $silverpop_tracking['source_type'] = $node->field_term_source_type['und'][0]['tid'];
     }
-    // Check for modules that implement silverpop_tracking_add
-    foreach(module_implements('silverpop_tracking_add') as $module){
-      $function = $module . '_silverpop_tracking_add';
-      $function($node, $silverpop_tracking);
-    }  
+    // If node is legacy content, then we don't want tids b/c
+    // they're not reliable
+    if(!$legacy){
+      // Check for modules that implement silverpop_tracking_add
+      foreach(module_implements('silverpop_tracking_add') as $module){
+        $function = $module . '_silverpop_tracking_add';
+        $function($node, $silverpop_tracking);
+      }
+    }
     $silverpop_tracking = json_encode($silverpop_tracking); 
     $silverpop_tracking_inline = '<script type="text/javascript">var ewt_pagename = \'' . $silverpop_tracking . '\'; </script>';
     $silverpop_tracking_element = array(
