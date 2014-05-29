@@ -434,12 +434,12 @@ EOS;
     $function($node, $silverpop_tracking);
   }  
   $silverpop_tracking = json_encode($silverpop_tracking); 
-  $silverpop_tracking_js = <<<EJS
-    <script type="text/javascript">
-    var ewt_pagename = '$silverpop_tracking';
-    </script>
-EJS;
-  drupal_add_js($silverpop_tracking_js, array('type'=>'inline', 'scope'=>'footer'));
+  $silverpop_tracking_inline = '<script type="text/javascript">var ewt_pagename = \'' . $silverpop_tracking . '\'; </script>';
+  $silverpop_tracking_element = array(
+    '#type' => 'markup',
+    '#markup' => $silverpop_tracking_inline,
+  );
+  drupal_add_html_head($silverpop_tracking_element, 'spop_engagement_tracking');
  
 }
 
