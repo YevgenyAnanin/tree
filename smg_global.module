@@ -408,7 +408,7 @@ EOS;
   
   // #2301 Add inline javascript to call Silverpop's page view event
   $menu_object = menu_get_object();
-  if($menu_object->nid == $node->nid){
+  if(is_object($menu_object) && $menu_object->nid == $node->nid){
     // Check to see if this is legacy content
     $legacy = false;
     if(property_exists($node, 'field_legacy')){
