@@ -28,12 +28,76 @@ function smg_global_menu(){
     'type' => MENU_NORMAL_ITEM,
     'file' => 'smg_global.admin.inc',
   );
+  $items['app-registration-web/thank-you/%/%'] = array(
+    'page callback' => 'app_reg_confirmation_page',
+    'page arguments' => array(2,3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,    
+  );
     
   return $items;
 }
 
 /**
- * Callback for app registration thank you page
+ * Menu callback for mobile app registration page
+ * 
+ * @param int/string $nid
+ *  Webform node id
+ * @param int/string $sid
+ *  Unique submission ID
+ */
+function app_reg_confirmation_page($nid, $sid){
+  // Get the email from the URL
+  if(isset($_GET['email'])){
+    $email_get = $_GET['email'];
+  }
+  else {
+    return drupal_access_denied();
+  }
+  
+  // Decode html chars in email
+  $email_get = htmlspecialchars_decode($email_get);
+  
+  // Get the submission array
+  $submission = webform_menu_submission_load($sid, $nid);
+  $node = node_load($nid);
+  // Search the webform for the submission key of the smg_password field
+  // and the email field
+  $email_key = 'submission error';
+  $pass_key = 'submission error';
+  foreach($node->webform['components'] as $key => $value){
+    if($value['type'] == 'smg_password')
+      $pass_key = $key;
+    if($value['type'] == 'smg_email')
+      $email_key = $key; 
+  }
+  $email = $submission->data[$email_key]['value'][0];
+  $pass = $submission->data[$pass_key]['value'][0];
+  
+  // If email parameter not equal to email in submission, return access denied
+  if($email != $email_get){
+    return drupal_access_denied();
+  }
+  
+  $ios_link = 'https://itunes.apple.com/us/app/healthcare-packaging/id860100066?mt=8&amp;uo=4';
+  // Invoke hook_aquafadas_data
+  $data = array();
+  if(sizeof(module_implements('aquafadas_data')) > 0){
+    $data = module_invoke_all('aquafadas_data');
+    if(array_key_exists('ios_link', $data)){
+      $ios_link = $data['ios_link'];
+    }
+  }
+  
+  $output = array(
+    '#type' => 'markup',
+    '#markup' => '<div style="padding-left:27px; margin-top:10px;"><p style="margin-bottom:5px; font-weight:bold; font-size:17px;">Thank you for registering. &nbsp;You can download the app here:</p><p style="margin"><a href="' . $ios_link .'" style="font-size:23px;">iOS (Apple iPhone/iPad)</a></p><p><span style="padding-left:4px;">After downloading the app, remember to login with this information:</span><br><span style="float:left; font-weight:bold; width:70px; text-align:right; margin-right:10px;">Username: </span>' . $email . '<br><span style="float:left; font-weight:bold; width:70px; text-align:right; margin-right:10px;">Password: </span>' . $pass . '</p></div>',
+  );
+  return $output;
+}
+
+/**
+ * Callback for app registration thank you page for jquery mobile reg form
  */
 function app_registration_thank_you(){
   return '<div id="app-registration-thank-you">Thank you for registering</div>';
@@ -281,7 +345,7 @@ function smg_global_node_insert($node){
   // method of pointing to an uploaded directory, then we move the file(s) into a subdirectory of
   // 360_gallery based on the node id, and we also generate small images and navigator images using
   // image styles
-  if($node->type == '360_package_spin_rotate' && !(isset($node->field_360_images['und']) && count($node->field_360_images['und']) > 0)){    
+  if($node->type == '360_package_spin_rotate' && !(isset($node->field_gallery_360_field_location['und']) && count($node->field_360_images['und']) > 0)){    
     smg_global_360_process_images($node);
   }
 }
@@ -463,7 +527,12 @@ EOS;
 function smg_global_360_get_template_data($node){
   $data = array();
   $data['files'] = array();
-  foreach($node->field_360_images['und'] as $key => $value){
+  $three_sixty_images = $node->field_360_images['und'];
+  // Check for the "Reverse" boolean field
+  if(property_exists($node, 'field_360_images_reverse') && isset($node->field_360_images_reverse['und']) && $node->field_360_images_reverse['und'][0]['value']){
+    $three_sixty_images = array_reverse($three_sixty_images);
+  } 
+  foreach($three_sixty_images as $key => $value){
     $fc_item = entity_load('field_collection_item', array($value['value']));
     $fc_item = $fc_item[$value['value']];
     $large_url = file_create_url($fc_item->field_360_fc_large['und'][0]['uri']);
