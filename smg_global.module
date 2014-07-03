@@ -567,3 +567,20 @@ function smg_global_360_get_template_data($node){
   return $data;
 }
 
+/**
+ * Render a block (as html)
+ *
+ * @param string $module_name
+ *  the name of the module that invokes the block
+ * @param string $delta
+ *  the delta of the block
+ *
+ * @return string
+ *  rendered block
+ */
+function smg_global_block_render($module_name, $block_delta) {
+  $block = block_load($module_name, $block_delta);
+  $block_content = _block_render_blocks(array($block));
+  $build = _block_get_renderable_array($block_content);
+  return drupal_render($build);
+}
