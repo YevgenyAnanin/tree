@@ -16,6 +16,7 @@ class SmgInsertBlock
   
   public $percentOfWordToTest = 90;
   public $backupExplodeTag = '<br /><br />';
+  public $backupbackupExplodeTag = '<br />';
   
   function __construct($node, $field_name, $explodeTag = '</p>') {
     $this->_explodeTag = $explodeTag;
@@ -24,6 +25,9 @@ class SmgInsertBlock
     $this->getParagraphCounts($explodeTag);
     if($this->_tryBackupExplodeTags) {
       $this->getParagraphCounts($this->backupExplodeTag);
+    }
+    if($this->_tryBackupExplodeTags) {
+      $this->getParagraphCounts($this->backupbackupExplodeTag);
     }
   }
   
@@ -40,11 +44,12 @@ class SmgInsertBlock
     if($this->_explodedBody) {
       foreach($this->_explodedBody as $paragraph) {
         if($paragraph) {
+          $this->_tryBackupExplodeTags = FALSE;
           $pWordCount = $this->findWordCount($paragraph);
           // if there is greater than percentOfWordTest that means it must 
           // be exploding on the wrong characters and there are more than 2 items.
           $percentofWordCount = ($pWordCount / $this->_wordCount ) * 100;
-          if($percentofWordCount >= $this->percentOfWordToTest && count($this->_explodedBody) > 2) {
+          if($percentofWordCount >= $this->percentOfWordToTest && count($this->_explodedBody) >= 2) {
             $this->_tryBackupExplodeTags = TRUE;
             $this->_paragraphCounts = array();
             return '';
