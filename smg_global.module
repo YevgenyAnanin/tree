@@ -584,3 +584,20 @@ function smg_global_block_render($module_name, $block_delta) {
   $build = _block_get_renderable_array($block_content);
   return drupal_render($build);
 }
+
+/**
+ * Implements hook_ckeditor_plugin().
+ */
+function smg_global_ckeditor_plugin() {
+  return array(
+    // Plugin for inserting a comment token into body so later you can 
+    'smginsertblocks' => array(
+      'name' => 'smginsertblocks',
+      'desc' => t('Plugin for adding a comment tokens of blocks that need to be inserted. If more blocks are needed, they need to be added to /block-insert-list.'),
+      'path' => drupal_get_path('module', 'smg_global') . '/plugins/smginsertblocks/',
+      'buttons' => array(
+        'SMGInsertBlock' => array('label' => 'Insert Blocks', 'icon' => 'images/smginsertblocks.png'),
+      ),
+    ),
+  );
+}
