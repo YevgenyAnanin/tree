@@ -7,7 +7,7 @@
   
   var smgInsertBlockDialog = function(editor) {
     return {
-      title: 'SNG Insert Blocks',
+      title: 'SMG Insert Blocks',
       minWidth: 400,
       minHeight: 200,
       contents: 
@@ -67,8 +67,7 @@
       onOk : function()
 			{
 			  var dialog = this;
-			  insertComment('%%smgBlock:{' + dialog.getValueOf( 'tab-basic','block_name') + '}%%');
-			  //insertComment('insert_blocks');
+			  insertComment('%%smgInsertedBlock:' + dialog.getValueOf( 'tab-basic','block_name') + '%%');
 			}
     };
     

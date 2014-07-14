@@ -56,7 +56,7 @@
             };
           }
 
-          if (value.indexOf('smgBlock') > -1 )
+          if (value.indexOf('smgInsertedBlock') > -1 )
             return editor.createFakeParserElement( new CKEDITOR.htmlParser.comment( value ), 'cke_drupal_insert_blocks', 'hr' );
 
           return value;
