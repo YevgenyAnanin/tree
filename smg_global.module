@@ -590,7 +590,7 @@ function smg_global_block_render($module_name, $block_delta) {
  */
 function smg_global_ckeditor_plugin() {
   return array(
-    // Plugin for inserting a comment token into body so later you can 
+    // Plugin for inserting a comment token into body so later you can replace it with a block
     'smginsertblocks' => array(
       'name' => 'smginsertblocks',
       'desc' => t('Plugin for adding a comment tokens of blocks that need to be inserted. If more blocks are needed, they need to be added to /block-insert-list.'),
