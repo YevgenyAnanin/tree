@@ -7,3 +7,11 @@
   .page-node #content .node .content {}
   .page-node .node .form-item, .page-node #holder360 {min-height:500px;}
 }
+
+@media (max-width: 640px) {
+  #wrapper-360 .form-item, #wrapper-360 #holder360 {min-height:250px;}
+}
+
+@media (max-width: 481px) {
+  #wrapper-360 {margin:0; padding:0;}
+}
