@@ -1,0 +1,6 @@
+#mobile-app-alert-block {display:none; border: 1px solid black; padding: 7px 9px; font-size:150%; background-color: #fbf5b1; color:#000000; margin-bottom:10px;}
+#mobile-app-alert-block #app-alert-close {float:right; cursor:pointer; border:1px solid black; font-size:45px; display:inline-block; line-height: 23px; padding-top:2px; margin-top:-2px; margin-right:-2px;}
+#mobile-app-alert-block a#mobile-app-alert-apps-link {text-decoration:underline; color:#0B6BB5;}
+#mobile-app-alert-block #app-alert-close:before {content:'\00D7';}
+#mobile-app-alert-block #app-alert-close:hover {text-decoration: none; border:2px solid black; font-weight: bold;}
+#mobile-app-alert-block #app-alert-close:active {margin-top:1px;}

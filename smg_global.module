@@ -32,15 +32,15 @@ function smg_global_menu(){
     'page callback' => 'app_reg_confirmation_page',
     'page arguments' => array(2,3),
     'access arguments' => array('access content'),
-    'type' => MENU_CALLBACK,    
+    'type' => MENU_CALLBACK,
   );
-    
+
   return $items;
 }
 
 /**
  * Menu callback for mobile app registration page
- * 
+ *
  * @param int/string $nid
  *  Webform node id
  * @param int/string $sid
@@ -54,10 +54,10 @@ function app_reg_confirmation_page($nid, $sid){
   else {
     return drupal_access_denied();
   }
-  
+
   // Decode html chars in email
   $email_get = htmlspecialchars_decode($email_get);
-  
+
   // Get the submission array
   $submission = webform_menu_submission_load($sid, $nid);
   $node = node_load($nid);
@@ -69,16 +69,16 @@ function app_reg_confirmation_page($nid, $sid){
     if($value['type'] == 'smg_password')
       $pass_key = $key;
     if($value['type'] == 'smg_email')
-      $email_key = $key; 
+      $email_key = $key;
   }
   $email = $submission->data[$email_key]['value'][0];
   $pass = $submission->data[$pass_key]['value'][0];
-  
+
   // If email parameter not equal to email in submission, return access denied
   if($email != $email_get){
     return drupal_access_denied();
   }
-  
+
   $ios_link = 'https://itunes.apple.com/us/app/healthcare-packaging/id860100066?mt=8&amp;uo=4';
   // Invoke hook_aquafadas_data
   $data = array();
@@ -88,7 +88,7 @@ function app_reg_confirmation_page($nid, $sid){
       $ios_link = $data['ios_link'];
     }
   }
-  
+
   $output = array(
     '#type' => 'markup',
     '#markup' => '<div style="padding-left:27px; margin-top:10px;"><p style="margin-bottom:5px; font-weight:bold; font-size:17px;">Thank you for registering. &nbsp;You can download the app here:</p><p style="margin"><a href="' . $ios_link .'" style="font-size:23px;">iOS (Apple iPhone/iPad)</a></p><p><span style="padding-left:4px;">After downloading the app, remember to login with this information:</span><br><span style="float:left; font-weight:bold; width:70px; text-align:right; margin-right:10px;">Username: </span>' . $email . '<br><span style="float:left; font-weight:bold; width:70px; text-align:right; margin-right:10px;">Password: </span>' . $pass . '</p></div>',
@@ -107,7 +107,7 @@ function app_registration_thank_you(){
  * Callback for app registration forgot password page
  */
 function app_registration_forgot_password($form, &$form_state){
-  
+
   if(array_key_exists('leadworks_query', $form_state)){
     if(!$form_state['leadworks_query']){
       $form['email_not_found'] = array(
@@ -124,7 +124,7 @@ function app_registration_forgot_password($form, &$form_state){
         '#value' => t('Register'),
         '#submit' => array('app_registration_forgot_password_register'),
       );
-    } 
+    }
     else {
       $form['email_found'] = array(
         '#type' => 'item',
@@ -147,7 +147,7 @@ function app_registration_forgot_password($form, &$form_state){
       '#submit' => array('app_registration_forgot_password_submit'),
     );
   }
-  
+
   return $form;
 }
 
@@ -155,9 +155,9 @@ function app_registration_forgot_password($form, &$form_state){
  * Submit handler for forgot password form
  */
 function app_registration_forgot_password_submit($form, &$form_state){
- 
+
   require_once(drupal_get_path('module', 'playbook_fields') . '/includes/external_submit.inc');
-  
+
   $email = (isset($form_state['values']['email'])) ? $form_state['values']['email'] : false;
   $leadworks_query = playbook_fields_leadworks_password_request($email);
   if(!$leadworks_query){
@@ -187,7 +187,7 @@ function app_registration_forgot_password_submit($form, &$form_state){
     $to = $leadworks_query->email;
     drupal_mail('smg_global', 'forgot_password', $to, language_default(), $params, $from);
   }
-  
+
   $form_state['rebuild'] = TRUE;
 }
 
@@ -253,7 +253,7 @@ function smg_global_form_alter(&$form, &$form_state, $form_id){
 
   // Go through form and see if one of the fields is an smg_password field
   $has_password = false;
-  if(isset($form['submitted'])){    
+  if(isset($form['submitted'])){
     foreach($form['submitted'] as $key => $value){
       if(is_array($value) && array_key_exists('#webform_component', $value) && $value['#webform_component']['type'] == 'smg_password'){
         $has_password = true;
@@ -265,28 +265,28 @@ function smg_global_form_alter(&$form, &$form_state, $form_id){
 
   if(isset($form['#node']) && ($is_mobile || $has_password) && (strstr($form_id, 'webform_client_form') != false)){
     $webform_nid = $form['#node']->nid;
-    
+
     if(isset($_SESSION['app_registration_'.$webform_nid]) && $_SESSION['app_registration_'.$webform_nid] == 'submitted' && $is_mobile){
       unset($_SESSION['app_registration_'.$webform_nid]);
       drupal_goto('app-registration/thank-you');
     }
-    
+
     $index = array_search('webform_client_form_submit', $form['#submit']);
     array_splice($form['#submit'], $index, 0, 'app_registration_form_pre_submit');
     $form['#submit'][] = 'app_registration_form_post_submit';
-    
+
     if($is_mobile){
       $form['#attributes']['class'][] = 'mobile-webform';
       foreach($form['submitted'] as $form_key => &$value){
         if(is_array($value) && array_key_exists('password_fieldset', $value)){
           $fieldset_weight = $value['password_fieldset']['#weight'];
           $value['#weight'] = $fieldset_weight;
-        }      
+        }
       }
     }
-    
+
   }
-  
+
   if(array_key_exists('#node_edit_form', $form) && $form['#node_edit_form'] && isset($form['type']['#value']) && $form['type']['#value'] == '360_package_spin_rotate'){
     drupal_add_js(drupal_get_path('module','smg_global') . '/js/360EditAlterations.js', array('type'=>'file', 'every_page'=>false, 'preprocess'=>false));
   }
@@ -294,26 +294,26 @@ function smg_global_form_alter(&$form, &$form_state, $form_id){
 
 function smg_global_form_webform_client_form_alter(&$form, &$form_state, $form_id){
   if(isset($form['#node']) && $form['#node']->type == 'mobile_webform'){
-    
+
     if(isset($form['#node']) && $form['#node']->title == 'Create an account'){
       $form['#attributes']['autocomplete'] = 'off';
     }
-    
+
     foreach($form['submitted'] as $form_key => &$value){
-      
+
       if(is_array($value) && array_key_exists('#type', $value)){
         if($value['#type'] == 'select'){
           if(array_key_exists('#multiple', $value) && $value['#multiple']){
             //$value['#default_value'] = '';
             $value['#empty_value'] = '';
-            $value['#options'] = array('' => '- Select all that apply -') + $value['#options']; 
+            $value['#options'] = array('' => '- Select all that apply -') + $value['#options'];
             $value['#attributes']['data-native-menu'] = 'false';
           }
         }
-        if(is_array($value) && array_key_exists('#webform_component', $value) && $value['#webform_component']['type'] == 'smg_password'){          
-          $value['password_primary']['#attributes']['autocomplete'] = 'off';          
+        if(is_array($value) && array_key_exists('#webform_component', $value) && $value['#webform_component']['type'] == 'smg_password'){
+          $value['password_primary']['#attributes']['autocomplete'] = 'off';
           $value['verify_password']['#attributes']['autocomplete'] = 'off';
-        }        
+        }
       }
     }
   }
@@ -345,13 +345,78 @@ function smg_global_node_insert($node){
   // method of pointing to an uploaded directory, then we move the file(s) into a subdirectory of
   // 360_gallery based on the node id, and we also generate small images and navigator images using
   // image styles
-  if($node->type == '360_package_spin_rotate' && !(isset($node->field_gallery_360_field_location['und']) && count($node->field_360_images['und']) > 0)){    
+  if($node->type == '360_package_spin_rotate' && !(isset($node->field_gallery_360_field_location['und']) && count($node->field_360_images['und']) > 0)){
     smg_global_360_process_images($node);
   }
 }
 
 /**
- * For 360 nodes that are using the codecanyon library, this function makes sure that we have all of the 
+ * Implements hook_block_info().
+ */
+function smg_global_block_info() {
+  $blocks = array();
+
+  // Only add the Mobile App Alert Box to AW, PW
+  $site = variable_get("site");
+  if($site = 'aw' || $site = 'pw'){
+    $blocks['mobile_app_alert_box'] = array(
+      'info' => t('SMG Global Mobile App Alert Box'),
+    );
+  }
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function smg_global_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'mobile_app_alert_box':
+      $block['subject'] = '';
+      $block['content'] = _smg_global_app_alert_content();
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Generate content for the Mobile App Alert Box
+ */
+function _smg_global_app_alert_content() {
+  // Set the friendly name of the site/brand
+  $site = variable_get("site");
+  $brand = '';
+  switch ($site) {
+    case 'aw':
+      $brand = 'Automation World';
+      break;
+    case 'pw':
+      $brand = 'Packaging World';
+      break;
+  }
+
+  $output = array(
+    '#type' => 'markup',
+    '#markup' => '<script type="text/javascript"> _gaq.push([\'_trackEvent\', \'App Enticement\', \'Viewed\', \'\', 0, true]);</script><div id="mobile-app-alert-block"><a id="app-alert-close" onClick="_gaq.push([\'_trackEvent\', \'App Enticement\', \'Closed\', \'\', 0, true]);" ></a><strong>Alert:</strong> ' . $brand . ' now enhanced for the iPad and iPhone.  Watch a <a href="/apps?csource=alertbox" id="mobile-app-alert-apps-link" >quick video preview</a></div>',
+  );
+
+  return $output;
+}
+
+/**
+ * Implements hook_page_alter
+ */
+function smg_global_page_alter(&$page) {
+
+
+}
+
+/**
+ * For 360 nodes that are using the codecanyon library, this function makes sure that we have all of the
  * correct images (large, small, and navigator), and that the images are in the correct place in the filesystem
  */
 function smg_global_360_process_images(&$node){
@@ -384,7 +449,7 @@ function smg_global_360_process_images(&$node){
         $nav_destination = $nav_dir . '/' . $f->filename;
         $nav_url = image_style_url("360_width_110", $new_file_uri);
         $nav_file = file_save_data(file_get_contents($nav_url), $nav_destination, FILE_EXISTS_REPLACE);
-        
+
         // Now Add a field collection for this file
         $fc_item = entity_create("field_collection_item", array("field_name" => "field_360_images"));
         $fc_item->setHostEntity('node', $node, LANGUAGE_NONE, FALSE);
@@ -392,17 +457,17 @@ function smg_global_360_process_images(&$node){
         $fc_item->field_360_fc_small["und"][$key] = (array)$small_file;
         $fc_item->field_360_fc_nav["und"][$key] = (array)$nav_file;
         $fc_item->save(true);
-        
+
         $node->field_360_images['und'][$key] = array('value'=>$fc_item->item_id, 'revision_id'=>$fc_item->revision_id);
-        
+
         /*
         $new_file = (array)$new_file;
         $new_file += array("display"=>1, "description"=>"");  // Multi upload widget expects these, file_move removes it for some reason so we add it back
         $node->field_360_multi_upload["und"][$key] = $new_file;
         */
-                 
+
         //field_attach_update('node',$node);
-                
+
       }
     } // End foreach
     field_attach_update('node',$node);
@@ -425,28 +490,28 @@ function smg_global_node_view($node, $view_mode, $langcode){
 
   if($node->type == '360_package_spin_rotate'){
     if(!isset($node->field_gallery_360_field_location['und']) && isset($node->field_360_images['und']) && $view_mode != 'teaser'){
-      
+
       include_once(drupal_get_path('module', 'smg_global').'/includes/templateController.php');
-      
+
       drupal_add_css(drupal_get_path('module','smg_global') . '/360_includes/skin_round_silver/global.css', array('type'=>'file', 'group'=>CSS_DEFAULT));
       drupal_add_css(drupal_get_path('module','smg_global') . '/360_includes/smg360.css', array('type'=>'file', 'group'=>CSS_DEFAULT));
       drupal_add_js(drupal_get_path('module','smg_global') . '/360_includes/java/FWDViewer.js', array('type'=>'file', 'group'=>JS_DEFAULT, 'weight'=>0));
       drupal_add_js(drupal_get_path('module','smg_global') . '/360_includes/params.js', array('type'=>'file', 'group'=>JS_DEFAULT, 'weight'=>5));
-      
+
       $data = smg_global_360_get_template_data($node); // Get data to pass to template controller
       $template_location = drupal_get_path('module', 'smg_global') . '/includes/templates/360.phtml';
       $t = new SmgGlobalTemplateController();
       $t->data = $data;
       $output = $t->render($template_location);
-      
+
       // Create a render array and add to $node->content
       $node->content['360'] = array(
         '#type' => 'item',
         '#markup' => $output,
       );
-      
+
       $brand = variable_get('smg_global_site', 'pw');
-      
+
       if($brand == 'hcp'){
         $js = <<<EOS
         jQuery(document).ready(function(){
@@ -462,14 +527,14 @@ function smg_global_node_view($node, $view_mode, $langcode){
             }
           });
         });
-        
+
 EOS;
-        drupal_add_js($js, array('type'=>'inline'));    
+        drupal_add_js($js, array('type'=>'inline'));
       }
-      
+
     }
   }
-  
+
   // #2301 Add inline javascript to call Silverpop's page view event
   $menu_object = menu_get_object();
   if(is_object($menu_object) && $menu_object->nid == $node->nid){
@@ -480,8 +545,8 @@ EOS;
         $legacy = true;
       }
     }
-    
-    // Create an array that we will convert to json later, and set as 
+
+    // Create an array that we will convert to json later, and set as
     // the "Name" field of Silverpop's web tracking event
     $silverpop_tracking = array();
     $silverpop_tracking['nid'] = $node->nid;
@@ -510,7 +575,7 @@ EOS;
         $function($node, $silverpop_tracking);
       }
     }
-    $silverpop_tracking = json_encode($silverpop_tracking); 
+    $silverpop_tracking = json_encode($silverpop_tracking);
     $silverpop_tracking_inline = '<script type="text/javascript">var ewt_pagename = \'' . $silverpop_tracking . '\'; </script>';
     $silverpop_tracking_element = array(
       '#type' => 'markup',
@@ -518,7 +583,7 @@ EOS;
     );
     drupal_add_html_head($silverpop_tracking_element, 'spop_engagement_tracking');
   }
- 
+
 }
 
 /**
@@ -531,7 +596,7 @@ function smg_global_360_get_template_data($node){
   // Check for the "Reverse" boolean field
   if(property_exists($node, 'field_360_images_reverse') && isset($node->field_360_images_reverse['und']) && $node->field_360_images_reverse['und'][0]['value']){
     $three_sixty_images = array_reverse($three_sixty_images);
-  } 
+  }
   foreach($three_sixty_images as $key => $value){
     $fc_item = entity_load('field_collection_item', array($value['value']));
     $fc_item = $fc_item[$value['value']];
@@ -561,9 +626,9 @@ function smg_global_360_get_template_data($node){
   }
   // Get location of 360_includes folder
   $data['360_includes'] = array(
-    'path' => drupal_get_path('module', 'smg_global') . '/360_includes',
+    'path' => '/' . drupal_get_path('module', 'smg_global') . '/360_includes',
   );
-  
+
   return $data;
 }
 
