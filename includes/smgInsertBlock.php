@@ -40,7 +40,7 @@ class SmgInsertBlock
   public function getParagraphCounts($explodeTag)
   {
     $this->_explodedBody = explode($explodeTag, $this->_body);
-
+    
     if($this->_explodedBody) {
       foreach($this->_explodedBody as $paragraph) {
         if($paragraph) {
@@ -55,6 +55,10 @@ class SmgInsertBlock
             return '';
           }
           $this->_paragraphCounts[] = $this->findWordCount($paragraph);
+        }
+        else {
+          // empty paragraph
+          $this->_paragraphCounts[] = 0;
         }
       }
     }
@@ -71,6 +75,7 @@ class SmgInsertBlock
   public function insertAfterWordCount($wordCount, $insertString) {
     $totalWordCount = 0;
     $inserted = FALSE;
+    
     foreach($this->_explodedBody as $key => $exploded) {
       $totalWordCount = $totalWordCount + $this->_paragraphCounts[$key];
             
