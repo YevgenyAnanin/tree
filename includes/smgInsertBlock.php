@@ -79,7 +79,7 @@ class SmgInsertBlock
     foreach($this->_explodedBody as $key => $exploded) {
       $totalWordCount = $totalWordCount + $this->_paragraphCounts[$key];
             
-      if($totalWordCount >= $wordCount && !$inserted) {
+      if($totalWordCount >= $wordCount && !$inserted && !isset($this->_inserts[$key])) {
         $this->_inserts[$key] = $insertString;
         $inserted = TRUE;
       }

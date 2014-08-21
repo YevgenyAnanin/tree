@@ -5,7 +5,7 @@
 
 @media (min-width: 640px) {
   .page-node #content .node .content {}
-  .page-node .node .form-item, .page-node #holder360 {min-height:500px;}
+  .node-type-360-package-spin-rotate .node #wrapper-360 .form-item, .page-node #holder360 {min-height:500px;}
 }
 
 @media (max-width: 640px) {
