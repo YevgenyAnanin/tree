@@ -412,7 +412,6 @@ function _smg_global_app_alert_content() {
  */
 function smg_global_page_alter(&$page) {
 
-
 }
 
 /**
@@ -665,4 +664,23 @@ function smg_global_ckeditor_plugin() {
       ),
     ),
   );
+}
+
+/**
+ * Implements hook_library().
+ */
+function smg_global_library() {
+
+  // Add the angularjs library
+  $libraries['angularjs'] = array(
+    'title' => 'AngularJS',
+    'website' => 'https://angularjs.org/',
+    'version' => '1.2.22',
+    'js' => array(
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(),
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/filters.js' => array(),
+    ),
+  );
+
+  return $libraries;
 }
