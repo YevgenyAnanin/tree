@@ -1,0 +1,6 @@
+<div id="videoWidget-videos" ng-cloak>
+    <div class="videoWidget-video" ng-repeat="video in videos" ng-show="video.visible">
+        <img ng-src="{{video.img_url}}">
+        <span class="videoWidget-title">{{video.name}}</span>
+    </div>
+</div>

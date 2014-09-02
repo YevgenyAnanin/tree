@@ -34,6 +34,16 @@ function smg_global_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  // #46 Build out a menu router path that can supply templates to angular,
+  // since angular loads files through ajax and they can't be referenced with
+  // a relative path
+  $items['video-widget/resource/%/%'] = array(
+    'page callback' => 'video_widget_resource',
+    'page arguments' => array(2,3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'video_widget_includes/video-widget.inc'
+  );
 
   return $items;
 }
@@ -412,6 +422,10 @@ function _smg_global_app_alert_content() {
  */
 function smg_global_page_alter(&$page) {
 
+  $node = menu_get_object();
+
+  // #LIA implementation: http://redmine.summitmediagroup.com/projects/lia
+  _lia_sidebar($page, $node);
 }
 
 /**
@@ -678,9 +692,33 @@ function smg_global_library() {
     'version' => '1.2.22',
     'js' => array(
       base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(),
-      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/filters.js' => array(),
     ),
   );
 
   return $libraries;
+}
+
+/**
+ * Implements hook_theme
+ */
+function smg_global_theme($existing, $type, $theme, $path) {
+  return array(
+    'video_widget' => array(
+      'template' => 'video_widget_includes/templates/video-widget',
+      'variables' => array('test_var' => NULL),
+    ),
+  );
+}
+
+function _lia_sidebar(&$page, $node) {
+  drupal_add_library('smg_global', 'angularjs');
+  drupal_add_js(drupal_get_path('module','smg_global').'/video_widget_includes/angular/app.js');
+  drupal_add_css(drupal_get_path('module','smg_global').'/video_widget_includes/css/video_widget.css');
+  $stuff = array(
+    'stuff' => array(
+      '#markup' => theme('video_widget'),
+      '#weight' => 0,
+    ),
+  );
+  array_unshift($page['content'], $stuff);
 }

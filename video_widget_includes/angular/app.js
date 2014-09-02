@@ -1,0 +1,212 @@
+var videoWidget = angular.module('videoWidget', []);
+
+// Bootstrap angularjs manually
+jQuery(document).ready(function () {
+  angular.bootstrap(document.getElementById('videoWidget'), ['videoWidget'] );
+});
+
+videoWidget.controller('VideoListCtrl', function ($scope) {
+  $scope.videos = [
+    {'name':'Test Video 1',
+     'img_url': 'sites/default/files/video_overlay/v1.png'},
+    {'name': 'Test Video 2',
+     'img_url': 'sites/default/files/video_overlay/v2.png'},
+    {'name': 'Test Video 3',
+     'img_url': 'sites/default/files/video_overlay/v3.png'},
+    {'name':'Test Video 4',
+      'img_url': 'sites/default/files/video_overlay/v4.png'},
+    {'name': 'Test Video 5',
+      'img_url': 'sites/default/files/video_overlay/v5.png'},
+    {'name': 'Test Video 6',
+      'img_url': 'sites/default/files/video_overlay/v6.png'},
+    {'name': 'Test Video 7',
+     'img_url': 'sites/default/files/video_overlay/v7.jpg'},
+    {'name': 'Test Video 8',
+     'img_url': 'sites/default/files/video_overlay/v8.jpg'}
+  ];
+
+  $scope.currentCount = 1; // Initialize the count
+
+  $scope.videoWidgetParams = {
+    videosToShow: 3, // How many videos to show at once
+    oldVideosToShow: 3 // Will store the value of videosToShow from previous draw()
+  };
+
+  $scope.updateVideosToShow = function (newNumber) {
+    $scope.videoWidgetParams.oldVideosToShow = $scope.videoWidgetParams.videosToShow;
+    $scope.videoWidgetParams.videosToShow = newNumber;
+
+    $scope.normalizeCount();
+  }
+
+  // Determine how many video blocks there are (i.e. if there's
+  // 12 possible videos and you're showing 3 at a time, then
+  // there's 4 video blocks
+  $scope.videoBlockCount = function () {
+    return Math.ceil($scope.videos.length / $scope.videoWidgetParams.videosToShow);
+  };
+
+  $scope.videosNext = function () {
+
+    var videoBlockCount = $scope.videoBlockCount();
+
+    if($scope.currentCount < videoBlockCount) {
+      $scope.currentCount++;
+    }
+    else {
+      $scope.currentCount = 1;
+    }
+
+  };
+
+  $scope.videosPrev = function () {
+    if($scope.currentCount > 1) {
+      $scope.currentCount--;
+    }
+  };
+  
+  $scope.draw = function () {
+    var startIndex = ($scope.currentCount - 1) * $scope.videoWidgetParams.videosToShow;
+    var endIndex = ($scope.currentCount * $scope.videoWidgetParams.videosToShow);
+
+    $scope.videos.forEach(function(video, index) {
+      if (!(index >= startIndex && index < endIndex)) {
+        video.visible = false;
+      }
+      else {
+        video.visible = true;
+      }
+    });
+  };
+
+  /**
+   *
+   * Normalize the currentCount parameter.  Since the currentCount param
+   * increments every time the user clicks next, we have a problem if the
+   * user resizes the window.  Example:
+   *  - We have 6 videos, and on a small browser window we show one at a time,
+   *     therefore you can increment the counter 6 times.
+   *  - On a larger window, we show three at a time, therefore you can
+   *    only increment 2 times: increment 1 = (videos 1 - 3)
+   *    and  increment 2 = (videos 4 - 6).
+   *  - If you're viewing on a small window, and you're on increment 4 (video 4),
+   *    and then you transition to a larger page, we have to redraw the video
+   *    widget as though it were on increment 2, since that corresponds to
+   *    video 4.
+   *
+   */
+  $scope.normalizeCount = function () {
+
+
+    var firstVideo = ($scope.currentCount * $scope.videoWidgetParams.oldVideosToShow) - ($scope.videoWidgetParams.oldVideosToShow - 1);
+    var show = $scope.videoWidgetParams.videosToShow;
+    if (firstVideo < show) {
+      $scope.currentCount = 1;
+    }
+    else if (!(firstVideo % show)) {
+      $scope.currentCount = firstVideo / show;
+    }
+    else {
+      $scope.currentCount = (Math.floor(firstVideo / show)) + 1
+    }
+  };
+
+  // This object contains the name and truthy value of css classes
+  // that will be added to ng-class property of video widget triangle
+  // wrapper divs.  Only one of the property values should ever be
+  // true, and it changes depending on the window size.
+  $scope.moverCssClasses = {
+    full: true,
+    twoVideo: false,
+    oneVideo: false
+  };
+
+});
+
+videoWidget.directive('videoSlider', function () {
+  return {
+    restrict: 'AE',
+    replace: true,
+    scope: true,
+    link: function (scope, element, attrs) {
+
+      // Initialize the visibility of the videos in the video
+      // widget
+      scope.draw();
+
+      // Watch changes to the parent scope's currentCount property
+      scope.$watch('currentCount', function () {
+        scope.draw();
+      });
+
+      scope.$watch('videosToShow', function () {
+        scope.draw();
+      });
+    },
+    templateUrl: 'video-widget/resource/angular-template/video.html'
+  };
+});
+
+videoWidget.directive('resizable', function ($window) {
+  return {
+    restrict: 'AE',
+    scope: true,
+    link: function (scope, element) {
+      var w = angular.element($window);
+      scope.getWindowDimensions = function () {
+        return {
+          'w': w.width(),
+          'h': w.height()
+        };
+      };
+      scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
+
+        // Collect the divs that hold the widget's move buttons, so we can
+        // manipulate their css classes depending on the window width
+        var triWrappers = element.find('videoWidget-triangle-wrapper');
+
+        // This function checks the "videosToShow" parameter in the parent
+        // scope, and if necessary it changes the parameter and calls the
+        // draw() function.  It also calls the changeClass function.
+        var resizeRedraw = function (videosToShow, newClass) {
+          if (scope.videoWidgetParams.videosToShow !== videosToShow) {
+            scope.updateVideosToShow(videosToShow);
+            changeClass(newClass);
+            scope.draw();
+          }
+        }
+
+        // This function changes the css class on the move button, by manipulating
+        // the moverCssClasses array
+        var changeClass = function (newClass) {
+          if (!scope.moverCssClasses[newClass]) {
+            for (var key in scope.moverCssClasses) {
+              if (scope.moverCssClasses.hasOwnProperty(key)) {
+                if (key == newClass) {
+                  scope.moverCssClasses[key] = true;
+                }
+                else {
+                  scope.moverCssClasses[key] = false;
+                }
+              }
+            }
+          }
+        }
+
+        if(newValue.w < 800 && newValue.w > 479) {
+          resizeRedraw(2, 'twoVideo');
+        }
+        else if (newValue.w < 480) {
+          resizeRedraw(1, 'oneVideo');
+        }
+        else {
+          resizeRedraw(3, 'full');
+        }
+      }, true);
+
+      w.bind('resize', function () {
+        scope.$apply();
+      });
+    }
+  };
+});

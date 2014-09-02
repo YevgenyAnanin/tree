@@ -1,0 +1,210 @@
+/* line 4, ../sass/video_widget.scss */
+#videoWidget-wrapper {
+  overflow: auto;
+  position: relative;
+  min-height: 120px;
+}
+
+/* line 5, ../sass/video_widget.scss */
+#videoWidget-wrapper div {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* line 6, ../sass/video_widget.scss */
+#videoWidget-videos {
+  overflow: auto;
+  float: left;
+  width: 80%;
+  background-color: #616161;
+  border-top: 1px solid #000000;
+  border-bottom: 1px solid #000000;
+  min-height: 120px;
+}
+
+/* line 7, ../sass/video_widget.scss */
+.videoWidget-count-selector {
+  overflow: auto;
+  min-height: 1px;
+}
+
+/* line 9, ../sass/video_widget.scss */
+#videoWidget-left-selection.full, #videoWidget-left-selection.twoVideo, #videoWidget-right-selection.full, #videoWidget-right-selection.twoVideo {
+  display: inline-block;
+  width: 10%;
+  float: left;
+}
+
+/* line 13, ../sass/video_widget.scss */
+#videoWidget-left-triangle-wrapper {
+  background-image: -ms-linear-gradient(left, #acacac 0%, #828282 100%);
+  background-image: -moz-linear-gradient(left, #acacac 0%, #828282 100%);
+  background-image: -o-linear-gradient(left, #acacac 0%, #828282 100%);
+  background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #acacac), color-stop(1, #828282));
+  background-image: -webkit-linear-gradient(left, #acacac 0%, #828282 100%);
+  background-image: linear-gradient(to right, #acacac 0%, #828282 100%);
+}
+/* line 15, ../sass/video_widget.scss */
+#videoWidget-left-triangle-wrapper.full, #videoWidget-left-triangle-wrapper.twoVideo {
+  border-radius: 8px 0 0 8px;
+}
+
+/* line 19, ../sass/video_widget.scss */
+#videoWidget-right-triangle-wrapper {
+  background-image: -ms-linear-gradient(right, #acacac 0%, #828282 100%);
+  background-image: -moz-linear-gradient(right, #acacac 0%, #828282 100%);
+  background-image: -o-linear-gradient(right, #acacac 0%, #828282 100%);
+  background-image: -webkit-gradient(linear, right top, left top, color-stop(0, #acacac), color-stop(1, #828282));
+  background-image: -webkit-linear-gradient(right, #acacac 0%, #828282 100%);
+  background-image: linear-gradient(to left, #acacac 0%, #828282 100%);
+}
+/* line 20, ../sass/video_widget.scss */
+#videoWidget-right-triangle-wrapper.full, #videoWidget-right-triangle-wrapper.twoVideo {
+  border-radius: 0 8px 8px 0;
+}
+
+/* line 25, ../sass/video_widget.scss */
+.videoWidget-triangle-wrapper.full, .videoWidget-triangle-wrapper.twoVideo {
+  position: absolute;
+  width: 10%;
+  height: 100%;
+  border: 1px solid #000000;
+}
+
+/* line 30, ../sass/video_widget.scss */
+.videoWidget-triangle.full, .videoWidget-triangle.twoVideo {
+  position: absolute;
+  top: 50%;
+  margin-top: -40px;
+  left: 50%;
+  margin-left: -10px;
+}
+
+/* line 35, ../sass/video_widget.scss */
+.full .videoWidget-triangle, .twoVideo .videoWidget-triangle {
+  position: absolute;
+  top: 50%;
+  margin-top: -40px;
+  left: 50%;
+  margin-left: -10px;
+}
+/* line 38, ../sass/video_widget.scss */
+.full #videoWidget-triangle-left, .twoVideo #videoWidget-triangle-left {
+  width: 0;
+  height: 0;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-right: 20px solid #FFFFFF;
+  right: 35%;
+}
+/* line 41, ../sass/video_widget.scss */
+.full #videoWidget-triangle-right, .twoVideo #videoWidget-triangle-right {
+  width: 0;
+  height: 0;
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-left: 20px solid #FFFFFF;
+}
+
+/* line 45, ../sass/video_widget.scss */
+.videoWidget-video {
+  float: left;
+  width: 33%;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* line 46, ../sass/video_widget.scss */
+.videoWidget-title {
+  float: left;
+  clear: both;
+  width: 100%;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-family: "FolksLightRegular",sans-serif;
+  letter-spacing: .03em;
+  margin-top: 4px;
+}
+
+@media (max-width: 800px) and (min-width: 480px) {
+  /* line 49, ../sass/video_widget.scss */
+  #videoWidget {
+    display: inline-block;
+    width: 100%;
+  }
+
+  /* line 50, ../sass/video_widget.scss */
+  .videoWidget-video {
+    width: 50%;
+  }
+}
+@media (max-width: 479px) {
+  /* line 54, ../sass/video_widget.scss */
+  #videoWidget {
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  /* line 55, ../sass/video_widget.scss */
+  #videoWidget-wrapper {
+    display: table;
+    width: 100%;
+  }
+
+  /* line 56, ../sass/video_widget.scss */
+  #videoWidget-videos {
+    display: table-header-group;
+    float: none;
+    min-height: 125px;
+  }
+
+  /* line 57, ../sass/video_widget.scss */
+  #videoWidget-left-selection {
+    display: table-row-group;
+  }
+
+  /* line 58, ../sass/video_widget.scss */
+  #videoWidget-right-selection {
+    display: table-footer-group;
+  }
+
+  /* line 59, ../sass/video_widget.scss */
+  .videoWidget-triangle-wrapper {
+    display: table-cell;
+    padding: 10px 0;
+  }
+
+  /* line 60, ../sass/video_widget.scss */
+  .videoWidget-triangle-wrapper:active {
+    padding-top: 11px;
+    -moz-box-shadow: inset 0 0 1px 0 #000000;
+    -webkit-box-shadow: inset 0 0 1px 0 #000000;
+    box-shadow: inset 0 0 1px 0 #000000;
+  }
+
+  /* line 61, ../sass/video_widget.scss */
+  .videoWidget-video {
+    width: 100%;
+  }
+
+  /* line 63, ../sass/video_widget.scss */
+  .oneVideo .videoWidget-triangle {
+    width: 0;
+    height: 0;
+    margin: 0 auto;
+  }
+  /* line 65, ../sass/video_widget.scss */
+  .oneVideo .videoWidget-triangle#videoWidget-triangle-left {
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-bottom: 15px solid white;
+  }
+  /* line 66, ../sass/video_widget.scss */
+  .oneVideo .videoWidget-triangle#videoWidget-triangle-right {
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    border-top: 15px solid white;
+  }
+}
