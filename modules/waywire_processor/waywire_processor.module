@@ -1,0 +1,31 @@
+<?php
+
+/**
+ *  Implements hook_ctools_plugin api().
+ */
+function waywire_processor_ctools_plugin_api($owner, $api) {
+  if ($owner == 'feeds' && $api == 'plugins') {
+    return array('version' => 1);
+  }
+}
+
+/**
+ * Implements hook_feeds_plugins().
+ */
+function waywire_processor_feeds_plugins() {
+  $info = array();
+  $path = drupal_get_path('module', 'waywire_processor') . '/feeds';
+  $info['WaywireProcessor'] = array(
+    'name' => 'Waywire Processor',
+    'description' => 'Import Waywire Videos into Waywire Video Entity',
+    'help' => 'Creates or updates Waywire Videos from feeds.',
+    'handler' => array(
+      'parent' => 'FeedsProcessor',
+      'class' => 'WaywireProcessor',
+      'file' => 'WaywireProcessor.inc',
+      'path' => $path,
+    ),
+  );
+
+  return $info;
+}
