@@ -713,6 +713,8 @@ function smg_global_theme($existing, $type, $theme, $path) {
 function _lia_sidebar(&$page, $node) {
   drupal_add_library('smg_global', 'angularjs');
   drupal_add_js(drupal_get_path('module','smg_global').'/video_widget_includes/angular/app.js');
+  //drupal_add_js('http://summitmediagroup.magnify.net/embed/player/lightbox.js', array('type' => 'external', 'group' => JS_LIBRARY, 'weight' => -100));
+  drupal_add_js(drupal_get_path('module', 'smg_global').'/video_widget_includes/js/lightbox.js');
   drupal_add_css(drupal_get_path('module','smg_global').'/video_widget_includes/css/video_widget.css');
   $stuff = array(
     'stuff' => array(

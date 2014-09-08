@@ -139,44 +139,50 @@
     width: 50%;
   }
 }
+@media (min-width: 480px) {
+  /* line 55, ../sass/video_widget.scss */
+  .videoWidget-video img {
+    max-width: 90%;
+  }
+}
 @media (max-width: 479px) {
-  /* line 54, ../sass/video_widget.scss */
+  /* line 60, ../sass/video_widget.scss */
   #videoWidget {
     display: block;
     width: 60%;
     margin: 0 auto;
   }
 
-  /* line 55, ../sass/video_widget.scss */
+  /* line 61, ../sass/video_widget.scss */
   #videoWidget-wrapper {
     display: table;
     width: 100%;
   }
 
-  /* line 56, ../sass/video_widget.scss */
+  /* line 62, ../sass/video_widget.scss */
   #videoWidget-videos {
     display: table-header-group;
     float: none;
     min-height: 125px;
   }
 
-  /* line 57, ../sass/video_widget.scss */
+  /* line 63, ../sass/video_widget.scss */
   #videoWidget-left-selection {
     display: table-row-group;
   }
 
-  /* line 58, ../sass/video_widget.scss */
+  /* line 64, ../sass/video_widget.scss */
   #videoWidget-right-selection {
     display: table-footer-group;
   }
 
-  /* line 59, ../sass/video_widget.scss */
+  /* line 65, ../sass/video_widget.scss */
   .videoWidget-triangle-wrapper {
     display: table-cell;
     padding: 10px 0;
   }
 
-  /* line 60, ../sass/video_widget.scss */
+  /* line 66, ../sass/video_widget.scss */
   .videoWidget-triangle-wrapper:active {
     padding-top: 11px;
     -moz-box-shadow: inset 0 0 1px 0 #000000;
@@ -184,24 +190,24 @@
     box-shadow: inset 0 0 1px 0 #000000;
   }
 
-  /* line 61, ../sass/video_widget.scss */
+  /* line 67, ../sass/video_widget.scss */
   .videoWidget-video {
     width: 100%;
   }
 
-  /* line 63, ../sass/video_widget.scss */
+  /* line 69, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle {
     width: 0;
     height: 0;
     margin: 0 auto;
   }
-  /* line 65, ../sass/video_widget.scss */
+  /* line 71, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle#videoWidget-triangle-left {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-bottom: 15px solid white;
   }
-  /* line 66, ../sass/video_widget.scss */
+  /* line 72, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle#videoWidget-triangle-right {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;

@@ -50,6 +50,12 @@ $mobile-triangle-size: 15px;
   .videoWidget-video {width:50%;}
 }
 
+@media (min-width: 480px) {
+  .videoWidget-video {
+    img {max-width: 90%;}
+  }
+}
+
 @media (max-width:479px) {
   #videoWidget {display:block; width: $mobile-width; margin: 0 auto;}
   #videoWidget-wrapper {display: table; width:100%;}

@@ -15,7 +15,7 @@
     
     if(!appAlertCookie){
       $("#mobile-app-alert-block").show();
-      $("#mobile-app-alert-block a.#app-alert-close").on("click", function(){
+      $("#mobile-app-alert-block a#app-alert-close").on("click", function(){
         $.cookie('smg_mobile_app_alert', true, {expires: date, path: '/', domain: documentDomain });        
         $(this).parent().hide(400);
       });

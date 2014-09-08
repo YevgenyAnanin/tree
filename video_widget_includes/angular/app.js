@@ -8,25 +8,34 @@ jQuery(document).ready(function () {
 videoWidget.controller('VideoListCtrl', function ($scope) {
   $scope.videos = [
     {'name':'Test Video 1',
-     'img_url': 'sites/default/files/video_overlay/v1.png'},
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/H06L9B3P3T7T5YH1.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/Moxa-IP-Video-Showcase-Overview'},
     {'name': 'Test Video 2',
-     'img_url': 'sites/default/files/video_overlay/v2.png'},
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/C448BH34GP9VYXN0.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/The-Monthly-Rundown-for-Moxa-On'},
     {'name': 'Test Video 3',
-     'img_url': 'sites/default/files/video_overlay/v3.png'},
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/6VV9DG0JB3JV1FKQ.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-Intelligent-Video-Anal'},
     {'name':'Test Video 4',
-      'img_url': 'sites/default/files/video_overlay/v4.png'},
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/T682GX1KXKC21NG3.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-De-mist-Function-Demo'},
     {'name': 'Test Video 5',
-      'img_url': 'sites/default/files/video_overlay/v5.png'},
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/9YMDDD32L57GZJ81.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-Footage-Low-light-and'},
     {'name': 'Test Video 6',
-      'img_url': 'sites/default/files/video_overlay/v6.png'},
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/BJFSXR3DX0PH61XZ.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-De-mist-Function-Dem-2'},
     {'name': 'Test Video 7',
-     'img_url': 'sites/default/files/video_overlay/v7.jpg'},
-    {'name': 'Test Video 8',
-     'img_url': 'sites/default/files/video_overlay/v8.jpg'}
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/75GQFF2X9LV148SG.jpg',
+     'href': 'http://summitmediagroup.magnify.net/video/Moxa-VPort-36-Footage-Vision-Te'}
+    /*{'name': 'Test Video 8',
+     'img_url': 'http://s3.amazonaws.com/magnifythumbs/GMN7042X1Z6VJH82.jpg',
+     'href': 'http://summitmediagroup.magnify.net/embed/content/MFJLR62GCV3YWPCN'}*/
   ];
 
   $scope.currentCount = 1; // Initialize the count
 
+  // An object that stores the count of how many videos to show in the widget
   $scope.videoWidgetParams = {
     videosToShow: 3, // How many videos to show at once
     oldVideosToShow: 3 // Will store the value of videosToShow from previous draw()
@@ -46,6 +55,8 @@ videoWidget.controller('VideoListCtrl', function ($scope) {
     return Math.ceil($scope.videos.length / $scope.videoWidgetParams.videosToShow);
   };
 
+  // Iterates the counter to the next position, or to position 1
+  // if we've reached the end
   $scope.videosNext = function () {
 
     var videoBlockCount = $scope.videoBlockCount();
@@ -64,7 +75,8 @@ videoWidget.controller('VideoListCtrl', function ($scope) {
       $scope.currentCount--;
     }
   };
-  
+
+  // We show/hide videos in the counter by changing their visibility
   $scope.draw = function () {
     var startIndex = ($scope.currentCount - 1) * $scope.videoWidgetParams.videosToShow;
     var endIndex = ($scope.currentCount * $scope.videoWidgetParams.videosToShow);
@@ -123,6 +135,11 @@ videoWidget.controller('VideoListCtrl', function ($scope) {
 
 });
 
+/**
+ * This directive defines the videoWidget-videos div that contains the videos,
+ * and it is responsible for watching the value of the counter, and then
+ * redrawing the widget when the counter changes.
+ */
 videoWidget.directive('videoSlider', function () {
   return {
     restrict: 'AE',
@@ -139,14 +156,16 @@ videoWidget.directive('videoSlider', function () {
         scope.draw();
       });
 
-      scope.$watch('videosToShow', function () {
-        scope.draw();
-      });
     },
-    templateUrl: 'video-widget/resource/angular-template/video.html'
+    templateUrl: '/video-widget/resource/angular-template/video.html'
   };
 });
 
+/**
+ * This directive is applied to the videoWidget-wrapper div.  It watches
+ * the size of the browser window and redraws the video widget if
+ * necessary
+ */
 videoWidget.directive('resizable', function ($window) {
   return {
     restrict: 'AE',
@@ -160,10 +179,6 @@ videoWidget.directive('resizable', function ($window) {
         };
       };
       scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
-
-        // Collect the divs that hold the widget's move buttons, so we can
-        // manipulate their css classes depending on the window width
-        var triWrappers = element.find('videoWidget-triangle-wrapper');
 
         // This function checks the "videosToShow" parameter in the parent
         // scope, and if necessary it changes the parameter and calls the
@@ -210,3 +225,21 @@ videoWidget.directive('resizable', function ($window) {
     }
   };
 });
+
+/**
+ * This directive is applied to each <a> tag that links to a Waywire video.
+ * It calls the createLinkPlayer function from the lightbox.js file, which
+ * creates a lightbox object and attaches the appropriate onclick events to
+ * the link.
+ */
+videoWidget.directive('smgLightbox',['$timeout', function ($timeout) {
+  return {
+    restrict: 'A',
+    scope: true,
+    link: function (scope, element) {
+      $timeout(function () {
+        createLinkPlayer(element[0]);
+      }, 0);
+    }
+  };
+}]);
