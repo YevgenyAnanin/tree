@@ -1,0 +1,130 @@
+<?php
+/**
+ * @file
+ * Module for integrating waywire videos into leadership.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function waywire_leadership_menu() {
+  $items['waywire_leadership/create'] = array(
+    'title' => 'Test',
+    'page callback' => 'waywire_leadership_create_entities_for_all_companies',
+    'access arguments' => array('access content'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/leadership/waywire'] = array(
+    'title' => 'Waywire Leadership Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('waywire_leadership_settings_form'),
+    'access arguments' => array('administer_leadership'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'waywire_leadership.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Create video entities for all youtube amplify companies from the current
+ * session.
+ */
+function waywire_leadership_create_entities_for_all_companies() {
+  $companies = waywire_leadership_get_youtube_amplify_companies_from_current_session();
+
+  foreach ($companies as $company) {
+    if ($company->field_waywire_playlist_id_value) {
+      // @TODO handle playlist query
+    }
+    // Get Videos based on on tag
+    elseif ($company->field_waywire_tag_value) {
+      waywire_leadership_process_api_content(variable_get('waywire_leadership_importer_id'), $company->field_waywire_tag_value, $company->nid);
+    }
+    else {
+      watchdog('waywire_leadership', 'There wasn\'t a tag name or playlist id for Company: %company_name Nid: %nid', array(
+        '%company_name' => $company->title,
+        '%nid' => $company->nid,
+      ));
+    }
+  }
+
+  return '';
+}
+
+/**
+ * Get the companies from the current session that have youtube amplified
+ * checked.
+ *
+ * @return array $result
+ *  an array of objects that hold company fields.
+ */
+function waywire_leadership_get_youtube_amplify_companies_from_current_session() {
+
+  // Get all company profiles in current session
+  $query = db_select('node', 'node')
+    ->fields('node', array('title', 'nid'))
+    ->condition('type', 'company')
+    ->condition('status', '1')
+    ->orderBy('title', 'asc');
+
+  $query->leftJoin('field_data_field_ld_session', 'session', 'node.nid = session.entity_id');
+  $query->condition('session.field_ld_session_tid', variable_get('leadership_session_term'));
+  $query->leftJoin('field_data_field_youtube_amplified', 'youtube_amplify', 'node.nid = youtube_amplify.entity_id');
+  $query->condition('youtube_amplify.field_youtube_amplified_value', 1);
+  $query->leftJoin('field_data_field_waywire_playlist_id', 'waywire_playlist_id', 'node.nid = waywire_playlist_id.entity_id');
+  $query->addField('waywire_playlist_id', 'field_waywire_playlist_id_value');
+  $query->leftJoin('field_data_field_waywire_tag', 'waywire_tag', 'node.nid = waywire_tag.entity_id');
+  $query->addField('waywire_tag', 'field_waywire_tag_value');
+  $result = $query->execute()->fetchAll();
+
+  return $result;
+}
+
+/**
+ * Generate API Content waywire api call using feeds programatically.
+ *
+ * @param  string $importer_id
+ *   The feed name.
+ * @param  string $tag
+ *   The tag string that a video is tagged in waywire.
+ * @param  integer $company_nid
+ *   The company node id of the video.
+ * @param  string  $method
+ *   The Waywire api call.
+ * @param  integer $page
+ *   The page number of the videos from Waywire.
+ * @param  integer $per_page
+ *   The number of videos you want Waywire to give you.
+ * @param  string $sort
+ *   The sort paramater.
+ */
+function waywire_leadership_process_api_content($importer_id, $tag, $company_nid,
+  $method = 'find', $page = 1, $per_page = 6, $sort='recent') {
+
+  // The Waywire url that is used for api calls.
+  $api_url = variable_get('waywire_leadership_url') . '/api/content/' . $method;
+  // Query paramaters that append to url.
+  $query = array(
+    'page' => $page,
+    'per_page' => $per_page,
+    'vq' => $tag,
+  );
+  $source_url = $api_url . '?' . http_build_query($query);
+
+  $feeds_source = feeds_source($importer_id);
+  $config = $feeds_source->getConfig();
+  // Add source url and company node id to config.
+  $config['FeedsHTTPFetcherAppendHeaders']['source'] = $source_url;
+  $config['FeedsHTTPFetcherAppendHeaders']['company_nid'] = $company_nid;
+
+  $feeds_source->setConfig($config);
+  $feeds_source->save();  // Weird if you don't save it doesn't work.
+
+  while (FEEDS_BATCH_COMPLETE != $feeds_source->import());
+
+  // Clean up states.
+  $feeds_source->state(FEEDS_FETCH);
+  $feeds_source->state(FEEDS_PROCESS);
+  $feeds_source->state(FEEDS_PROCESS_CLEAR);
+}

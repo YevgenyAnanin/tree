@@ -1,0 +1,6 @@
+name = Waywire Leadership Integration
+description = Integrate Waywire with Leadership
+core = 7.x
+package = SMG
+dependencies[] = feeds_waywire
+dependencies[] = waywire_processor
