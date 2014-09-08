@@ -10,10 +10,6 @@
  */
 class WaywireProcessor extends FeedsProcessor {
   /**
-   * @var integer - the company nid
-   */
-  public $company_nid = NULL;
-  /**
    * Define entity type.
    */
   public function entityType() {
@@ -206,6 +202,13 @@ class WaywireProcessor extends FeedsProcessor {
   public function setTargetElement(FeedsSource $source, $target_entity, $target_element, $value) {
     switch ($target_element) {
       case 'name':
+        parent::setTargetElement($source, $target_entity, $target_element, $value);
+        // When setting name, also setting company nid.
+        $config =  $source->getConfig();
+        if(isset($config['FeedsHTTPFetcherAppendHeaders']['company_nid'])) {
+          $target_entity->node_id = $config['FeedsHTTPFetcherAppendHeaders']['company_nid'];
+        }
+        break;
       case 'node_id':
       case 'created':
       case 'changed':
@@ -216,10 +219,6 @@ class WaywireProcessor extends FeedsProcessor {
         // (magnify_id)
         parent::setTargetElement($source, $target_entity, $target_element, $value);
         $target_entity->{$target_element} = $value;
-        // When setting the GUID I will also set the company node id
-        if($this->company_nid) {
-          $target_entity->company_nid = $this->company_nid;
-        }
         break;
       default:
         $target_entity->data[$target_element] = $value;
