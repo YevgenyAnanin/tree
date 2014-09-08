@@ -2,7 +2,7 @@ var videoWidget = angular.module('videoWidget', []);
 
 // Bootstrap angularjs manually
 jQuery(document).ready(function () {
-  angular.bootstrap(document.getElementById('videoWidget'), ['videoWidget'] );
+  angular.bootstrap(document, ['videoWidget'] );
 });
 
 videoWidget.controller('VideoListCtrl', function ($scope) {

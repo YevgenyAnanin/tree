@@ -1,19 +1,19 @@
 /* line 4, ../sass/video_widget.scss */
-#videoWidget-wrapper {
+.videoWidget-wrapper {
   overflow: auto;
   position: relative;
   min-height: 120px;
 }
 
 /* line 5, ../sass/video_widget.scss */
-#videoWidget-wrapper div {
+.videoWidget-wrapper div {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
 /* line 6, ../sass/video_widget.scss */
-#videoWidget-videos {
+.videoWidget-videos {
   overflow: auto;
   float: left;
   width: 80%;
@@ -30,14 +30,14 @@
 }
 
 /* line 9, ../sass/video_widget.scss */
-#videoWidget-left-selection.full, #videoWidget-left-selection.twoVideo, #videoWidget-right-selection.full, #videoWidget-right-selection.twoVideo {
+.videoWidget-left-selection.full, .videoWidget-left-selection.twoVideo, .videoWidget-right-selection.full, .videoWidget-right-selection.twoVideo {
   display: inline-block;
   width: 10%;
   float: left;
 }
 
 /* line 13, ../sass/video_widget.scss */
-#videoWidget-left-triangle-wrapper {
+.videoWidget-left-triangle-wrapper {
   background-image: -ms-linear-gradient(left, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(left, #acacac 0%, #828282 100%);
   background-image: -o-linear-gradient(left, #acacac 0%, #828282 100%);
@@ -46,12 +46,12 @@
   background-image: linear-gradient(to right, #acacac 0%, #828282 100%);
 }
 /* line 15, ../sass/video_widget.scss */
-#videoWidget-left-triangle-wrapper.full, #videoWidget-left-triangle-wrapper.twoVideo {
+.videoWidget-left-triangle-wrapper.full, .videoWidget-left-triangle-wrapper.twoVideo {
   border-radius: 8px 0 0 8px;
 }
 
 /* line 19, ../sass/video_widget.scss */
-#videoWidget-right-triangle-wrapper {
+.videoWidget-right-triangle-wrapper {
   background-image: -ms-linear-gradient(right, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(right, #acacac 0%, #828282 100%);
   background-image: -o-linear-gradient(right, #acacac 0%, #828282 100%);
@@ -60,7 +60,7 @@
   background-image: linear-gradient(to left, #acacac 0%, #828282 100%);
 }
 /* line 20, ../sass/video_widget.scss */
-#videoWidget-right-triangle-wrapper.full, #videoWidget-right-triangle-wrapper.twoVideo {
+.videoWidget-right-triangle-wrapper.full, .videoWidget-right-triangle-wrapper.twoVideo {
   border-radius: 0 8px 8px 0;
 }
 
@@ -90,7 +90,7 @@
   margin-left: -10px;
 }
 /* line 38, ../sass/video_widget.scss */
-.full #videoWidget-triangle-left, .twoVideo #videoWidget-triangle-left {
+.full .videoWidget-triangle-left, .twoVideo .videoWidget-triangle-left {
   width: 0;
   height: 0;
   border-top: 40px solid transparent;
@@ -99,7 +99,7 @@
   right: 35%;
 }
 /* line 41, ../sass/video_widget.scss */
-.full #videoWidget-triangle-right, .twoVideo #videoWidget-triangle-right {
+.full .videoWidget-triangle-right, .twoVideo .videoWidget-triangle-right {
   width: 0;
   height: 0;
   border-top: 40px solid transparent;
@@ -129,7 +129,7 @@
 
 @media (max-width: 800px) and (min-width: 480px) {
   /* line 49, ../sass/video_widget.scss */
-  #videoWidget {
+  .videoWidget {
     display: inline-block;
     width: 100%;
   }
@@ -147,32 +147,32 @@
 }
 @media (max-width: 479px) {
   /* line 60, ../sass/video_widget.scss */
-  #videoWidget {
+  .videoWidget {
     display: block;
     width: 60%;
     margin: 0 auto;
   }
 
   /* line 61, ../sass/video_widget.scss */
-  #videoWidget-wrapper {
+  .videoWidget-wrapper {
     display: table;
     width: 100%;
   }
 
   /* line 62, ../sass/video_widget.scss */
-  #videoWidget-videos {
+  .videoWidget-videos {
     display: table-header-group;
     float: none;
     min-height: 125px;
   }
 
   /* line 63, ../sass/video_widget.scss */
-  #videoWidget-left-selection {
+  .videoWidget-left-selection {
     display: table-row-group;
   }
 
   /* line 64, ../sass/video_widget.scss */
-  #videoWidget-right-selection {
+  .videoWidget-right-selection {
     display: table-footer-group;
   }
 
@@ -202,13 +202,13 @@
     margin: 0 auto;
   }
   /* line 71, ../sass/video_widget.scss */
-  .oneVideo .videoWidget-triangle#videoWidget-triangle-left {
+  .oneVideo .videoWidget-triangle.videoWidget-triangle-left {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-bottom: 15px solid white;
   }
   /* line 72, ../sass/video_widget.scss */
-  .oneVideo .videoWidget-triangle#videoWidget-triangle-right {
+  .oneVideo .videoWidget-triangle.videoWidget-triangle-right {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-top: 15px solid white;
