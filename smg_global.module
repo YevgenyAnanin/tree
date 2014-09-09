@@ -724,6 +724,10 @@ function _lia_sidebar(&$page, $node) {
       '#markup' => theme('video_widget'),
       '#weight' => 0,
     ),
+    'stuff2' => array(
+      '#markup' => theme('video_widget'),
+      '#weight' => 0,
+    ),
   );
   array_unshift($page['content'], $stuff);
 }

@@ -1,4 +1,4 @@
-<div class="videoWidget" ng-controller="VideoListCtrl" video-height>
+<div class="videoWidget" ng-controller="VideoListCtrl" >
   <div class="videoWidget-wrapper" resizable>
     <div ng-click="videosPrev()" class="videoWidget-count-selector videoWidget-left-selection clearfix" ng-class="moverCssClasses">
       <div class="videoWidget-triangle-wrapper videoWidget-left-triangle-wrapper" ng-class="moverCssClasses">

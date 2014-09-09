@@ -1,11 +1,14 @@
-var videoWidget = angular.module('videoWidget', []);
+var videoWidget = angular.module('videoWidget', ['videoWidgetConfig']);
 
 // Bootstrap angularjs manually
 jQuery(document).ready(function () {
   angular.bootstrap(document, ['videoWidget'] );
 });
 
-videoWidget.controller('VideoListCtrl', function ($scope) {
+/**
+ * The main controller for each video widget
+ */
+videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', function ($scope, getConfig) {
   $scope.videos = [
     {'name':'Test Video 1',
      'img_url': 'http://s3.amazonaws.com/magnifythumbs/H06L9B3P3T7T5YH1.jpg',
@@ -33,12 +36,16 @@ videoWidget.controller('VideoListCtrl', function ($scope) {
      'href': 'http://summitmediagroup.magnify.net/embed/content/MFJLR62GCV3YWPCN'}*/
   ];
 
+  $scope.nid = false;
+
+  $scope.config = getConfig;
+
   $scope.currentCount = 1; // Initialize the count
 
   // An object that stores the count of how many videos to show in the widget
   $scope.videoWidgetParams = {
-    videosToShow: 3, // How many videos to show at once
-    oldVideosToShow: 3 // Will store the value of videosToShow from previous draw()
+    videosToShow: $scope.config.videosToShow, // How many videos to show at once
+    oldVideosToShow: $scope.config.videosToShow // Will store the value of videosToShow from previous draw()
   };
 
   $scope.updateVideosToShow = function (newNumber) {
@@ -133,7 +140,7 @@ videoWidget.controller('VideoListCtrl', function ($scope) {
     oneVideo: false
   };
 
-});
+}]);
 
 /**
  * This directive defines the videoWidget-videos div that contains the videos,
@@ -157,7 +164,8 @@ videoWidget.directive('videoSlider', function () {
       });
 
     },
-    templateUrl: '/video-widget/resource/angular-template/video.html'
+    //templateUrl: '/video-widget/resource/angular-template/video.html'
+    templateUrl: '/sites/default/modules/smg_global/video_widget_includes/angular/templates/video.html'
   };
 });
 
