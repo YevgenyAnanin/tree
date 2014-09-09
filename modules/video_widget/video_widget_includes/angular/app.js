@@ -148,6 +148,10 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', function ($scope,
  * redrawing the widget when the counter changes.
  */
 videoWidget.directive('videoSlider', function () {
+
+  // Get the location of the video.html template
+  var videoTpl = Drupal.settings.smgAngularTemplates.video;
+
   return {
     restrict: 'AE',
     replace: true,
@@ -165,7 +169,7 @@ videoWidget.directive('videoSlider', function () {
 
     },
     //templateUrl: '/video-widget/resource/angular-template/video.html'
-    templateUrl: '/sites/default/modules/smg_global/video_widget_includes/angular/templates/video.html'
+    templateUrl: videoTpl
   };
 });
 

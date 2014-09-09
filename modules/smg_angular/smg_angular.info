@@ -1,0 +1,4 @@
+name = SMG Angular
+description = Integration with AngularJS
+package = SMG
+core = 7.x

@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * This module provides integration with AngularJS
+ *
+ * @author Yevgeny Ananin <yananin@summitmediagroup.com>
+ *
+ */
+
+/**
+ * Implements hook_library().
+ */
+function smg_angular_library() {
+
+  // Add the angularjs library
+  $libraries['angularjs'] = array(
+    'title' => 'AngularJS',
+    'website' => 'https://angularjs.org/',
+    'version' => '1.2.22',
+    'js' => array(
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(
+        'type' => 'file',
+        'preprocess' => FALSE,
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_page_alter
+ */
+function smg_angular_page_alter(&$page) {
+
+  $node = menu_get_object();
+
+  // #LIA implementation: http://redmine.summitmediagroup.com/projects/lia
+  _lia_sidebar($page, $node);
+
+  // Add the AngularJS library
+  drupal_add_library('smg_angular', 'angularjs');
+
+  // Add any AngularJS templates that are defined by other modules through the
+  // smg_angular_add_template hook
+  if(sizeof(module_implements('smg_angular_add_template')) > 0) {
+    $angular_templates = array();
+    foreach(module_implements('smg_angular_add_template') as $module) {
+      $angular_templates = array_merge($angular_templates, module_invoke($module, 'smg_angular_add_template'));
+    }
+
+    drupal_add_js(array('smgAngularTemplates' => $angular_templates), 'setting');
+  }
+
+}
+
+function _lia_sidebar(&$page, $node) {
+
+
+}
