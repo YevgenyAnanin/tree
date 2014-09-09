@@ -3,3 +3,11 @@
  * @file
  * Performs install/uninstall operations.
  */
+
+/**
+ * Implement hook_schema().
+ */
+function waywire_leadership_schema() {
+  $schema['cache_waywire_leadership'] = drupal_get_schema_unprocessed('system', 'cache');
+  return $schema;
+}

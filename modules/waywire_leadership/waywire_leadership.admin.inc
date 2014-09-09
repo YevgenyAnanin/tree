@@ -22,6 +22,13 @@ function waywire_leadership_settings_form() {
     '#required' => TRUE,
     '#default_value' => variable_get('waywire_leadership_importer_id'),
   );
+  $form['waywire_leadership_widget_video_count'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of Videos On Widget'),
+    '#description' => 'Enter the number of videos to be shown in a widget',
+    '#required' => TRUE,
+    '#default_value' => variable_get('waywire_leadership_widget_video_count'),
+  );
 
   return system_settings_form($form);
 }
