@@ -353,6 +353,28 @@ function waywire_video_menu_local_tasks_alter(&$data, $router_item, $root_path) 
 }
 
 /**
+ * Get waywire videos
+ *
+ * @param  int $node_id
+ *  Node Id.
+ *
+ * @return array $result
+ *  Waywire video entities.
+ */
+function waywire_video_get_all($node_id = NULL) {
+  $query = db_select('waywire_video', 'waywire_video')
+    ->fields('waywire_video');
+
+  if ($node_id) {
+    $query->condition('node_id', $node_id);
+  }
+
+  $result = $query->execute()->fetchAll();
+
+  return $result;
+}
+
+/**
  * The class used for waywire video entities.
  */
 class WaywireVideo extends Entity {
