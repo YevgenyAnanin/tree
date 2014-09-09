@@ -691,7 +691,10 @@ function smg_global_library() {
     'website' => 'https://angularjs.org/',
     'version' => '1.2.22',
     'js' => array(
-      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(),
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(
+        'type' => 'file',
+        'preprocess' => FALSE,
+      ),
     ),
   );
 
