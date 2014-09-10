@@ -13,7 +13,7 @@ function video_widget_theme($existing, $type, $theme, $path) {
   return array(
     'video_widget' => array(
       'template' => 'video_widget_includes/templates/video-widget',
-      'variables' => array('test_var' => NULL),
+      'variables' => array('nid' => NULL),
     ),
   );
 }
@@ -48,11 +48,11 @@ function video_widget_page_alter(&$page) {
   drupal_add_css(drupal_get_path('module','video_widget').'/video_widget_includes/css/video_widget.css');
   $stuff = array(
     'stuff' => array(
-      '#markup' => theme('video_widget'),
+      '#markup' => theme('video_widget', array('nid' => '1000')),
       '#weight' => 0,
     ),
     'stuff2' => array(
-      '#markup' => theme('video_widget'),
+      '#markup' => theme('video_widget', array('nid' => '2000')),
       '#weight' => 0,
     ),
   );

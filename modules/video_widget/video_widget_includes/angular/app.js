@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
 /**
  * The main controller for each video widget
  */
-videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', function ($scope, getConfig) {
+videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', function ($scope, getConfig, $attrs) {
   $scope.videos = [
     {'name':'Test Video 1',
      'img_url': 'http://s3.amazonaws.com/magnifythumbs/H06L9B3P3T7T5YH1.jpg',
@@ -36,7 +36,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', function ($scope,
      'href': 'http://summitmediagroup.magnify.net/embed/content/MFJLR62GCV3YWPCN'}*/
   ];
 
-  $scope.nid = false;
+  $scope.nid = $attrs.nid;
 
   $scope.config = getConfig;
 
@@ -130,15 +130,28 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', function ($scope,
     }
   };
 
-  // This object contains the name and truthy value of css classes
-  // that will be added to ng-class property of video widget triangle
-  // wrapper divs.  Only one of the property values should ever be
-  // true, and it changes depending on the window size.
-  $scope.moverCssClasses = {
+  // This object contains extra classes that will be added throughout the
+  // templates for responsive design (using ng-class).  Only one of these
+  // values should be true.
+  $scope.responsiveCssClasses = {
     full: true,
     twoVideo: false,
-    oneVideo: false
+    oneVideo: false,
+    max480: false,
   };
+
+  // This object contains extra classes that will be added to the templates.
+  // It will look to see if there are any classes added globally in the site
+  // specific video widget module (videoWidgetConfig).
+  $scope.extraCssClasses = ($scope.config.extraCssClasses !== undefined) ? $scope.config.extraCssClasses : {};
+
+  // This function simply merges responsiveCssClasses with extraCssClasses
+  $scope.mergeCssClassesObjs = function () {
+    for (var attrname in $scope.responsiveCssClasses) $scope.extraCssClasses[attrname] = $scope.responsiveCssClasses[attrname];
+  }
+
+  // Call the mergeCssClassesObjs function initially
+  $scope.mergeCssClassesObjs();
 
 }]);
 
@@ -196,7 +209,7 @@ videoWidget.directive('resizable', function ($window) {
         // scope, and if necessary it changes the parameter and calls the
         // draw() function.  It also calls the changeClass function.
         var resizeRedraw = function (videosToShow, newClass) {
-          if (scope.videoWidgetParams.videosToShow !== videosToShow) {
+          if ( !scope.responsiveCssClasses[newClass] ) {
             scope.updateVideosToShow(videosToShow);
             changeClass(newClass);
             scope.draw();
@@ -206,17 +219,18 @@ videoWidget.directive('resizable', function ($window) {
         // This function changes the css class on the move button, by manipulating
         // the moverCssClasses array
         var changeClass = function (newClass) {
-          if (!scope.moverCssClasses[newClass]) {
-            for (var key in scope.moverCssClasses) {
-              if (scope.moverCssClasses.hasOwnProperty(key)) {
+          if (!scope.responsiveCssClasses[newClass]) {
+            for (var key in scope.responsiveCssClasses) {
+              if (scope.responsiveCssClasses.hasOwnProperty(key)) {
                 if (key == newClass) {
-                  scope.moverCssClasses[key] = true;
+                  scope.responsiveCssClasses[key] = true;
                 }
                 else {
-                  scope.moverCssClasses[key] = false;
+                  scope.responsiveCssClasses[key] = false;
                 }
               }
             }
+            scope.mergeCssClassesObjs();
           }
         }
 
@@ -224,7 +238,7 @@ videoWidget.directive('resizable', function ($window) {
           resizeRedraw(2, 'twoVideo');
         }
         else if (newValue.w < 480) {
-          resizeRedraw(1, 'oneVideo');
+          resizeRedraw(2, 'max480');
         }
         else {
           resizeRedraw(3, 'full');
