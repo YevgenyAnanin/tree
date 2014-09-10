@@ -39,9 +39,15 @@ function smg_global_settings_form(){
     '#empty_option' => t('None'),
     '#default_value' => variable_get('smg_global_standard_purf')
   );
+  $form['smg_global_settings']['smg_global_social_media_watch_admin'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Social Media Watch Admin',
+    '#description' => 'Everytime an article is posted of a company that has social media watch, a notification will sent out to this email.',
+    '#default_value' => variable_get('smg_global_social_media_watch_admin'),
+  );
 
   $form['#submit'][] = 'smg_global_settings_form_submit';
-  
+
   return system_settings_form($form);
 }
 
@@ -52,5 +58,3 @@ function smg_global_settings_form_submit($form, &$form_state){
   variable_set('smg_global_site', $form_state['values']['site']);
   variable_set('smg_global_standard_purf', $form_state['values']['purf_standard']);
 }
-
-

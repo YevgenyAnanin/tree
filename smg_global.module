@@ -333,6 +333,11 @@ function smg_global_mail($key, &$message, $params){
         'Bcc' => 'yananin@summitmediagroup.com, ajankowski@summitmediagroup.com',
       );
       break;
+    case 'social_media_watch':
+      $message['subject'] = 'Social Media Watch - ' . $params['title'];
+      $message['body'][] = "New content that needs to be promoted as part of Social Media Watch campaign, which ends " . $params['social_media_watch'] . ":\n" . $params['url'];
+      $message['headers']['Content-Type']  =  'text/html';
+      break;
   }
 }
 
@@ -665,4 +670,60 @@ function smg_global_ckeditor_plugin() {
       ),
     ),
   );
+}
+
+/**
+ * Implements hook_node_presave().
+ */
+function smg_global_node_presave($node) {
+  // #50 - Send out a notification if the node has a company that has social
+  // media watch date not expired.
+  if (isset($node->field_companies['und']) && variable_get('smg_global_social_media_watch_admin')) {
+    $current_date = date("Y-m-d");
+    global $base_url;
+
+    foreach ($node->field_companies['und'] as $key => $company_node) {
+      $company = node_load($company_node['nid']);
+
+      if (isset($company->field_social_media_watch['und'][0]['value'])) {
+        if ($current_date < $company->field_social_media_watch['und'][0]['value']) {
+          $brand_info = smg_global_get_brand_info();
+
+          $from = $brand_info['email'];
+          $to = variable_get('smg_global_social_media_watch_admin');
+
+          $params['title'] = $company->title;
+          $params['social_media_watch'] = $company->field_social_media_watch['und'][0]['value'];
+          $params['url'] = $base_url . '/' . drupal_get_path_alias('node/' . $node->nid);
+
+          drupal_mail('smg_global', 'social_media_watch', $to, language_default(), $params, $from);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Get info based on brand.
+ *
+ * @return array
+ *   an array containg keys like email, brand name, etc..
+ */
+function smg_global_get_brand_info() {
+  switch (variable_get('smg_global_site', 'pw')) {
+    case 'hcp':
+      $data['email'] = 'webmaster@healthcarepackaging.com';
+      $data['brand'] = 'Healthcare Packging';
+      break;
+    case 'aw':
+      $data['email'] = 'webmaster@automationworld.com';
+      $data['brand'] = 'Automation World';
+      break;
+    case 'pw':
+      $data['email'] = 'webmaster@packworld.com';
+      $data['brand'] = 'Packaging World';
+      break;
+  }
+
+  return $data;
 }
