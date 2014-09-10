@@ -97,6 +97,27 @@ function waywire_leadership_get_youtube_amplify_companies_from_current_session()
 }
 
 /**
+ * Checks if a company has Youtube Amplified checked and it is in the current
+ * session.
+ *
+ * @param  integer $nid
+ *   node id.
+ * @return  boolean $has_youtube_amplify_checked
+ */
+function waywire_leadership_is_youtube_amplify($nid) {
+  $query = new EntityFieldQuery();
+  $has_youtube_amplify_checked = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'company')
+    ->propertyCondition('nid', $nid)
+    ->fieldCondition('field_youtube_amplified', 'value', 1)
+    ->fieldCondition('field_ld_session', 'tid', variable_get('leadership_session_term'))
+    ->count()
+    ->execute();
+
+  return $has_youtube_amplify_checked;
+}
+
+/**
  * Generate API Content waywire api call using feeds programatically.
  *
  * @param  string $importer_id
@@ -115,7 +136,12 @@ function waywire_leadership_get_youtube_amplify_companies_from_current_session()
  *   The sort paramater.
  */
 function waywire_leadership_process_api_content($importer_id, $tag, $company_nid,
-  $method = 'find', $page = 1, $per_page = 6, $sort='recent') {
+  $method = 'find', $page = 1, $per_page = FALSE, $sort='recent') {
+
+  // Set a default number of videos to be on a page.
+  if (!$per_page) {
+    $per_page =  variable_get('waywire_leadership_widget_page_count');
+  }
 
   // The Waywire url that is used for api calls.
   $api_url = variable_get('waywire_leadership_url') . '/api/content/' . $method;
@@ -127,7 +153,7 @@ function waywire_leadership_process_api_content($importer_id, $tag, $company_nid
   );
   $source_url = $api_url . '?' . http_build_query($query);
 
-  $feeds_source = fe\eds_source($importer_id);
+  $feeds_source = feeds_source($importer_id);
   $config = $feeds_source->getConfig();
   // Add source url and company node id to config.
   $config['FeedsHTTPFetcherAppendHeaders']['source'] = $source_url;
@@ -205,10 +231,20 @@ function waywire_leadership_save_cache($company) {
  *  company node id.
  * @param integer $page
  *  the page number of videos.
+ *
+ * @param mixed $json
+ *  either the json or an array of the companies videos.
  */
-function waywire_leadership_get_company_video_json($company_nid, $page = 1) {
+function waywire_leadership_get_company_video_json($company_nid, $page = 1, $jsonDecode = TRUE) {
   $cache = cache_get('company_' . $company_nid . '_page_' . $page, 'cache_waywire_leadership');
-  return json_decode($cache->data);
+
+  if ($jsonDecode) {
+    $json = json_decode($cache->data);
+  }
+  else {
+    $json = $cache->data;
+  }
+  return $json;
 }
 
 /**
@@ -216,4 +252,26 @@ function waywire_leadership_get_company_video_json($company_nid, $page = 1) {
  */
 function waywire_leadership_clear_all_cache() {
   cache_clear_all(NULL, 'cache_waywire_leadership');
+}
+
+/**
+ * Implements hook_node_view_alter().
+ */
+function waywire_leadership_node_view_alter(&$build) {
+  if ($build['#view_mode'] == 'full') {
+    if (isset($build['field_companies'])) {
+      foreach ($build['field_companies']['#items'] as $key => $company) {
+        // Check if this company has youtube amplified checked
+        if (waywire_leadership_is_youtube_amplify($company['nid'])) {
+          // Get that companies videos
+          $waywire_videos[$company['nid']] = waywire_leadership_get_company_video_json($company['nid'], 1);
+        }
+      }
+
+      // Add the videos to the Drupal.settings object
+      if(isset($waywire_videos)) {
+        drupal_add_js(array('waywire_leadership' => $waywire_videos), 'setting');
+      }
+    }
+  }
 }
