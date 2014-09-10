@@ -24,8 +24,8 @@ function waywire_leadership_settings_form() {
   );
   $form['waywire_leadership_widget_page_count'] = array(
     '#type' => 'textfield',
-    '#title' => t('Number of Videos On Page'),
-    '#description' => 'Enter the number of videos to be on each page (always good to be double of videos on widget)',
+    '#title' => t('Number of Videos To Get From Waywire'),
+    '#description' => 'Enter the most number of videos to get from Waywire. For exmaple if I input 50 I will only get 50 of the latest videos from a client.',
     '#required' => TRUE,
     '#default_value' => variable_get('waywire_leadership_widget_page_count'),
   );
