@@ -212,7 +212,7 @@ function waywire_leadership_save_cache($company) {
   foreach ($split_videos as $key => $split) {
     $page = $key + 1;
     $json_data = array(
-      'name' => $company->title,
+      'companyName' => $company->title,
       'page' => $page, // Page Number
       'total_count' => $total_videos, // Total number of videos for this company
       'page_count' => count($split), // Total number of videos for this page
