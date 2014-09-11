@@ -1,4 +1,7 @@
 <div class="videoWidget" ng-controller="VideoListCtrl" nid="<?php print $nid; ?>" ng-class="extraCssClasses">
+  <div class="videoWidget-widget-title">
+    Browse {{totalCount}} videos from {{companyName}}
+  </div>
   <div class="videoWidget-wrapper" resizable>
     <div ng-click="videosPrev()" class="videoWidget-count-selector videoWidget-left-selection clearfix" ng-class="extraCssClasses">
       <div class="videoWidget-triangle-wrapper videoWidget-left-triangle-wrapper" ng-class="extraCssClasses">

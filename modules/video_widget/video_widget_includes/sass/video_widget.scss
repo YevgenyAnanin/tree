@@ -1,5 +1,14 @@
 $mobile-width: 60%;
 $mobile-triangle-size: 15px;
+@mixin color-gradient($start, $end){
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$start', endColorstr='$end');
+  background-image: -ms-linear-gradient(top, $start 0%, $end 100%);
+  background-image: -moz-linear-gradient(top, $start 0%, $end 100%);
+  background-image: -o-linear-gradient(top, $start 0%, $end 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, $start), color-stop(1, $end));
+  background-image: -webkit-linear-gradient(top, $start 0%, $end 100%);
+  background-image: linear-gradient(to bottom, $start 0%, $end 100%);
+}
 
 /* Variables for the max-480px width design, specifying width of image, title, and button */
 $max480-image-width: 50%;
@@ -7,7 +16,11 @@ $max480-title-width: 30%;
 $max480-remainder-width: $max480-image-width - $max480-title-width;
 $max480-button-height-width: 46px;
 
+/* Color and size of video widget title border */
+$widget-title-border: 1px solid #972901;
+
 .full, .twoVideo {
+  &.videoWidget {margin-bottom: 10px;}
   .videoWidget-video {float:left; text-align: center; margin: 10px 0;}
   .videoWidget-wrapper {overflow: auto; position:relative; min-height: 120px;}
   .videoWidget-wrapper div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
@@ -30,6 +43,7 @@ $max480-button-height-width: 46px;
     width:0; height: 0; border-top: 40px solid transparent; border-bottom: 40px solid transparent; border-left: 20px solid #FFFFFF;
   }
   .videoWidget-title {float:left; clear: both; width:100%; color:#FFFFFF; font-weight: bold; font-family: "FolksLightRegular",sans-serif; letter-spacing: .03em; margin-top:4px;}
+  .videoWidget-widget-title {display: inline-block; font-size:145%; margin-left:25px; padding:10px 25px; @include color-gradient(#F25000, #EE9755); border-top: $widget-title-border; border-left: $widget-title-border; border-right: $widget-title-border; border-top-left-radius: 12px; border-top-right-radius: 12px; color: #FFFFFF;}
 }
 
 .full .videoWidget-video {width:33%;}
