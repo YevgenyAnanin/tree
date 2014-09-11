@@ -8,7 +8,9 @@ jQuery(document).ready(function () {
 /**
  * The main controller for each video widget
  */
-videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', function ($scope, getConfig, $attrs) {
+videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http', function ($scope, getConfig, $attrs, $http) {
+
+  /*
   $scope.videos = [
     {'name':'Test Video 1',
      'img_url': 'http://s3.amazonaws.com/magnifythumbs/H06L9B3P3T7T5YH1.jpg',
@@ -31,12 +33,25 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', functio
     {'name': 'Test Video 7',
      'img_url': 'http://s3.amazonaws.com/magnifythumbs/75GQFF2X9LV148SG.jpg',
      'href': 'http://summitmediagroup.magnify.net/video/Moxa-VPort-36-Footage-Vision-Te'}
-    /*{'name': 'Test Video 8',
+    {'name': 'Test Video 8',
      'img_url': 'http://s3.amazonaws.com/magnifythumbs/GMN7042X1Z6VJH82.jpg',
-     'href': 'http://summitmediagroup.magnify.net/embed/content/MFJLR62GCV3YWPCN'}*/
-  ];
+     'href': 'http://summitmediagroup.magnify.net/embed/content/MFJLR62GCV3YWPCN'}
+  ];*/
 
   $scope.nid = $attrs.nid;
+
+  // Populate the videos property
+  $scope.videos = {};
+  if ( Drupal.settings.hasOwnProperty('waywire_leadership') ) {
+    if ( Drupal.settings.waywire_leadership.hasOwnProperty($scope.nid) ) {
+      var waywireData = Drupal.settings.waywire_leadership[$scope.nid];
+      // Set some properties on the scope
+      $scope.page = waywireData.page;
+      $scope.pageCount = waywireData.page_count;
+      $scope.totalCount = waywireData.total_count;
+      $scope.videos = waywireData.videos;
+    }
+  }
 
   $scope.config = getConfig;
 
@@ -62,6 +77,16 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', functio
     return Math.ceil($scope.videos.length / $scope.videoWidgetParams.videosToShow);
   };
 
+  // Helper function for determining size of object
+  // @see http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
+  $scope.sizeOfObj = function (obj) {
+    var size = 0, key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+  }
+
   // Iterates the counter to the next position, or to position 1
   // if we've reached the end
   $scope.videosNext = function () {
@@ -69,6 +94,18 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', functio
     var videoBlockCount = $scope.videoBlockCount();
 
     if($scope.currentCount < videoBlockCount) {
+
+      // If we're close to the end, then use ajax to get more videos
+      if( (videoBlockCount - $scope.currentCount === 1) && ($scope.sizeOfObj($scope.videos) < $scope.totalCount) ) {
+        var waywireJSONPath = '/waywire_leadership/get/json/' + $scope.nid + '/' + (++$scope.page);
+        $http({method: 'GET', url: waywireJSONPath}).
+          success(function (data, status, headers, config) {
+            for (i = 0; i < data.videos.length; i++) {
+              $scope.videos.push( data.videos[i] );
+            }
+          });
+      }
+
       $scope.currentCount++;
     }
     else {

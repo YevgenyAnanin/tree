@@ -271,6 +271,11 @@ function waywire_leadership_node_view_alter(&$build) {
       // Add the videos to the Drupal.settings object
       if(isset($waywire_videos)) {
         drupal_add_js(array('waywire_leadership' => $waywire_videos), 'setting');
+        foreach($waywire_videos as $company_nid => $value) {
+          $build['leadership_videos'][] = array(
+            '#markup' => theme('video_widget', array('nid' => $company_nid)),
+          );
+        }
       }
     }
   }

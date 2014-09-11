@@ -12,7 +12,9 @@ $max480-button-height-width: 46px;
   .videoWidget-wrapper {overflow: auto; position:relative; min-height: 120px;}
   .videoWidget-wrapper div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
   .videoWidget-videos {overflow: auto; float:left; width:80%; background-color: #616161; border-top: 1px solid #000000; border-bottom: 1px solid #000000; min-height: 120px;}
-  .videoWidget-count-selector {overflow: auto; min-height:1px; }
+  .videoWidget-count-selector {overflow: auto; min-height:1px;
+    &:hover {cursor:pointer};
+  }
   .videoWidget-left-selection, .videoWidget-right-selection { display:inline-block; width:10%; float:left; }
   .videoWidget-left-triangle-wrapper { background-image: -ms-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -moz-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -o-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #ACACAC), color-stop(1, #828282)); background-image: -webkit-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: linear-gradient(to right, #ACACAC 0%, #828282 100%); border-radius: 8px 0 0 8px;}
   .videoWidget-right-triangle-wrapper { background-image: -ms-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: -moz-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: -o-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: -webkit-gradient(linear, right top, left top, color-stop(0, #ACACAC), color-stop(1, #828282)); background-image: -webkit-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: linear-gradient(to left, #ACACAC 0%, #828282 100%); border-radius: 0 8px 8px 0; }

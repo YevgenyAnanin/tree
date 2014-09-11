@@ -33,12 +33,16 @@
   min-height: 1px;
 }
 /* line 16, ../sass/video_widget.scss */
+.full .videoWidget-count-selector:hover, .twoVideo .videoWidget-count-selector:hover {
+  cursor: pointer;
+}
+/* line 18, ../sass/video_widget.scss */
 .full .videoWidget-left-selection, .full .videoWidget-right-selection, .twoVideo .videoWidget-left-selection, .twoVideo .videoWidget-right-selection {
   display: inline-block;
   width: 10%;
   float: left;
 }
-/* line 17, ../sass/video_widget.scss */
+/* line 19, ../sass/video_widget.scss */
 .full .videoWidget-left-triangle-wrapper, .twoVideo .videoWidget-left-triangle-wrapper {
   background-image: -ms-linear-gradient(left, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(left, #acacac 0%, #828282 100%);
@@ -48,7 +52,7 @@
   background-image: linear-gradient(to right, #acacac 0%, #828282 100%);
   border-radius: 8px 0 0 8px;
 }
-/* line 18, ../sass/video_widget.scss */
+/* line 20, ../sass/video_widget.scss */
 .full .videoWidget-right-triangle-wrapper, .twoVideo .videoWidget-right-triangle-wrapper {
   background-image: -ms-linear-gradient(right, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(right, #acacac 0%, #828282 100%);
@@ -58,14 +62,14 @@
   background-image: linear-gradient(to left, #acacac 0%, #828282 100%);
   border-radius: 0 8px 8px 0;
 }
-/* line 19, ../sass/video_widget.scss */
+/* line 21, ../sass/video_widget.scss */
 .full .videoWidget-triangle-wrapper, .twoVideo .videoWidget-triangle-wrapper {
   position: absolute;
   width: 10%;
   height: 100%;
   border: 1px solid #000000;
 }
-/* line 20, ../sass/video_widget.scss */
+/* line 22, ../sass/video_widget.scss */
 .full .videoWidget-triangle, .twoVideo .videoWidget-triangle {
   position: absolute;
   top: 50%;
@@ -73,7 +77,7 @@
   left: 50%;
   margin-left: -10px;
 }
-/* line 21, ../sass/video_widget.scss */
+/* line 23, ../sass/video_widget.scss */
 .full .videoWidget-triangle, .twoVideo .videoWidget-triangle {
   position: absolute;
   top: 50%;
@@ -81,7 +85,7 @@
   left: 50%;
   margin-left: -10px;
 }
-/* line 24, ../sass/video_widget.scss */
+/* line 26, ../sass/video_widget.scss */
 .full .videoWidget-triangle-left, .twoVideo .videoWidget-triangle-left {
   width: 0;
   height: 0;
@@ -90,7 +94,7 @@
   border-right: 20px solid #FFFFFF;
   right: 35%;
 }
-/* line 27, ../sass/video_widget.scss */
+/* line 29, ../sass/video_widget.scss */
 .full .videoWidget-triangle-right, .twoVideo .videoWidget-triangle-right {
   width: 0;
   height: 0;
@@ -98,7 +102,7 @@
   border-bottom: 40px solid transparent;
   border-left: 20px solid #FFFFFF;
 }
-/* line 30, ../sass/video_widget.scss */
+/* line 32, ../sass/video_widget.scss */
 .full .videoWidget-title, .twoVideo .videoWidget-title {
   float: left;
   clear: both;
@@ -110,97 +114,97 @@
   margin-top: 4px;
 }
 
-/* line 33, ../sass/video_widget.scss */
+/* line 35, ../sass/video_widget.scss */
 .full .videoWidget-video {
   width: 33%;
 }
 
 @media (max-width: 800px) and (min-width: 480px) {
-  /* line 37, ../sass/video_widget.scss */
+  /* line 39, ../sass/video_widget.scss */
   .videoWidget {
     display: inline-block;
     width: 100%;
   }
 
-  /* line 38, ../sass/video_widget.scss */
+  /* line 40, ../sass/video_widget.scss */
   .videoWidget-video {
     width: 50%;
   }
 }
 @media (min-width: 480px) {
-  /* line 43, ../sass/video_widget.scss */
+  /* line 45, ../sass/video_widget.scss */
   .videoWidget-video img {
     max-width: 90%;
   }
 }
 @media (max-width: 479px) {
-  /* line 49, ../sass/video_widget.scss */
+  /* line 51, ../sass/video_widget.scss */
   .oneVideo.videoWidget {
     display: block;
     width: 60%;
     margin: 0 auto;
   }
-  /* line 50, ../sass/video_widget.scss */
+  /* line 52, ../sass/video_widget.scss */
   .oneVideo .videoWidget-wrapper {
     display: table;
     width: 100%;
   }
-  /* line 51, ../sass/video_widget.scss */
+  /* line 53, ../sass/video_widget.scss */
   .oneVideo .videoWidget-videos {
     display: table-header-group;
     float: none;
     min-height: 125px;
   }
-  /* line 52, ../sass/video_widget.scss */
+  /* line 54, ../sass/video_widget.scss */
   .oneVideo .videoWidget-left-selection {
     display: table-row-group;
   }
-  /* line 53, ../sass/video_widget.scss */
+  /* line 55, ../sass/video_widget.scss */
   .oneVideo .videoWidget-right-selection {
     display: table-footer-group;
   }
-  /* line 54, ../sass/video_widget.scss */
+  /* line 56, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper {
     display: table-cell;
     padding: 10px 0;
   }
-  /* line 55, ../sass/video_widget.scss */
+  /* line 57, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper:active {
     padding-top: 11px;
     -moz-box-shadow: inset 0 0 1px 0 #000000;
     -webkit-box-shadow: inset 0 0 1px 0 #000000;
     box-shadow: inset 0 0 1px 0 #000000;
   }
-  /* line 56, ../sass/video_widget.scss */
+  /* line 58, ../sass/video_widget.scss */
   .oneVideo .videoWidget-video {
     width: 100%;
   }
-  /* line 57, ../sass/video_widget.scss */
+  /* line 59, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle {
     width: 0;
     height: 0;
     margin: 0 auto;
   }
-  /* line 59, ../sass/video_widget.scss */
+  /* line 61, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-left {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-bottom: 15px solid white;
   }
-  /* line 60, ../sass/video_widget.scss */
+  /* line 62, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-right {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-top: 15px solid white;
   }
 
-  /* line 64, ../sass/video_widget.scss */
+  /* line 66, ../sass/video_widget.scss */
   .max480.videoWidget {
     background: #ECEDF4;
     margin: 15px 0;
     border-radius: 8px;
   }
-  /* line 65, ../sass/video_widget.scss */
+  /* line 67, ../sass/video_widget.scss */
   .max480 .videoWidget-video {
     width: 90%;
     display: table;
@@ -211,12 +215,12 @@
     table-layout: fixed;
     position: relative;
   }
-  /* line 66, ../sass/video_widget.scss */
+  /* line 68, ../sass/video_widget.scss */
   .max480 .videoWidget-video a {
     display: table-cell;
     width: 50%;
   }
-  /* line 67, ../sass/video_widget.scss */
+  /* line 69, ../sass/video_widget.scss */
   .max480 .videoWidget-video::after {
     /*display: table-cell;*/
     content: '\203A';
@@ -234,7 +238,7 @@
     border-radius: 50%;
     line-height: 40px;
   }
-  /* line 85, ../sass/video_widget.scss */
+  /* line 87, ../sass/video_widget.scss */
   .max480 .videoWidget-title {
     display: table-cell;
     vertical-align: middle;
