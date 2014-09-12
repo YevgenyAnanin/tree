@@ -243,9 +243,13 @@
   /* line 82, ../sass/video_widget.scss */
   .max480 .videoWidget-video a {
     display: table-cell;
-    width: 50%;
+    width: 40%;
   }
   /* line 83, ../sass/video_widget.scss */
+  .max480 .videoWidget-video a img {
+    width: 100%;
+  }
+  /* line 85, ../sass/video_widget.scss */
   .max480 .videoWidget-video::after {
     /*display: table-cell;*/
     content: '\203A';
@@ -263,15 +267,16 @@
     border-radius: 50%;
     line-height: 40px;
   }
-  /* line 101, ../sass/video_widget.scss */
+  /* line 103, ../sass/video_widget.scss */
   .max480 .videoWidget-title {
     display: table-cell;
     vertical-align: middle;
-    width: 30%;
+    width: 40%;
     font-weight: bold;
     font-size: 150%;
+    padding-left: 10px;
   }
-  /* line 102, ../sass/video_widget.scss */
+  /* line 104, ../sass/video_widget.scss */
   .max480 .videoWidget-widget-title {
     display: block;
     padding: 12px 12px 0;

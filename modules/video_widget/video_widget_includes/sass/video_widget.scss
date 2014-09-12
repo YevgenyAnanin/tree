@@ -11,9 +11,9 @@ $mobile-triangle-size: 15px;
 }
 
 /* Variables for the max-480px width design, specifying width of image, title, and button */
-$max480-image-width: 50%;
-$max480-title-width: 30%;
-$max480-remainder-width: $max480-image-width - $max480-title-width;
+$max480-image-width: 40%;
+$max480-title-width: 40%;
+$max480-remainder-width: 100 - $max480-image-width - $max480-title-width;
 $max480-button-height-width: 46px;
 
 /* Color and size of video widget title border */
@@ -79,7 +79,9 @@ $widget-title-border: 1px solid #972901;
   .max480 {
     &.videoWidget {background: #ECEDF4; margin:15px 0; border-radius: 8px; }
     .videoWidget-video {width:90%; display: table; margin: 10px auto; padding: 12px; background: #FFFFFF; border-radius: 8px; table-layout: fixed; position: relative;
-      a {display: table-cell; width: $max480-image-width;}
+      a {display: table-cell; width: $max480-image-width;
+        img {width:100%;}
+      }
       &::after {
         /*display: table-cell;*/
         content: '\203A';
@@ -98,7 +100,7 @@ $widget-title-border: 1px solid #972901;
         line-height: $max480-button-height-width - 6;
       }
     }
-    .videoWidget-title {display: table-cell; vertical-align: middle; width:$max480-title-width; font-weight: bold; font-size: 150%; }
+    .videoWidget-title {display: table-cell; vertical-align: middle; width:$max480-title-width; font-weight: bold; font-size: 150%; padding-left:10px;}
     .videoWidget-widget-title { display: block; padding: 12px 12px 0; font-size:175%; font-weight:bold; color:#414040;}
   }
 }
