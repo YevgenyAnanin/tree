@@ -98,6 +98,7 @@ $widget-title-border: 1px solid #972901;
         position: absolute;
         border-radius: 50%;
         line-height: $max480-button-height-width - 6;
+        color:#FFFFFF;
       }
     }
     .videoWidget-title {display: table-cell; vertical-align: middle; width:$max480-title-width; font-weight: bold; font-size: 150%; padding-left:10px;}

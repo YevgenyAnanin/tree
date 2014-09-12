@@ -266,8 +266,9 @@
     position: absolute;
     border-radius: 50%;
     line-height: 40px;
+    color: #FFFFFF;
   }
-  /* line 103, ../sass/video_widget.scss */
+  /* line 104, ../sass/video_widget.scss */
   .max480 .videoWidget-title {
     display: table-cell;
     vertical-align: middle;
@@ -276,7 +277,7 @@
     font-size: 150%;
     padding-left: 10px;
   }
-  /* line 104, ../sass/video_widget.scss */
+  /* line 105, ../sass/video_widget.scss */
   .max480 .videoWidget-widget-title {
     display: block;
     padding: 12px 12px 0;
