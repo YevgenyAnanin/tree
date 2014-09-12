@@ -99,5 +99,6 @@ $widget-title-border: 1px solid #972901;
       }
     }
     .videoWidget-title {display: table-cell; vertical-align: middle; width:$max480-title-width; font-weight: bold; font-size: 150%; }
+    .videoWidget-widget-title { display: block; padding: 12px 12px 0; font-size:175%; font-weight:bold; color:#414040;}
   }
 }
