@@ -49,7 +49,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
       $scope.page = waywireData.page;
       $scope.pageCount = waywireData.page_count;
       $scope.totalCount = waywireData.total_count;
-      $scope.companyName = "A-B-C Corp";
+      $scope.companyName = waywireData.companyName;
       $scope.videos = waywireData.videos;
     }
   }
