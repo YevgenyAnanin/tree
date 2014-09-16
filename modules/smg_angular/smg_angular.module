@@ -18,10 +18,14 @@ function smg_angular_library() {
     'website' => 'https://angularjs.org/',
     'version' => '1.2.22',
     'js' => array(
-      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.min.js' => array(
         'type' => 'file',
         'preprocess' => FALSE,
       ),
+      /*base_path() . 'sites/all/libraries/angularjs/bower_components/angular-animate/angular-animate.min.js' => array(
+        'type' => 'file',
+        'preprocess' => FALSE,
+      ),*/
     ),
   );
 
@@ -32,11 +36,6 @@ function smg_angular_library() {
  * Implements hook_page_alter
  */
 function smg_angular_page_alter(&$page) {
-
-  $node = menu_get_object();
-
-  // #LIA implementation: http://redmine.summitmediagroup.com/projects/lia
-  _lia_sidebar($page, $node);
 
   // Add the AngularJS library
   drupal_add_library('smg_angular', 'angularjs');
@@ -54,7 +53,3 @@ function smg_angular_page_alter(&$page) {
 
 }
 
-function _lia_sidebar(&$page, $node) {
-
-
-}

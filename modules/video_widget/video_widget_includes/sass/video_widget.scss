@@ -10,6 +10,13 @@ $mobile-triangle-size: 15px;
   background-image: linear-gradient(to bottom, $start 0%, $end 100%);
 }
 
+@mixin box-sizing(){
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 /* Variables for the max-480px width design, specifying width of image, title, and button */
 $max480-image-width: 40%;
 $max480-title-width: 40%;
@@ -21,17 +28,38 @@ $widget-title-border: 1px solid #972901;
 
 .full, .twoVideo {
   &.videoWidget {margin-bottom: 10px;}
-  .videoWidget-video {float:left; text-align: center; margin: 10px 0;}
+  .videoWidget-video {text-align: center; margin: 10px 0; display: inline-block;
+    -webkit-transition:all ease-in 1.2s;
+    transition:all ease-in 1.2s;
+    &.ng-hide {
+      display: inline-block !important;
+      /*-webkit-transition:all linear 2s;
+      transition:all linear 2s;*/
+    }
+    &.noHide {
+
+    }
+    &.ng-hide-add-active, &.ng-hide-remove, &.ng-hide-remove-active, &.ng-hide-add {
+      display:inline-block !important;
+      -webkit-transition:all linear 2s;
+      transition:all linear 2s;
+    }
+  }
   .videoWidget-wrapper {overflow: auto; position:relative; min-height: 120px;}
   .videoWidget-wrapper div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
-  .videoWidget-videos {overflow: auto; float:left; width:80%; background-color: #616161; border-top: 1px solid #000000; border-bottom: 1px solid #000000; min-height: 120px;}
+  .videoWidget-videos {overflow: hidden; float:left; width:80%; background-color: #616161; border-top: 1px solid #000000; border-bottom: 1px solid #000000; min-height: 120px; white-space: nowrap;}
   .videoWidget-count-selector {overflow: auto; min-height:1px;
-    &:hover {cursor:pointer};
+    //&:hover {cursor:pointer};
   }
   .videoWidget-left-selection, .videoWidget-right-selection { display:inline-block; width:10%; float:left; }
   .videoWidget-left-triangle-wrapper { background-image: -ms-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -moz-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -o-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #ACACAC), color-stop(1, #828282)); background-image: -webkit-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: linear-gradient(to right, #ACACAC 0%, #828282 100%); border-radius: 8px 0 0 8px;}
   .videoWidget-right-triangle-wrapper { background-image: -ms-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: -moz-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: -o-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: -webkit-gradient(linear, right top, left top, color-stop(0, #ACACAC), color-stop(1, #828282)); background-image: -webkit-linear-gradient(right, #ACACAC 0%, #828282 100%); background-image: linear-gradient(to left, #ACACAC 0%, #828282 100%); border-radius: 0 8px 8px 0; }
-  .videoWidget-triangle-wrapper { position: absolute; width:10%; height:100%; border: 1px solid #000000; }
+  .videoWidget-triangle-wrapper { position: absolute; width:10%; height:100%; border: 1px solid #000000;
+    &:hover {cursor:pointer}
+    &.lastVideoBlock {
+      &:hover {cursor: not-allowed;}
+    }
+  }
   .videoWidget-triangle { position: absolute; top:50%; margin-top: -40px; left:50%; margin-left:-10px; }
   .videoWidget-triangle {
     position: absolute; top:50%; margin-top: -40px; left:50%; margin-left:-10px;
@@ -42,11 +70,12 @@ $widget-title-border: 1px solid #972901;
   .videoWidget-triangle-right {
     width:0; height: 0; border-top: 40px solid transparent; border-bottom: 40px solid transparent; border-left: 20px solid #FFFFFF;
   }
-  .videoWidget-title {float:left; clear: both; width:100%; color:#FFFFFF; font-weight: bold; font-family: "FolksLightRegular",sans-serif; letter-spacing: .03em; margin-top:4px;}
+  .videoWidget-title {float:left; clear: both; width:100%; color:#FFFFFF; font-weight: bold; font-family: "FolksLightRegular",sans-serif; letter-spacing: .03em; margin-top:4px; padding: 0 5px; @include box-sizing; white-space: nowrap; height:30px; overflow:hidden; text-overflow: ellipsis;}
   .videoWidget-widget-title {display: inline-block; font-size:145%; margin-left:25px; padding:10px 25px; @include color-gradient(#F25000, #EE9755); border-top: $widget-title-border; border-left: $widget-title-border; border-right: $widget-title-border; border-top-left-radius: 12px; border-top-right-radius: 12px; color: #FFFFFF;}
+  .lastVideoBlock {opacity: 0.42;}
 }
 
-.full .videoWidget-video {width:33%;}
+.full .videoWidget-video {width:33.33%; width: calc(100%/3);}
 
 
 @media (max-width:800px) and (min-width: 480px) {

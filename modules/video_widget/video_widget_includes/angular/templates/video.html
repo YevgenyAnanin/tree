@@ -1,5 +1,5 @@
-<div class="videoWidget-videos" ng-cloak>
-    <div class="videoWidget-video" ng-repeat="video in videos" ng-show="video.visible">
+<div class="videoWidget-videos" ng-style="videoContainerStyle()" ng-cloak>
+    <div class="videoWidget-video ng-show" ng-style="videoStyle($index)" ng-repeat="video in videos" ng-show="video.visible" ng-class="video.videoCss">
         <a ng-href="{{video.href}}" smg-lightbox ><img ng-src="{{video.thumbnail}}"></a>
         <span class="videoWidget-title">{{video.name}}</span>
     </div>

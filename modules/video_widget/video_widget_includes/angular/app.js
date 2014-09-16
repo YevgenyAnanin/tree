@@ -1,4 +1,4 @@
-var videoWidget = angular.module('videoWidget', ['videoWidgetConfig']);
+var videoWidget = angular.module('videoWidget', ['videoWidgetConfig'/*, 'ngAnimate'*/]);
 
 // Bootstrap angularjs manually
 jQuery(document).ready(function () {
@@ -8,35 +8,7 @@ jQuery(document).ready(function () {
 /**
  * The main controller for each video widget
  */
-videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http', function ($scope, getConfig, $attrs, $http) {
-
-  /*
-  $scope.videos = [
-    {'name':'Test Video 1',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/H06L9B3P3T7T5YH1.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/Moxa-IP-Video-Showcase-Overview'},
-    {'name': 'Test Video 2',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/C448BH34GP9VYXN0.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/The-Monthly-Rundown-for-Moxa-On'},
-    {'name': 'Test Video 3',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/6VV9DG0JB3JV1FKQ.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-Intelligent-Video-Anal'},
-    {'name':'Test Video 4',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/T682GX1KXKC21NG3.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-De-mist-Function-Demo'},
-    {'name': 'Test Video 5',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/9YMDDD32L57GZJ81.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-Footage-Low-light-and'},
-    {'name': 'Test Video 6',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/BJFSXR3DX0PH61XZ.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/VPort-36-De-mist-Function-Dem-2'},
-    {'name': 'Test Video 7',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/75GQFF2X9LV148SG.jpg',
-     'href': 'http://summitmediagroup.magnify.net/video/Moxa-VPort-36-Footage-Vision-Te'}
-    {'name': 'Test Video 8',
-     'img_url': 'http://s3.amazonaws.com/magnifythumbs/GMN7042X1Z6VJH82.jpg',
-     'href': 'http://summitmediagroup.magnify.net/embed/content/MFJLR62GCV3YWPCN'}
-  ];*/
+videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http', '$element', function ($scope, getConfig, $attrs, $http, $element) {
 
   $scope.nid = $attrs.nid;
 
@@ -78,6 +50,8 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
     return Math.ceil($scope.videos.length / $scope.videoWidgetParams.videosToShow);
   };
 
+  $scope.isLastVideoBlock = false;
+
   // Helper function for determining size of object
   // @see http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
   $scope.sizeOfObj = function (obj) {
@@ -88,29 +62,43 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
     return size;
   }
 
-  // Iterates the counter to the next position, or to position 1
-  // if we've reached the end
+  /**
+   * Determine if the video widget is currently showing the last video block.  For example, if there
+   * are 9 videos, and we're showing 3 at a time, then when the widget is showing videos 6-9 then
+   * we're on the last video block
+   */
+  $scope.isLastVideoBlockCalculate = function () {
+    return ( ($scope.videoBlockCount() - $scope.currentCount === 0) && !($scope.sizeOfObj($scope.videos) < $scope.totalCount) );
+  }
+
+  // Iterates the counter to the next position
   $scope.videosNext = function () {
 
     var videoBlockCount = $scope.videoBlockCount();
-
     if($scope.currentCount < videoBlockCount) {
 
       // If we're close to the end, then use ajax to get more videos
-      if( (videoBlockCount - $scope.currentCount === 1) && ($scope.sizeOfObj($scope.videos) < $scope.totalCount) ) {
-        var waywireJSONPath = '/waywire_leadership/get/json/' + $scope.nid + '/' + (++$scope.page);
-        $http({method: 'GET', url: waywireJSONPath}).
-          success(function (data, status, headers, config) {
-            for (i = 0; i < data.videos.length; i++) {
-              $scope.videos.push( data.videos[i] );
-            }
-          });
+      if( videoBlockCount - $scope.currentCount === 1 ) {
+
+        if ( $scope.sizeOfObj($scope.videos) < $scope.totalCount ) {
+          var waywireJSONPath = '/waywire_leadership/get/json/' + $scope.nid + '/' + (++$scope.page);
+          $http({method: 'GET', url: waywireJSONPath}).
+            success(function (data, status, headers, config) {
+              for (i = 0; i < data.videos.length; i++) {
+                $scope.videos.push( data.videos[i] );
+
+              }
+            });
+        }
+        else {
+          $scope.isLastVideoBlock = true;
+        }
       }
 
       $scope.currentCount++;
     }
     else {
-      $scope.currentCount = 1;
+      //$scope.currentCount = 1;
     }
 
   };
@@ -118,6 +106,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
   $scope.videosPrev = function () {
     if($scope.currentCount > 1) {
       $scope.currentCount--;
+      $scope.isLastVideoBlock = false;
     }
   };
 
@@ -126,12 +115,22 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
     var startIndex = ($scope.currentCount - 1) * $scope.videoWidgetParams.videosToShow;
     var endIndex = ($scope.currentCount * $scope.videoWidgetParams.videosToShow);
 
+    // Check if we're on the last video block
+    $scope.isLastVideoBlock = $scope.isLastVideoBlockCalculate();
+
     $scope.videos.forEach(function(video, index) {
       if (!(index >= startIndex && index < endIndex)) {
         video.visible = false;
+        if (index < startIndex) {
+          video.videoCss = 'hideLeft';
+        }
+        else {
+          video.videoCss = 'hideRight';
+        }
       }
       else {
         video.visible = true;
+        video.videoCss = 'noHide';
       }
     });
   };
@@ -191,6 +190,51 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
   // Call the mergeCssClassesObjs function initially
   $scope.mergeCssClassesObjs();
 
+  $scope.leftMargin = function (index) {
+    var styles = {};
+    if (index === 0) {
+      var marginLeft = -100 * ($scope.currentCount - 1);
+      styles["margin-left"] = marginLeft + '%';
+    }
+    return styles;
+  }
+
+  // Dynamically computes some styles for the videos in the video widget videos
+  $scope.videoStyle = function (index) {
+    var styles = {};
+
+    // If the index is 0, then we're on the first video.  The margin left prop
+    // of this video determines how far the entire video widget is scrolled
+    if (index === 0) {
+      var marginLeft = -100 * ($scope.currentCount -1);
+      styles["margin-left"] = marginLeft + '%';
+    }
+
+    var videosContainer = jQuery($element).find(".videoWidget-videos");
+    var correctVideoWidth = Math.floor(videosContainer.width() / $scope.videoWidgetParams.videosToShow);
+    styles["width"] = correctVideoWidth;
+
+    return styles;
+  }
+
+  // Function for ng-style for video container div
+  $scope.videoContainerStyle = function () {
+
+    var videosContainer = jQuery($element).find(".videoWidget-videos");
+    // Set the width of the videoWidget-videos div to the closest number
+    // divisible by the "videos to show" number
+    var videosToShow = $scope.videoWidgetParams.videosToShow;
+
+    if (videosContainer.width() % videosToShow != 0) {
+      var newContainerWidth = Math.floor(videosContainer.width() / videosToShow) * videosToShow;
+      videosContainer.css({"width":newContainerWidth});
+    }
+
+  }
+
+
+
+
 }]);
 
 /**
@@ -241,8 +285,9 @@ videoWidget.directive('resizable', function ($window) {
           'h': w.height()
         };
       };
-      scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
 
+      scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
+        //scope.modifyWidgetVideoWidths();
         // This function checks the "videosToShow" parameter in the parent
         // scope, and if necessary it changes the parameter and calls the
         // draw() function.  It also calls the changeClass function.
