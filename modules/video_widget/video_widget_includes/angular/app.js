@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
 /**
  * The main controller for each video widget
  */
-videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http', '$element', function ($scope, getConfig, $attrs, $http, $element) {
+videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http', '$element', '$window', function ($scope, getConfig, $attrs, $http, $element, $window) {
 
   $scope.nid = $attrs.nid;
 
@@ -117,6 +117,8 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
 
     // Check if we're on the last video block
     $scope.isLastVideoBlock = $scope.isLastVideoBlockCalculate();
+    // Add to extraCssClasses
+    $scope.extraCssClasses["lastVideoBlock"] = $scope.isLastVideoBlock;
 
     $scope.videos.forEach(function(video, index) {
       if (!(index >= startIndex && index < endIndex)) {
@@ -130,7 +132,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
       }
       else {
         video.visible = true;
-        video.videoCss = 'noHide';
+        video.videoCss = (endIndex - index == 1) ? {noHide:true, lastNoHide:true} : {noHide:true};
       }
     });
   };
@@ -180,7 +182,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
   // This object contains extra classes that will be added to the templates.
   // It will look to see if there are any classes added globally in the site
   // specific video widget module (videoWidgetConfig).
-  $scope.extraCssClasses = ($scope.config.extraCssClasses !== undefined) ? $scope.config.extraCssClasses : {};
+  $scope.extraCssClasses = ($scope.config.extraCssClasses !== undefined) ? angular.copy($scope.config.extraCssClasses) : {};
 
   // This function simply merges responsiveCssClasses with extraCssClasses
   $scope.mergeCssClassesObjs = function () {
@@ -189,50 +191,6 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
 
   // Call the mergeCssClassesObjs function initially
   $scope.mergeCssClassesObjs();
-
-  $scope.leftMargin = function (index) {
-    var styles = {};
-    if (index === 0) {
-      var marginLeft = -100 * ($scope.currentCount - 1);
-      styles["margin-left"] = marginLeft + '%';
-    }
-    return styles;
-  }
-
-  // Dynamically computes some styles for the videos in the video widget videos
-  $scope.videoStyle = function (index) {
-    var styles = {};
-
-    // If the index is 0, then we're on the first video.  The margin left prop
-    // of this video determines how far the entire video widget is scrolled
-    if (index === 0) {
-      var marginLeft = -100 * ($scope.currentCount -1);
-      styles["margin-left"] = marginLeft + '%';
-    }
-
-    var videosContainer = jQuery($element).find(".videoWidget-videos");
-    var correctVideoWidth = Math.floor(videosContainer.width() / $scope.videoWidgetParams.videosToShow);
-    styles["width"] = correctVideoWidth;
-
-    return styles;
-  }
-
-  // Function for ng-style for video container div
-  $scope.videoContainerStyle = function () {
-
-    var videosContainer = jQuery($element).find(".videoWidget-videos");
-    // Set the width of the videoWidget-videos div to the closest number
-    // divisible by the "videos to show" number
-    var videosToShow = $scope.videoWidgetParams.videosToShow;
-
-    if (videosContainer.width() % videosToShow != 0) {
-      var newContainerWidth = Math.floor(videosContainer.width() / videosToShow) * videosToShow;
-      videosContainer.css({"width":newContainerWidth});
-    }
-
-  }
-
-
 
 
 }]);
@@ -349,6 +307,148 @@ videoWidget.directive('smgLightbox',['$timeout', function ($timeout) {
       $timeout(function () {
         createLinkPlayer(element[0]);
       }, 0);
+
+      // Make the whole video div clickable
+      var videoDiv = element.parents(".videoWidget-video");
+      videoDiv.on("click", function () {
+        element[0].click();
+      });
+    }
+  };
+}]);
+
+/**
+ * This directive is applied to each videoWidget-videos div
+ */
+videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($window, $timeout) {
+  return {
+    require: 'videoContainerStyle',
+    restrict: 'A',
+    scope: true,
+    controller: function ($scope, $element) {
+      this.changeVideoContainerHeight = function () {
+
+        var videosContainer = $element;
+
+        if ($window.innerWidth > 480) {
+
+          // Set the width of the videoWidget-videos div to the closest number
+          // divisible by the "videos to show" number
+          var videosToShow = $scope.videoWidgetParams.videosToShow;
+
+          //var contWidth = Math.floor(videosContainer[0].getBoundingClientRect().width);
+          var videoWidgetWrapperWidth = $element.parents(".videoWidget-wrapper").width();
+          var videosMaxWidth = .8;
+          if ( $element.css("max-width") != "none" ) {
+            var mWidth = $element.css("max-width");
+            if ( mWidth.search("%") ) {
+              videosMaxWidth = parseFloat(mWidth) / 100;
+            }
+          }
+          var contWidth = videosMaxWidth * videoWidgetWrapperWidth;
+          if (contWidth % videosToShow != 0) {
+            var newContainerWidth = Math.floor(contWidth / videosToShow) * videosToShow;
+            $element.css({"width":newContainerWidth+"px"});
+          }
+
+          $element.css({"height":""});
+        }
+        else {
+          // Calculate the height of the video container
+          var newHeight = 0;
+          videosContainer.find(".videoWidget-video.noHide").each(function (i,e) {
+            newHeight += jQuery(e).outerHeight(true);
+          });
+
+          // Subtract the margin-bottom value
+          newHeight -= 2 * parseInt(videosContainer.find(".videoWidget-video.lastNoHide").css("margin-bottom"));
+          $element[0].style.height = newHeight + 'px';
+
+          $element.css({"width":""});
+
+        }
+      };
+    },
+    link: function (scope, element, attrs, currentCtrl) {
+
+      //$timeout(currentCtrl.changeVideoContainerHeight,0);
+
+      scope.$watch(scope.getWindowDimensions(), function (newValue, oldValue) {
+        currentCtrl.changeVideoContainerHeight();
+      });
+
+      angular.element($window).bind('resize', function () {
+        currentCtrl.changeVideoContainerHeight();
+        scope.$apply();
+      });
+
+    }
+  };
+}]);
+
+/**
+ * This directive is applied to each video inside of a video slider
+ */
+videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $timeout) {
+  return {
+    restrict: 'A',
+    require: '^videoContainerStyle',
+    scope: true,
+    link: function (scope, element, attrs, vidContCtrl) {
+
+      scope.changeVideoStyles = function () {
+
+        if ($window.innerWidth < 480) {
+
+          // Make sure all videos are equal height when in mobile view
+          // so we make them all the height of the first video
+          var heightFirst = element.siblings().first().height();
+          element.siblings().height(heightFirst + "px");
+
+          if (scope.$last) {
+            $timeout(vidContCtrl.changeVideoContainerHeight,1000);
+            $timeout(vidContCtrl.changeVideoContainerHeight,4000);
+          }
+          element.css("margin-left","");
+          element.css("width","");
+
+          if (scope.$first && (scope.currentCount > 1)) {
+            //newMargin = (element.outerHeight() * scope.videoWidgetParams.videosToShow) + (parseInt(element.css("margin-top")) * 2);
+            var elementMargin = parseInt(element.css("margin-bottom"));
+            newMargin = (-1 * (scope.currentCount - 1))
+                        * ((element.outerHeight() * scope.videoWidgetParams.videosToShow) + (elementMargin * (scope.videoWidgetParams.videosToShow)));
+
+            newMargin += elementMargin;
+            element.css({"margin-top":newMargin + "px"});
+          }
+        }
+        else {
+
+          var videosContainer = element.parents(".videoWidget-videos");
+          var correctVideoWidth = Math.floor(videosContainer.width() / scope.videoWidgetParams.videosToShow);
+          element.css({"width":correctVideoWidth});
+
+          // If the index is 0, then we're on the first video.  The margin left prop
+          // of this video determines how far the entire video widget is scrolled
+          if (scope.$index === 0) {
+            var marginLeft = -100 * (scope.currentCount -1);
+            element.css({"margin-left":marginLeft + '%'});
+          }
+
+          // Remove any specific height
+          element.css({"height":""});
+        }
+      };
+
+      scope.$watch('currentCount', function () {
+        scope.changeVideoStyles();
+      });
+
+      angular.element($window).bind('resize', function () {
+        scope.changeVideoStyles();
+        scope.$apply();
+      });
+
     }
   };
 }]);
