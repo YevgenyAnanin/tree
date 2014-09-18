@@ -33,23 +33,50 @@ function smg_angular_library() {
 }
 
 /**
- * Implements hook_page_alter
+ * Implements hook_page_alter().
  */
 function smg_angular_page_alter(&$page) {
+  $add_angular = TRUE;
 
-  // Add the AngularJS library
-  drupal_add_library('smg_angular', 'angularjs');
-
-  // Add any AngularJS templates that are defined by other modules through the
-  // smg_angular_add_template hook
-  if(sizeof(module_implements('smg_angular_add_template')) > 0) {
-    $angular_templates = array();
-    foreach(module_implements('smg_angular_add_template') as $module) {
-      $angular_templates = array_merge($angular_templates, module_invoke($module, 'smg_angular_add_template'));
-    }
-
-    drupal_add_js(array('smgAngularTemplates' => $angular_templates), 'setting');
+  // Don't add angular on the admin pages.
+  if (path_is_admin(current_path())) {
+    $add_angular = FALSE;
   }
 
-}
+  if ($add_angular) {
+    // Add object so other angular apps can add their modules to them. In your
+    // angular javascript add your module by adding the following to the end of
+    // the file:
+    //   window.smgAngularDependencies.push(MODULE_NAME);
+    $inline_script = '<script type="text/javascript">window.smgAngularDependencies = [];</script>';
+    $element = array(
+      '#type' => 'markup',
+      '#markup' => $inline_script,
+    );
+    drupal_add_html_head($element, 'smgAngularDependencies');
 
+    // This will add a global app that adds all the needed angular modules to a
+    // page.
+    drupal_add_js('
+      var smgGlobalApp = angular.module("smgGlobalApp", smgAngularDependencies);
+      jQuery(document).ready(function () {
+        angular.bootstrap(document, ["smgGlobalApp"] );
+      });',
+      array('type' => 'inline', 'scope' => 'footer')
+    );
+
+    // Add the AngularJS library
+    drupal_add_library('smg_angular', 'angularjs');
+
+    // Add any AngularJS templates that are defined by other modules through the
+    // smg_angular_add_template hook
+    if(sizeof(module_implements('smg_angular_add_template')) > 0) {
+      $angular_templates = array();
+      foreach(module_implements('smg_angular_add_template') as $module) {
+        $angular_templates = array_merge($angular_templates, module_invoke($module, 'smg_angular_add_template'));
+      }
+
+      drupal_add_js(array('smgAngularTemplates' => $angular_templates), 'setting');
+    }
+  }
+}

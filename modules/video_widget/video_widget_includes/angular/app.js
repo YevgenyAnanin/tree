@@ -1,9 +1,11 @@
 var videoWidget = angular.module('videoWidget', ['videoWidgetConfig'/*, 'ngAnimate'*/]);
 
 // Bootstrap angularjs manually
+/*
 jQuery(document).ready(function () {
   angular.bootstrap(document, ['videoWidget'] );
 });
+*/
 
 /**
  * The main controller for each video widget
@@ -452,3 +454,6 @@ videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $
     }
   };
 }]);
+
+// will be loaded in smg_angular module
+window.smgAngularDependencies.push('videoWidget');
