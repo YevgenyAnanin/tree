@@ -274,7 +274,7 @@ function waywire_leadership_node_view_alter(&$build) {
 
       // Add the videos to the Drupal.settings object
       if (isset($waywire_videos)) {
-        drupal_add_js(array('waywire_leadership' => $waywire_videos), 'setting');
+        waywire_leadership_add_videos_to_drupal_settings_object($waywire_videos);
         foreach ($waywire_videos as $company_nid => $value) {
           $build['leadership_videos'][] = array(
             '#markup' => theme('video_widget', array('nid' => $company_nid)),
@@ -282,5 +282,36 @@ function waywire_leadership_node_view_alter(&$build) {
         }
       }
     }
+  }
+}
+
+/**
+ * Adds the videos to to the Drupal.settings.waywire_leadership object. If
+ * videos were already added in a previous call it will look up the static
+ * variable and update it.
+ *
+ * @param array $videos
+ *   an array of company data that contains videos.
+ */
+function waywire_leadership_add_videos_to_drupal_settings_object($videos) {
+  $js = &drupal_static('drupal_add_js');
+  $run_drupal_add_js = TRUE;
+  if (isset($js['settings']['data'][0])) {
+    foreach ($js['settings']['data'] as $key => $data) {
+      if (isset($js['settings']['data'][$key]['waywire_leadership'])) {
+        $run_drupal_add_js = FALSE;
+        foreach ($videos as $nid => $data) {
+          if (!isset($js['settings']['data'][$key]['waywire_leadership'][$nid])) {
+            $js['settings']['data'][$key]['waywire_leadership'][$nid] = $data;
+          }
+        }
+      }
+    }
+  }
+
+  // Only run drupal_add_js if it never been run before (only for waywire
+  // videos).
+  if ($run_drupal_add_js) {
+    drupal_add_js(array('waywire_leadership' => $videos), 'setting');
   }
 }
