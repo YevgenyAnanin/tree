@@ -238,12 +238,15 @@ function waywire_leadership_save_cache($company) {
  */
 function waywire_leadership_get_company_video_json($company_nid, $page = 1, $jsonDecode = TRUE) {
   $cache = cache_get('company_' . $company_nid . '_page_' . $page, 'cache_waywire_leadership');
+  $json = array();
 
-  if ($jsonDecode) {
-    $json = json_decode($cache->data);
-  }
-  else {
-    $json = $cache->data;
+  if ($cache) {
+    if ($jsonDecode) {
+      $json = json_decode($cache->data);
+    }
+    else {
+      $json = $cache->data;
+    }
   }
   return $json;
 }
