@@ -76,6 +76,7 @@ function video_widget_node_view_alter(&$build) {
 function video_widget_smg_angular_add_template() {
   $templates = array(
     'video' => '/' . drupal_get_path('module','video_widget') . '/video_widget_includes/angular/templates/video.html',
+    'videoWidget' => '/' . drupal_get_path('module', 'video_widget') . '/video_widget_includes/angular/templates/videoWidget.html',
   );
 
   return $templates;

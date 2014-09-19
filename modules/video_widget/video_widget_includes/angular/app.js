@@ -19,6 +19,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
   if ( Drupal.settings.hasOwnProperty('waywire_leadership') ) {
     if ( Drupal.settings.waywire_leadership.hasOwnProperty($scope.nid) ) {
       var waywireData = Drupal.settings.waywire_leadership[$scope.nid];
+
       // Set some properties on the scope
       $scope.page = waywireData.page;
       $scope.pageCount = waywireData.page_count;
@@ -197,6 +198,19 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
 
 }]);
 
+videoWidget.directive('videoWidget', ['$window', function ($window) {
+
+  var videoWidgetTpl = Drupal.settings.smgAngularTemplates.videoWidget;
+
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: true,
+    controller: 'VideoListCtrl',
+    templateUrl: videoWidgetTpl
+  };
+}]);
+
 /**
  * This directive defines the videoWidget-videos div that contains the videos,
  * and it is responsible for watching the value of the counter, and then
@@ -340,14 +354,17 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
 
           //var contWidth = Math.floor(videosContainer[0].getBoundingClientRect().width);
           var videoWidgetWrapperWidth = $element.parents(".videoWidget-wrapper").width();
+
           var videosMaxWidth = .8;
           if ( $element.css("max-width") != "none" ) {
             var mWidth = $element.css("max-width");
-            if ( mWidth.search("%") ) {
+
+            if ( mWidth.search("%") > -1) {
               videosMaxWidth = parseFloat(mWidth) / 100;
             }
           }
           var contWidth = videosMaxWidth * videoWidgetWrapperWidth;
+
           if (contWidth % videosToShow != 0) {
             var newContainerWidth = Math.floor(contWidth / videosToShow) * videosToShow;
             $element.css({"width":newContainerWidth+"px"});
@@ -429,7 +446,7 @@ videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $
           var videosContainer = element.parents(".videoWidget-videos");
           var correctVideoWidth = Math.floor(videosContainer.width() / scope.videoWidgetParams.videosToShow);
           element.css({"width":correctVideoWidth});
-
+          console.log(correctVideoWidth);
           // If the index is 0, then we're on the first video.  The margin left prop
           // of this video determines how far the entire video widget is scrolled
           if (scope.$index === 0) {
