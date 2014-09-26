@@ -207,6 +207,11 @@ videoWidget.directive('videoWidget', ['$window', function ($window) {
     replace: true,
     scope: true,
     controller: 'VideoListCtrl',
+    link: function (scope, elem, attrs) {
+      attrs.$observe('nid', function (newValue) {
+        scope.nid = newValue;
+      });
+    },
     templateUrl: videoWidgetTpl
   };
 }]);
@@ -225,6 +230,7 @@ videoWidget.directive('videoSlider', function () {
     restrict: 'AE',
     replace: true,
     scope: true,
+
     link: function (scope, element, attrs) {
 
       // Initialize the visibility of the videos in the video
@@ -237,7 +243,6 @@ videoWidget.directive('videoSlider', function () {
       });
 
     },
-    //templateUrl: '/video-widget/resource/angular-template/video.html'
     templateUrl: videoTpl
   };
 });
@@ -387,6 +392,7 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
 
         }
       };
+
     },
     link: function (scope, element, attrs, currentCtrl) {
 
@@ -399,6 +405,12 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
       angular.element($window).bind('resize', function () {
         currentCtrl.changeVideoContainerHeight();
         scope.$apply();
+      });
+
+      scope.$on('leadershipHoverBegin', function () {
+        currentCtrl.changeVideoContainerHeight();
+
+        scope.$broadcast('videoContainerVisible');
       });
 
     }
@@ -446,7 +458,7 @@ videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $
           var videosContainer = element.parents(".videoWidget-videos");
           var correctVideoWidth = Math.floor(videosContainer.width() / scope.videoWidgetParams.videosToShow);
           element.css({"width":correctVideoWidth});
-          console.log(correctVideoWidth);
+
           // If the index is 0, then we're on the first video.  The margin left prop
           // of this video determines how far the entire video widget is scrolled
           if (scope.$index === 0) {
@@ -466,6 +478,14 @@ videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $
       angular.element($window).bind('resize', function () {
         scope.changeVideoStyles();
         scope.$apply();
+      });
+
+      scope.$on('videoContainerVisible', function () {
+        element.css({"transition":"none"});
+        scope.changeVideoStyles();
+        $timeout(function () {
+          element.css({"transition":""});
+        }, 100);
       });
 
     }

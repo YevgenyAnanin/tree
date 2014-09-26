@@ -277,7 +277,8 @@ function waywire_leadership_node_view_alter(&$build) {
         waywire_leadership_add_videos_to_drupal_settings_object($waywire_videos);
         foreach ($waywire_videos as $company_nid => $value) {
           $build['leadership_videos'][] = array(
-            '#markup' => theme('video_widget', array('nid' => $company_nid)),
+            //'#markup' => theme('video_widget', array('nid' => $company_nid)),
+            '#markup' => '<video-widget nid="' . $company_nid . '"></video-widget>',
           );
         }
       }
