@@ -436,32 +436,44 @@ videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $
           var heightFirst = element.siblings().first().height();
           element.siblings().height(heightFirst + "px");
 
+          element.css("margin-left","");
+          if ( scope.$first ) {
+            $timeout(function () {
+              element.css("width","");
+              element.siblings().css("width","");
+            }, 200);
+          }
+
           if (scope.$last) {
             $timeout(vidContCtrl.changeVideoContainerHeight,1000);
             $timeout(vidContCtrl.changeVideoContainerHeight,4000);
           }
-          element.css("margin-left","");
-          element.css("width","");
+
 
           if (scope.$first && (scope.currentCount > 1)) {
-            //newMargin = (element.outerHeight() * scope.videoWidgetParams.videosToShow) + (parseInt(element.css("margin-top")) * 2);
-            var elementMargin = parseInt(element.css("margin-bottom"));
-            newMargin = (-1 * (scope.currentCount - 1))
-                        * ((element.outerHeight() * scope.videoWidgetParams.videosToShow) + (elementMargin * (scope.videoWidgetParams.videosToShow)));
+            $timeout(function () {
+              var elementMargin = parseInt(element.css("margin-bottom"));
+              newMargin = (-1 * (scope.currentCount - 1))
+              * ((element.outerHeight() * scope.videoWidgetParams.videosToShow) + (elementMargin * (scope.videoWidgetParams.videosToShow)));
 
-            newMargin += elementMargin;
-            element.css({"margin-top":newMargin + "px"});
+              newMargin += elementMargin;
+              element.css({"margin-top":newMargin + "px"});
+            }, 300);
           }
         }
         else {
 
-          var videosContainer = element.parents(".videoWidget-videos");
-          var correctVideoWidth = Math.floor(videosContainer.width() / scope.videoWidgetParams.videosToShow);
-          element.css({"width":correctVideoWidth});
-
           // If the index is 0, then we're on the first video.  The margin left prop
           // of this video determines how far the entire video widget is scrolled
           if (scope.$index === 0) {
+
+            $timeout(function () {
+              var videosContainer = element.parents(".videoWidget-videos");
+              var correctVideoWidth = Math.floor(videosContainer.width() / scope.videoWidgetParams.videosToShow);
+              element.css({"width":correctVideoWidth});
+              element.siblings(".videoWidget-video").css({"width":correctVideoWidth});
+            }, 100);
+
             var marginLeft = -100 * (scope.currentCount -1);
             element.css({"margin-left":marginLeft + '%'});
           }
@@ -476,8 +488,10 @@ videoWidget.directive('videoStyle', ['$window', '$timeout', function ($window, $
       });
 
       angular.element($window).bind('resize', function () {
-        scope.changeVideoStyles();
-        scope.$apply();
+        if ( element.is(":visible") ) {
+          scope.changeVideoStyles();
+          //scope.$apply();
+        }
       });
 
       scope.$on('videoContainerVisible', function () {
