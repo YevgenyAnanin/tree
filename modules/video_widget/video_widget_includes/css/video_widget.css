@@ -60,6 +60,7 @@
 }
 /* line 55, ../sass/video_widget.scss */
 .full .videoWidget-left-triangle-wrapper, .twoVideo .videoWidget-left-triangle-wrapper {
+  background: #acacac;
   background-image: -ms-linear-gradient(left, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(left, #acacac 0%, #828282 100%);
   background-image: -o-linear-gradient(left, #acacac 0%, #828282 100%);
@@ -70,6 +71,7 @@
 }
 /* line 56, ../sass/video_widget.scss */
 .full .videoWidget-right-triangle-wrapper, .twoVideo .videoWidget-right-triangle-wrapper {
+  background: #acacac;
   background-image: -ms-linear-gradient(right, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(right, #acacac 0%, #828282 100%);
   background-image: -o-linear-gradient(right, #acacac 0%, #828282 100%);
