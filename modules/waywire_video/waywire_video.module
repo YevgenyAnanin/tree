@@ -135,7 +135,7 @@ function waywire_video_access($op, $waywire_video = NULL, $account = NULL) {
   if (user_access('administer waywire_videos', $account)) {
     return TRUE;
   }
-  if (isset($waywire_video) && $type_name = $waywire_video->type) {
+  if (isset($waywire_video->type) && $type_name = $waywire_video->type) {
     $op = ($op == 'view') ? 'view' : 'edit';
     if (user_access("$op any $type_name waywire_video", $account)) {
       return TRUE;
