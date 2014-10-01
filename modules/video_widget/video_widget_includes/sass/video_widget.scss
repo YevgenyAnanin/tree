@@ -74,7 +74,9 @@ $widget-title-border: 1px solid #972901;
   .videoWidget-title {float:left; clear: both; width:100%; color:#FFFFFF; font-weight: bold; font-family: "FolksLightRegular",sans-serif; letter-spacing: .03em; margin-top:4px; padding: 0 5px; @include box-sizing; white-space: nowrap; height:30px; overflow:hidden; text-overflow: ellipsis;
     div {overflow:hidden; text-overflow: ellipsis; white-space: nowrap;}
   }
-  .videoWidget-widget-title {display: inline-block; font-size:145%; margin-left:25px; padding:10px 25px; @include color-gradient(#F25000, #EE9755); border-top: $widget-title-border; border-left: $widget-title-border; border-right: $widget-title-border; border-top-left-radius: 12px; border-top-right-radius: 12px; color: #FFFFFF;}
+  .videoWidget-widget-title {display: inline-block; font-size:145%; margin-left:25px; padding:10px 25px; @include color-gradient(#F25000, #EE9755); border-top: $widget-title-border; border-left: $widget-title-border; border-right: $widget-title-border; border-top-left-radius: 12px; border-top-right-radius: 12px; color: #FFFFFF;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F25000', endColorstr='#EE9755');
+  }
 }
 .videoWidget-title {
   &:hover {cursor:pointer;}
