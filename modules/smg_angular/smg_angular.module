@@ -48,6 +48,28 @@ function smg_angular_page_alter(&$page) {
   }
 
   if ($add_angular) {
+    // This will fix IE8 problems
+    // @see https://docs.angularjs.org/guide/ie
+    $all_custom_elements = array();
+    foreach (module_implements('smg_angular_custom_elements') as $module) {
+      $custom_elements = module_invoke($module, 'smg_angular_custom_elements');
+      foreach ($custom_elements as $element) {
+        $all_custom_elements[] = $element;
+      }
+    }
+    if (sizeof($all_custom_elements) > 0) {
+      $element_string = '<!--[if lte IE 8]><script>';
+      foreach ($all_custom_elements as $element) {
+        $element_string .= "document.createElement('" . $element . "');";
+      }
+      $element_string .= "</script><![endif]-->";
+      $head_element = array(
+        '#type' => 'markup',
+        '#markup' => $element_string,
+      );
+      drupal_add_html_head($head_element, 'smgAngularCustomElements');
+    }
+
     // Add object so other angular apps can add their modules to them. In your
     // angular javascript add your module by adding the following to the end of
     // the file:
@@ -83,4 +105,22 @@ function smg_angular_page_alter(&$page) {
       drupal_add_js(array('smgAngularTemplates' => $angular_templates), 'setting');
     }
   }
+}
+
+/**
+ * Adds markup to the head tag, to add a fix for AngularJS in IE8-, as
+ * per https://docs.angularjs.org/guide/ie.  This function should be called
+ * by any other function, to register any custom elements
+ *
+ * @param string $element
+ *  - Custom AngularJS element
+ */
+function _smg_angular_register_custom_elements($elements) {
+  $all_elements = &drupal_static(__FUNCTION__, array());
+
+  foreach ($elements as $element) {
+    $all_elements[] = $element;
+  }
+
+  return $all_elements;
 }

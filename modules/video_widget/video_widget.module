@@ -41,37 +41,74 @@ function video_widget_menu() {
  */
 function video_widget_page_alter(&$page) {
 
-  /*
-  $stuff = array(
-    'stuff' => array(
-      '#markup' => theme('video_widget', array('nid' => '1000')),
-      '#weight' => 0,
-    ),
-    'stuff2' => array(
-      '#markup' => theme('video_widget', array('nid' => '2000')),
-      '#weight' => 0,
-    ),
-    'stuff3' => array(
-      '#markup' => theme('video_widget', array('nid' => '3000')),
-      '#weight' => 0,
-    ),
-  );
-  array_unshift($page['content'], $stuff);*/
 }
 
 /**
  * Implements hook_node_view_alter
  */
 function video_widget_node_view_alter(&$build) {
-  // Add the files for our Angular app
-  drupal_add_js(drupal_get_path('module','video_widget').'/video_widget_includes/angular/app.js');
-  //drupal_add_js('http://summitmediagroup.magnify.net/embed/player/lightbox.js', array('type' => 'external', 'group' => JS_LIBRARY, 'weight' => -100));
-  drupal_add_js(drupal_get_path('module', 'video_widget').'/video_widget_includes/js/lightbox.js');
-  drupal_add_css(drupal_get_path('module','video_widget').'/video_widget_includes/css/video_widget.css');
+
+  $add_widget = _video_widget_add_widget();
+
+  if ($add_widget['delta']) {
+    if (isset($add_widget['js'])) {
+      foreach ($add_widget['js'] as $js_group) {
+        foreach ($js_group as $key => $js_file) {
+          drupal_add_js($js_file);
+        }
+      }
+    }
+    if (isset($add_widget['css'])) {
+      foreach ($add_widget['css'] as $css_group) {
+        foreach ($css_group as $key => $css_file) {
+          drupal_add_js($js_file);
+        }
+      }
+    }
+
+    // Add the files for our Angular app
+    drupal_add_js(drupal_get_path('module','video_widget').'/video_widget_includes/angular/app.js');
+    //drupal_add_js('http://summitmediagroup.magnify.net/embed/player/lightbox.js', array('type' => 'external', 'group' => JS_LIBRARY, 'weight' => -100));
+    drupal_add_js(drupal_get_path('module', 'video_widget').'/video_widget_includes/js/lightbox.js');
+    drupal_add_css(drupal_get_path('module','video_widget').'/video_widget_includes/css/video_widget.css');
+  }
+}
+
+/**
+ * Any code (anywhere on the site) that wants to add the video widget to the page
+ * MUST call this function, to let the video widget module know that it should add
+ * the app.js file
+ *
+ * @param bool $extra
+ *  If the caller of this function wants to add extra js and/or css files, they can
+ *  provide an array like array('js' => array('path_to_file1', 'path_to_file2'), 'css' => array('path'))
+ * @return array
+ */
+function _video_widget_add_widget($extra = FALSE) {
+  $extra_js = &drupal_static(__FUNCTION__, array());
+
+  if ($extra) {
+    if (isset($extra['js'])) {
+      $extra_js['js'][] = $extra['js'];
+    }
+    if (isset($extra['css'])) {
+      $extra_js['css'][] = $extra['css'];
+    }
+  }
+
+  // Delta will keep track of how many times this function was called
+  if (!isset($extra_js['delta'])) {
+    $extra_js['delta'] = 0;
+  }
+  else {
+    $extra_js['delta']++;
+  }
+
+  return $extra_js;
 }
 
 /*
- * Implements hook_smg_angular_add_template
+ * Implements hook_smg_angular_add_template()
  */
 function video_widget_smg_angular_add_template() {
   $templates = array(
@@ -80,4 +117,12 @@ function video_widget_smg_angular_add_template() {
   );
 
   return $templates;
+}
+
+/**
+ * Implements hook_smg_angular_custom_elements().
+ */
+function video_widget_smg_angular_custom_elements() {
+  $custom_elements = array('video-widget','video-slider');
+  return $custom_elements;
 }
