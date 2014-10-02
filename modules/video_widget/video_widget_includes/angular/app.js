@@ -355,10 +355,17 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
       this.changeVideoContainerHeight = function () {
 
         var videosContainer = $element;
+        var window = jQuery($window);
 
-        var isIE = ( jQuery.inArray(isIE(), ["6", "7", "8"]) );
+        var isIE = function () {
+          var myNav = navigator.userAgent.toLowerCase();
+          return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+        }
 
-        if ($window.innerWidth > 480 || isIE) {
+        var isIE = isIE();
+        var isIE8orLess = (isIE && jQuery.inArray(isIE, ["6", "7", "8"]) );
+
+        if (window.innerWidth() > 480 || isIE) {
 
           // Set the width of the videoWidget-videos div to the closest number
           // divisible by the "videos to show" number

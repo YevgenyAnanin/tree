@@ -66,11 +66,23 @@ function video_widget_node_view_alter(&$build) {
       }
     }
 
+    $video_widget_path = drupal_get_path('module', 'video_widget');
+
     // Add the files for our Angular app
-    drupal_add_js(drupal_get_path('module','video_widget').'/video_widget_includes/angular/app.js');
+    drupal_add_js($video_widget_path.'/video_widget_includes/angular/app.js');
     //drupal_add_js('http://summitmediagroup.magnify.net/embed/player/lightbox.js', array('type' => 'external', 'group' => JS_LIBRARY, 'weight' => -100));
-    drupal_add_js(drupal_get_path('module', 'video_widget').'/video_widget_includes/js/lightbox.js');
-    drupal_add_css(drupal_get_path('module','video_widget').'/video_widget_includes/css/video_widget.css');
+    drupal_add_js($video_widget_path.'/video_widget_includes/js/lightbox.js');
+    drupal_add_css($video_widget_path.'/video_widget_includes/css/video_widget.css');
+
+    // Add IE8 specific css
+    $ie8_css = $video_widget_path . '/video_widget_includes/css/video_widget_ie8.css';
+    $ie8_css_string = '<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="' . $ie8_css . '" /><![endif]-->';
+    $ie8_css_head = array(
+      '#type' => 'markup',
+      '#markup' => $ie8_css_string,
+    );
+    drupal_add_html_head($ie8_css_head, 'smgVideoWidgetIE8');
+
   }
 }
 
