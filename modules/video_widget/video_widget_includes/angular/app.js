@@ -386,7 +386,8 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
 
           // Subtract the margin-bottom value
           newHeight -= 2 * parseInt(videosContainer.find(".videoWidget-video.lastNoHide").css("margin-bottom"));
-          $element[0].style.height = newHeight + 'px';
+          //$element[0].style.height = newHeight + 'px';
+          $element.css({"height":newHeight+"px"});
 
           $element.css({"width":""});
 
