@@ -338,6 +338,11 @@ videoWidget.directive('smgLightbox',['$timeout', function ($timeout) {
   };
 }]);
 
+function isIE () {
+  var myNav = navigator.userAgent.toLowerCase();
+  return (myNav.indexOf('msie') != -1) ? parseInt(myNav.split('msie')[1]) : false;
+}
+
 /**
  * This directive is applied to each videoWidget-videos div
  */
@@ -351,7 +356,9 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
 
         var videosContainer = $element;
 
-        if ($window.innerWidth > 480) {
+        var isIE = ( jQuery.inArray(isIE(), ["6", "7", "8"]) );
+
+        if ($window.innerWidth > 480 || isIE) {
 
           // Set the width of the videoWidget-videos div to the closest number
           // divisible by the "videos to show" number
