@@ -133,10 +133,6 @@ class WaywireProcessor extends FeedsProcessor {
         'name' => t('Content'),
         'description' => t('The Waywire content.'),
       ),
-      'thumbnail' => array(
-        'name' => t('Thumbnail'),
-        'description' => t('The Waywire thumbnail.'),
-      ),
       'published' => array(
         'name' => t('Published'),
         'description' => t('The Waywire published date.'),

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Waywire Video Entity feature.
+ */
+
+include_once 'waywire_video_entity.features.inc';

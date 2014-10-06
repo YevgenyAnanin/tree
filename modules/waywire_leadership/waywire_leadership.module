@@ -200,7 +200,7 @@ function waywire_leadership_save_cache($company) {
     $company_videos[] = array(
       'name' => $waywire_video->name,
       'href' => $data['media_url'],
-      'thumbnail' => $data['thumbnail'],
+      'thumbnail' => image_style_url("waywire_video_widget_thumbnail", $data['thumbnail']),
     );
   }
 
