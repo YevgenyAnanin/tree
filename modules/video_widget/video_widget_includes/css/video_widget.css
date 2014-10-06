@@ -1,11 +1,11 @@
 /* Variables for the max-480px width design, specifying width of image, title, and button */
 /* Color and size of video widget title border */
 /* line 30, ../sass/video_widget.scss */
-.full.videoWidget, .twoVideo.videoWidget {
+.full.videoWidget, .twoVideo.videoWidget, .full_pw.videoWidget {
   margin-bottom: 10px;
 }
 /* line 31, ../sass/video_widget.scss */
-.full .videoWidget-video, .twoVideo .videoWidget-video {
+.full .videoWidget-video, .twoVideo .videoWidget-video, .full_pw .videoWidget-video {
   text-align: center;
   margin: 10px 0;
   display: inline-block;
@@ -13,31 +13,31 @@
   transition: all ease-in 0.8s;
 }
 /* line 34, ../sass/video_widget.scss */
-.full .videoWidget-video.ng-hide, .twoVideo .videoWidget-video.ng-hide {
+.full .videoWidget-video.ng-hide, .twoVideo .videoWidget-video.ng-hide, .full_pw .videoWidget-video.ng-hide {
   display: inline-block !important;
   /*-webkit-transition:all linear 2s;
   transition:all linear 2s;*/
 }
 /* line 42, ../sass/video_widget.scss */
-.full .videoWidget-video.ng-hide-add-active, .full .videoWidget-video.ng-hide-remove, .full .videoWidget-video.ng-hide-remove-active, .full .videoWidget-video.ng-hide-add, .twoVideo .videoWidget-video.ng-hide-add-active, .twoVideo .videoWidget-video.ng-hide-remove, .twoVideo .videoWidget-video.ng-hide-remove-active, .twoVideo .videoWidget-video.ng-hide-add {
+.full .videoWidget-video.ng-hide-add-active, .full .videoWidget-video.ng-hide-remove, .full .videoWidget-video.ng-hide-remove-active, .full .videoWidget-video.ng-hide-add, .twoVideo .videoWidget-video.ng-hide-add-active, .twoVideo .videoWidget-video.ng-hide-remove, .twoVideo .videoWidget-video.ng-hide-remove-active, .twoVideo .videoWidget-video.ng-hide-add, .full_pw .videoWidget-video.ng-hide-add-active, .full_pw .videoWidget-video.ng-hide-remove, .full_pw .videoWidget-video.ng-hide-remove-active, .full_pw .videoWidget-video.ng-hide-add {
   display: inline-block !important;
   -webkit-transition: all linear 0.8s;
   transition: all linear 0.8s;
 }
 /* line 48, ../sass/video_widget.scss */
-.full .videoWidget-wrapper, .twoVideo .videoWidget-wrapper {
+.full .videoWidget-wrapper, .twoVideo .videoWidget-wrapper, .full_pw .videoWidget-wrapper {
   overflow: auto;
   position: relative;
   min-height: 120px;
 }
 /* line 49, ../sass/video_widget.scss */
-.full .videoWidget-wrapper div, .twoVideo .videoWidget-wrapper div {
+.full .videoWidget-wrapper div, .twoVideo .videoWidget-wrapper div, .full_pw .videoWidget-wrapper div {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 /* line 50, ../sass/video_widget.scss */
-.full .videoWidget-videos, .twoVideo .videoWidget-videos {
+.full .videoWidget-videos, .twoVideo .videoWidget-videos, .full_pw .videoWidget-videos {
   overflow: hidden;
   float: left;
   max-width: 80%;
@@ -48,18 +48,18 @@
   white-space: nowrap;
 }
 /* line 51, ../sass/video_widget.scss */
-.full .videoWidget-count-selector, .twoVideo .videoWidget-count-selector {
+.full .videoWidget-count-selector, .twoVideo .videoWidget-count-selector, .full_pw .videoWidget-count-selector {
   overflow: auto;
   min-height: 1px;
 }
 /* line 54, ../sass/video_widget.scss */
-.full .videoWidget-left-selection, .full .videoWidget-right-selection, .twoVideo .videoWidget-left-selection, .twoVideo .videoWidget-right-selection {
+.full .videoWidget-left-selection, .full .videoWidget-right-selection, .twoVideo .videoWidget-left-selection, .twoVideo .videoWidget-right-selection, .full_pw .videoWidget-left-selection, .full_pw .videoWidget-right-selection {
   display: inline-block;
   width: 10%;
   float: left;
 }
 /* line 55, ../sass/video_widget.scss */
-.full .videoWidget-left-triangle-wrapper, .twoVideo .videoWidget-left-triangle-wrapper {
+.full .videoWidget-left-triangle-wrapper, .twoVideo .videoWidget-left-triangle-wrapper, .full_pw .videoWidget-left-triangle-wrapper {
   background: #acacac;
   background-image: -ms-linear-gradient(left, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(left, #acacac 0%, #828282 100%);
@@ -70,7 +70,7 @@
   border-radius: 8px 0 0 8px;
 }
 /* line 56, ../sass/video_widget.scss */
-.full .videoWidget-right-triangle-wrapper, .twoVideo .videoWidget-right-triangle-wrapper {
+.full .videoWidget-right-triangle-wrapper, .twoVideo .videoWidget-right-triangle-wrapper, .full_pw .videoWidget-right-triangle-wrapper {
   background: #acacac;
   background-image: -ms-linear-gradient(right, #acacac 0%, #828282 100%);
   background-image: -moz-linear-gradient(right, #acacac 0%, #828282 100%);
@@ -81,26 +81,26 @@
   border-radius: 0 8px 8px 0;
 }
 /* line 57, ../sass/video_widget.scss */
-.full .videoWidget-right-triangle-wrapper.lastVideoBlock, .twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock {
+.full .videoWidget-right-triangle-wrapper.lastVideoBlock, .twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock, .full_pw .videoWidget-right-triangle-wrapper.lastVideoBlock {
   opacity: 0.42;
 }
 /* line 58, ../sass/video_widget.scss */
-.full .videoWidget-right-triangle-wrapper.lastVideoBlock:hover, .twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock:hover {
+.full .videoWidget-right-triangle-wrapper.lastVideoBlock:hover, .twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock:hover, .full_pw .videoWidget-right-triangle-wrapper.lastVideoBlock:hover {
   cursor: not-allowed;
 }
 /* line 61, ../sass/video_widget.scss */
-.full .videoWidget-triangle-wrapper, .twoVideo .videoWidget-triangle-wrapper {
+.full .videoWidget-triangle-wrapper, .twoVideo .videoWidget-triangle-wrapper, .full_pw .videoWidget-triangle-wrapper {
   position: absolute;
   width: 10%;
   height: 100%;
   border: 1px solid #000000;
 }
 /* line 62, ../sass/video_widget.scss */
-.full .videoWidget-triangle-wrapper:hover, .twoVideo .videoWidget-triangle-wrapper:hover {
+.full .videoWidget-triangle-wrapper:hover, .twoVideo .videoWidget-triangle-wrapper:hover, .full_pw .videoWidget-triangle-wrapper:hover {
   cursor: pointer;
 }
 /* line 64, ../sass/video_widget.scss */
-.full .videoWidget-triangle, .twoVideo .videoWidget-triangle {
+.full .videoWidget-triangle, .twoVideo .videoWidget-triangle, .full_pw .videoWidget-triangle {
   position: absolute;
   top: 50%;
   margin-top: -40px;
@@ -108,7 +108,7 @@
   margin-left: -10px;
 }
 /* line 65, ../sass/video_widget.scss */
-.full .videoWidget-triangle, .twoVideo .videoWidget-triangle {
+.full .videoWidget-triangle, .twoVideo .videoWidget-triangle, .full_pw .videoWidget-triangle {
   position: absolute;
   top: 50%;
   margin-top: -40px;
@@ -116,7 +116,7 @@
   margin-left: -10px;
 }
 /* line 68, ../sass/video_widget.scss */
-.full .videoWidget-triangle-left, .twoVideo .videoWidget-triangle-left {
+.full .videoWidget-triangle-left, .twoVideo .videoWidget-triangle-left, .full_pw .videoWidget-triangle-left {
   width: 0;
   height: 0;
   border-top: 40px solid transparent;
@@ -125,7 +125,7 @@
   right: 35%;
 }
 /* line 71, ../sass/video_widget.scss */
-.full .videoWidget-triangle-right, .twoVideo .videoWidget-triangle-right {
+.full .videoWidget-triangle-right, .twoVideo .videoWidget-triangle-right, .full_pw .videoWidget-triangle-right {
   width: 0;
   height: 0;
   border-top: 40px solid transparent;
@@ -133,7 +133,7 @@
   border-left: 20px solid #FFFFFF;
 }
 /* line 74, ../sass/video_widget.scss */
-.full .videoWidget-title, .twoVideo .videoWidget-title {
+.full .videoWidget-title, .twoVideo .videoWidget-title, .full_pw .videoWidget-title {
   float: left;
   clear: both;
   width: 100%;
@@ -153,13 +153,13 @@
   text-overflow: ellipsis;
 }
 /* line 75, ../sass/video_widget.scss */
-.full .videoWidget-title div, .twoVideo .videoWidget-title div {
+.full .videoWidget-title div, .twoVideo .videoWidget-title div, .full_pw .videoWidget-title div {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 /* line 77, ../sass/video_widget.scss */
-.full .videoWidget-widget-title, .twoVideo .videoWidget-widget-title {
+.full .videoWidget-widget-title, .twoVideo .videoWidget-widget-title, .full_pw .videoWidget-widget-title {
   display: inline-block;
   font-size: 145%;
   margin-left: 25px;
@@ -191,103 +191,108 @@
   width: calc(100%/3);
 }
 
+/* line 86, ../sass/video_widget.scss */
+.full_pw .videoWidget-video {
+  width: 25%;
+}
+
 @media (max-width: 800px) and (min-width: 480px) {
-  /* line 88, ../sass/video_widget.scss */
+  /* line 90, ../sass/video_widget.scss */
   .videoWidget {
     display: inline-block;
     width: 100%;
   }
 
-  /* line 89, ../sass/video_widget.scss */
+  /* line 91, ../sass/video_widget.scss */
   .videoWidget-video {
     width: 50%;
   }
 }
 @media (min-width: 480px) {
-  /* line 94, ../sass/video_widget.scss */
+  /* line 96, ../sass/video_widget.scss */
   .videoWidget-video img {
     max-width: 90%;
   }
 }
 @media (max-width: 479px) {
-  /* line 100, ../sass/video_widget.scss */
+  /* line 102, ../sass/video_widget.scss */
   .oneVideo.videoWidget {
     display: block;
     width: 60%;
     margin: 0 auto;
   }
-  /* line 101, ../sass/video_widget.scss */
+  /* line 103, ../sass/video_widget.scss */
   .oneVideo .videoWidget-wrapper {
     display: table;
     width: 100%;
   }
-  /* line 102, ../sass/video_widget.scss */
+  /* line 104, ../sass/video_widget.scss */
   .oneVideo .videoWidget-videos {
     display: table-header-group;
     float: none;
     min-height: 125px;
   }
-  /* line 103, ../sass/video_widget.scss */
+  /* line 105, ../sass/video_widget.scss */
   .oneVideo .videoWidget-left-selection {
     display: table-row-group;
   }
-  /* line 104, ../sass/video_widget.scss */
+  /* line 106, ../sass/video_widget.scss */
   .oneVideo .videoWidget-right-selection {
     display: table-footer-group;
   }
-  /* line 105, ../sass/video_widget.scss */
+  /* line 107, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper {
     display: table-cell;
     padding: 10px 0;
   }
-  /* line 106, ../sass/video_widget.scss */
+  /* line 108, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper:active {
     padding-top: 11px;
     -moz-box-shadow: inset 0 0 1px 0 #000000;
     -webkit-box-shadow: inset 0 0 1px 0 #000000;
     box-shadow: inset 0 0 1px 0 #000000;
   }
-  /* line 107, ../sass/video_widget.scss */
+  /* line 109, ../sass/video_widget.scss */
   .oneVideo .videoWidget-video {
     width: 100%;
   }
-  /* line 108, ../sass/video_widget.scss */
+  /* line 110, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle {
     width: 0;
     height: 0;
     margin: 0 auto;
   }
-  /* line 110, ../sass/video_widget.scss */
+  /* line 112, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-left {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-bottom: 15px solid white;
   }
-  /* line 111, ../sass/video_widget.scss */
+  /* line 113, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-right {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-top: 15px solid white;
   }
 
-  /* line 115, ../sass/video_widget.scss */
+  /* line 117, ../sass/video_widget.scss */
   .max480 .ng-hide {
     display: table !important;
   }
-  /* line 116, ../sass/video_widget.scss */
+  /* line 118, ../sass/video_widget.scss */
   .max480.videoWidget {
     background: #ECEDF4;
     margin: 15px 0;
     border-radius: 8px;
     padding-bottom: 12px;
   }
-  /* line 117, ../sass/video_widget.scss */
+  /* line 119, ../sass/video_widget.scss */
   .max480 .videoWidget-videos {
     overflow: hidden;
     white-space: nowrap;
     height: 310px;
   }
-  /* line 118, ../sass/video_widget.scss */
+  /* line 120, ../sass/video_widget.scss */
   .max480 .videoWidget-video {
     width: 90%;
     display: table;
@@ -302,26 +307,26 @@
     -webkit-transition: all ease-in 0.8s;
     transition: all ease-in 0.8s;
   }
-  /* line 121, ../sass/video_widget.scss */
+  /* line 123, ../sass/video_widget.scss */
   .max480 .videoWidget-video.ng-hide-add-active, .max480 .videoWidget-video.ng-hide-remove, .max480 .videoWidget-video.ng-hide-remove-active, .max480 .videoWidget-video.ng-hide-add {
     display: inline-block !important;
     -webkit-transition: all linear 0.8s;
     transition: all linear 0.8s;
   }
-  /* line 126, ../sass/video_widget.scss */
+  /* line 128, ../sass/video_widget.scss */
   .max480 .videoWidget-video.lastNoHide {
     /*margin-bottom: 0;*/
   }
-  /* line 127, ../sass/video_widget.scss */
+  /* line 129, ../sass/video_widget.scss */
   .max480 .videoWidget-video a {
     display: table-cell;
     width: 40%;
   }
-  /* line 128, ../sass/video_widget.scss */
+  /* line 130, ../sass/video_widget.scss */
   .max480 .videoWidget-video a img {
     width: 100%;
   }
-  /* line 130, ../sass/video_widget.scss */
+  /* line 132, ../sass/video_widget.scss */
   .max480 .videoWidget-video::after {
     /*display: table-cell;*/
     content: '\203A';
@@ -341,7 +346,7 @@
     color: #FFFFFF;
     cursor: pointer;
   }
-  /* line 150, ../sass/video_widget.scss */
+  /* line 152, ../sass/video_widget.scss */
   .max480 .videoWidget-title {
     display: table-cell;
     vertical-align: middle;
@@ -351,12 +356,12 @@
     padding-left: 10px;
     white-space: normal;
   }
-  /* line 151, ../sass/video_widget.scss */
+  /* line 153, ../sass/video_widget.scss */
   .max480 .videoWidget-title div {
     overflow: hidden;
     max-height: 120px;
   }
-  /* line 153, ../sass/video_widget.scss */
+  /* line 155, ../sass/video_widget.scss */
   .max480 .videoWidget-widget-title {
     display: block;
     padding: 12px 12px 0;
@@ -364,7 +369,7 @@
     font-weight: bold;
     color: #414040;
   }
-  /* line 154, ../sass/video_widget.scss */
+  /* line 156, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection {
     display: block;
     width: 90%;
@@ -378,15 +383,15 @@
     font-size: 150%;
     cursor: pointer;
   }
-  /* line 156, ../sass/video_widget.scss */
+  /* line 158, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection:before {
     content: "Load More Videos";
   }
-  /* line 157, ../sass/video_widget.scss */
+  /* line 159, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection.lastVideoBlock {
     opacity: 0.4;
   }
-  /* line 159, ../sass/video_widget.scss */
+  /* line 161, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection.lastVideoBlock:hover {
     cursor: not-allowed;
   }

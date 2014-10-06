@@ -36,37 +36,16 @@ function video_widget_menu() {
   return $items;
 }
 
-/*
- * Implements hook_page_alter().
- */
-function video_widget_page_alter(&$page) {
-
-}
-
 /**
- * Implements hook_node_view_alter
+ * Adds the video widget javascript/css files if they haven't been added yet.
  */
-function video_widget_node_view_alter(&$build) {
+function video_widget_add_js() {
+  $has_video_widget_js = &drupal_static('has_video_widget');
 
-  $add_widget = _video_widget_add_widget();
-
-  if ($add_widget['delta']) {
-    if (isset($add_widget['js'])) {
-      foreach ($add_widget['js'] as $js_group) {
-        foreach ($js_group as $key => $js_file) {
-          drupal_add_js($js_file);
-        }
-      }
-    }
-    if (isset($add_widget['css'])) {
-      foreach ($add_widget['css'] as $css_group) {
-        foreach ($css_group as $key => $css_file) {
-          drupal_add_js($js_file);
-        }
-      }
-    }
+  if ($has_video_widget_js == NULL) {
 
     $video_widget_path = drupal_get_path('module', 'video_widget');
+    drupal_add_js($video_widget_path.'/video_widget_includes/js/videoWidget_config_' . variable_get('smg_global_site') . '.js');
 
     // Add the files for our Angular app
     drupal_add_js($video_widget_path.'/video_widget_includes/angular/app.js');
@@ -82,7 +61,7 @@ function video_widget_node_view_alter(&$build) {
       '#markup' => $ie8_css_string,
     );
     drupal_add_html_head($ie8_css_head, 'smgVideoWidgetIE8');
-
+    $has_video_widget_js = TRUE;
   }
 }
 

@@ -26,7 +26,7 @@ $max480-button-height-width: 46px;
 /* Color and size of video widget title border */
 $widget-title-border: 1px solid #972901;
 
-.full, .twoVideo {
+.full, .twoVideo, .full_pw {
   &.videoWidget {margin-bottom: 10px;}
   .videoWidget-video {text-align: center; margin: 10px 0; display: inline-block;
     -webkit-transition:all ease-in 0.8s;
@@ -82,6 +82,8 @@ $widget-title-border: 1px solid #972901;
   &:hover {cursor:pointer;}
 }
 .full .videoWidget-video {width:33.33%; width: calc(100%/3);}
+
+.full_pw .videoWidget-video { width:25%; }
 
 
 @media (max-width:800px) and (min-width: 480px) {

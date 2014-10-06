@@ -33,10 +33,13 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
 
   $scope.currentCount = 1; // Initialize the count
 
+  // Boolean value that specifies if this video widget belongs to a datacard
+  $scope.isDataCard = ($attrs.hasOwnProperty("datacard") && $attrs.datacard);
+
   // An object that stores the count of how many videos to show in the widget
   $scope.videoWidgetParams = {
-    videosToShow: $scope.config.videosToShow, // How many videos to show at once
-    oldVideosToShow: $scope.config.videosToShow // Will store the value of videosToShow from previous draw()
+    videosToShow: ($scope.isDataCard) ? 3 : $scope.config.videosToShow, // How many videos to show at once
+    oldVideosToShow: ($scope.isDataCard) ? 3 : $scope.config.videosToShow // Will store the value of videosToShow from previous draw()
   };
 
   $scope.updateVideosToShow = function (newNumber) {
@@ -182,6 +185,14 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
     max480: false,
   };
 
+  // The passed in config fct may have an extraResponsiveClasses obj, if so
+  // then merge w/ values in scope's responsiveCssClasses obj
+  if ( $scope.config.hasOwnProperty('extraResponsiveClasses') && !$scope.isDataCard ) {
+    for ( var cssClass in $scope.config.extraResponsiveClasses ) {
+      $scope.responsiveCssClasses[cssClass] = $scope.config.extraResponsiveClasses[cssClass];
+    }
+  }
+
   // This object contains extra classes that will be added to the templates.
   // It will look to see if there are any classes added globally in the site
   // specific video widget module (videoWidgetConfig).
@@ -252,7 +263,7 @@ videoWidget.directive('videoSlider', function () {
  * the size of the browser window and redraws the video widget if
  * necessary
  */
-videoWidget.directive('resizable', function ($window) {
+videoWidget.directive('resizable', ['$window', 'getConfig', function ($window, getConfig) {
   return {
     restrict: 'AE',
     scope: true,
@@ -266,7 +277,7 @@ videoWidget.directive('resizable', function ($window) {
       };
 
       scope.$watch(scope.getWindowDimensions, function (newValue, oldValue) {
-        //scope.modifyWidgetVideoWidths();
+
         // This function checks the "videosToShow" parameter in the parent
         // scope, and if necessary it changes the parameter and calls the
         // draw() function.  It also calls the changeClass function.
@@ -296,6 +307,12 @@ videoWidget.directive('resizable', function ($window) {
           }
         }
 
+        // Call the videosToShowMapping function that we expect each site to have implemented
+        videosToShowMap = getConfig.videosToShowMapping(newValue);
+        if ( !scope.isDataCard )
+          resizeRedraw(videosToShowMap.mappingVideos, videosToShowMap.mappingClass);
+
+        /*
         if(newValue.w < 800 && newValue.w > 479) {
           resizeRedraw(2, 'twoVideo');
         }
@@ -304,7 +321,7 @@ videoWidget.directive('resizable', function ($window) {
         }
         else {
           resizeRedraw(3, 'full');
-        }
+        }*/
       }, true);
 
       w.bind('resize', function () {
@@ -312,7 +329,7 @@ videoWidget.directive('resizable', function ($window) {
       });
     }
   };
-});
+}]);
 
 /**
  * This directive is applied to each <a> tag that links to a Waywire video.
