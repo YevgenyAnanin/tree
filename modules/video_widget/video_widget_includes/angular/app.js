@@ -120,7 +120,6 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
   $scope.draw = function () {
     var startIndex = ($scope.currentCount - 1) * $scope.videoWidgetParams.videosToShow;
     var endIndex = ($scope.currentCount * $scope.videoWidgetParams.videosToShow);
-
     // Check if we're on the last video block
     $scope.isLastVideoBlock = $scope.isLastVideoBlockCalculate();
     // Add to extraCssClasses
@@ -138,9 +137,10 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
       }
       else {
         video.visible = true;
-        video.videoCss = (endIndex - index == 1) ? {noHide:true, lastNoHide:true} : {noHide:true};
+        video.videoCss = (endIndex - index == 1) ? {noHide:true, lastNoHide:true} : {noHide:true, lastNoHide: false};
       }
     });
+
   };
 
   /**
@@ -246,7 +246,7 @@ videoWidget.directive('videoSlider', function () {
 
       // Initialize the visibility of the videos in the video
       // widget
-      scope.draw();
+      //scope.draw();
 
       // Watch changes to the parent scope's currentCount property
       scope.$watch('currentCount', function () {
@@ -436,7 +436,7 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
 
       angular.element($window).bind('resize', function () {
         currentCtrl.changeVideoContainerHeight();
-        scope.$apply();
+        //scope.$apply();
       });
 
       scope.$on('leadershipHoverBegin', function () {

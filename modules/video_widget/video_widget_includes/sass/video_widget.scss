@@ -95,6 +95,7 @@ $widget-title-border: 1px solid #972901;
   .videoWidget-video {
     img {max-width: 90%;}
   }
+  #content .videoWidget-video img {max-width:90% !important;}
 }
 
 @media (max-width:479px) {
@@ -162,4 +163,5 @@ $widget-title-border: 1px solid #972901;
       }
     }
   }
+  #content .videoWidget-video img {max-width:90% !important;}
 }
