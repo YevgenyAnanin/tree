@@ -5,12 +5,12 @@
  */
 
 /**
- * Implementation of hook_image_default_styles().
+ * Implements hook_image_default_styles().
  */
 function waywire_video_entity_image_default_styles() {
   $styles = array();
 
-  // Exported image style: waywire_video_widget_thumbnail
+  // Exported image style: waywire_video_widget_thumbnail.
   $styles['waywire_video_widget_thumbnail'] = array(
     'name' => 'waywire_video_widget_thumbnail',
     'label' => 'waywire_video_widget_thumbnail',
@@ -34,7 +34,9 @@ function waywire_video_entity_image_default_styles() {
         'label' => 'Overlay (watermark)',
         'help' => 'Choose the file image you wish to use as an overlay, and position it in a layer on top of the canvas.',
         'effect callback' => 'canvasactions_file2canvas_image',
+        'dimensions passthrough' => TRUE,
         'form callback' => 'canvasactions_file2canvas_form',
+        'summary theme' => 'canvasactions_file2canvas_summary',
         'module' => 'imagecache_canvasactions',
         'name' => 'canvasactions_file2canvas',
         'data' => array(
@@ -43,8 +45,6 @@ function waywire_video_entity_image_default_styles() {
           'alpha' => '100',
           'path' => 'sites/default/modules/smg_global/modules/waywire_video/images/video_overlay_50.png',
         ),
-        'dimensions passthrough' => TRUE,
-        'summary theme' => 'canvasactions_file2canvas_summary',
         'weight' => '2',
       ),
     ),
@@ -54,7 +54,7 @@ function waywire_video_entity_image_default_styles() {
 }
 
 /**
- * Implementation of hook_default_waywire_video_type().
+ * Implements hook_default_waywire_video_type().
  */
 function waywire_video_entity_default_waywire_video_type() {
   $items = array();

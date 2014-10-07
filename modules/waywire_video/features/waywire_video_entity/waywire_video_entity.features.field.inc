@@ -5,12 +5,12 @@
  */
 
 /**
- * Implementation of hook_field_default_fields().
+ * Implements hook_field_default_fields().
  */
 function waywire_video_entity_field_default_fields() {
   $fields = array();
 
-  // Exported field: 'waywire_video-leadership_video-field_waywire_image'
+  // Exported field: 'waywire_video-leadership_video-field_waywire_image'.
   $fields['waywire_video-leadership_video-field_waywire_image'] = array(
     'field_config' => array(
       'active' => '1',
@@ -31,6 +31,7 @@ function waywire_video_entity_field_default_fields() {
           0 => 'fid',
         ),
       ),
+      'locked' => '0',
       'module' => 'image',
       'settings' => array(
         'default_image' => 0,
@@ -59,7 +60,7 @@ function waywire_video_entity_field_default_fields() {
             'field_injector_field' => '',
             'field_injector_position' => 'before_paragraph_1',
             'image_link' => '',
-            'image_style' => '',
+            'image_style' => 'waywire_video_widget_thumbnail',
           ),
           'type' => 'image',
           'weight' => '0',
