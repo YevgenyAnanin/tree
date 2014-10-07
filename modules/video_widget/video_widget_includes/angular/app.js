@@ -14,27 +14,38 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
 
   $scope.nid = $attrs.nid;
 
+  // Boolean value that specifies if this video widget belongs to a datacard
+  $scope.isDataCard = ( $attrs.hasOwnProperty("datacard") && $attrs.datacard );
+  $scope.tid = ( $attrs.hasOwnProperty('tid') ) ? $attrs.tid : false; // If element has tid property store it
+
   // Populate the videos property
   $scope.videos = {};
-  if ( Drupal.settings.hasOwnProperty('waywire_leadership') ) {
+  var waywireData = false;
+  if ( !$scope.isDataCard && Drupal.settings.hasOwnProperty('waywire_leadership') ) {
     if ( Drupal.settings.waywire_leadership.hasOwnProperty($scope.nid) ) {
-      var waywireData = Drupal.settings.waywire_leadership[$scope.nid];
-
-      // Set some properties on the scope
-      $scope.page = waywireData.page;
-      $scope.pageCount = waywireData.page_count;
-      $scope.totalCount = waywireData.total_count;
-      $scope.companyName = waywireData.companyName;
-      $scope.videos = waywireData.videos;
+      waywireData = Drupal.settings.waywire_leadership[$scope.nid];
     }
+  }
+  else if ( $scope.isDataCard && $scope.tid ) {
+    if ( Drupal.settings.hasOwnProperty('leadershipDatacard') && Drupal.settings.leadershipDatacard.hasOwnProperty($scope.tid) ) {
+      if ( Drupal.settings.leadershipDatacard[$scope.tid].hasOwnProperty($scope.nid) ) {
+        waywireData = Drupal.settings.leadershipDatacard[$scope.tid][$scope.nid].waywire_videos[$scope.nid];
+      }
+    }
+  }
+  // If waywireData exists, use it to populate videos properties:
+  if (waywireData) {
+    // Set some properties on the scope
+    $scope.page = waywireData.page;
+    $scope.pageCount = waywireData.page_count;
+    $scope.totalCount = waywireData.total_count;
+    $scope.companyName = waywireData.companyName;
+    $scope.videos = waywireData.videos;
   }
 
   $scope.config = getConfig;
 
   $scope.currentCount = 1; // Initialize the count
-
-  // Boolean value that specifies if this video widget belongs to a datacard
-  $scope.isDataCard = ($attrs.hasOwnProperty("datacard") && $attrs.datacard);
 
   // An object that stores the count of how many videos to show in the widget
   $scope.videoWidgetParams = {
