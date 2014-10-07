@@ -358,20 +358,25 @@ function waywire_video_menu_local_tasks_alter(&$data, $router_item, $root_path) 
  * @param  int $node_id
  *  Node Id.
  *
- * @return array $result
+ * @return array $waywire_videos
  *  Waywire video entities.
  */
 function waywire_video_get_all($node_id = NULL) {
-  $query = db_select('waywire_video', 'waywire_video')
-    ->fields('waywire_video');
+  $waywire_videos = array();
 
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'waywire_video');
   if ($node_id) {
-    $query->condition('node_id', $node_id);
+    $query->propertyCondition('node_id', $node_id);
+  }
+  $result = $query->execute();
+
+  if (isset($result['waywire_video'])) {
+    $entity_ids = array_keys($result['waywire_video']);
+    $waywire_videos = entity_load('waywire_video', $entity_ids);
   }
 
-  $result = $query->execute()->fetchAll();
-
-  return $result;
+  return $waywire_videos;
 }
 
 /**

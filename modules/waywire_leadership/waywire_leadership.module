@@ -196,11 +196,10 @@ function waywire_leadership_save_cache($company) {
 
   // For each video set up the main elements needed to display the video.
   foreach($waywire_videos as $waywire_video) {
-    $data = unserialize($waywire_video->data);
     $company_videos[] = array(
       'name' => $waywire_video->name,
-      'href' => $data['media_url'],
-      'thumbnail' => image_style_url("waywire_video_widget_thumbnail", $data['thumbnail']),
+      'href' => $waywire_video->data['media_url'],
+      'thumbnail' => image_style_url("waywire_video_widget_thumbnail", $waywire_video->field_waywire_image['und'][0]['uri']),
     );
   }
 
