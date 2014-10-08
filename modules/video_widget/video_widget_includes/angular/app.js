@@ -100,7 +100,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
         if ( $scope.sizeOfObj($scope.videos) < $scope.totalCount ) {
           // If datacard or not use the correct path to get the correct videos.
           var typePath = $scope.isDataCard ? 'datacard' : 'node';
-          var waywireJSONPath = '/waywire_leadership/get/json/' + $scope.nid + '/' + typePath + (++$scope.page);
+          var waywireJSONPath = '/waywire_leadership/get/json/' + $scope.nid + '/' + typePath + '/' + (++$scope.page);
           $http({method: 'GET', url: waywireJSONPath}).
             success(function (data, status, headers, config) {
               for (i = 0; i < data.videos.length; i++) {
