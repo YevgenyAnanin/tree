@@ -29,12 +29,19 @@ function waywire_leadership_settings_form() {
     '#required' => TRUE,
     '#default_value' => variable_get('waywire_leadership_widget_page_count'),
   );
-  $form['waywire_leadership_widget_video_count'] = array(
+  $form['waywire_leadership_widget_datacard_count'] = array(
     '#type' => 'textfield',
-    '#title' => t('Number of Videos On Widget'),
-    '#description' => 'Enter the number of videos to be shown in a widget',
+    '#title' => t('Number of Videos in the Datacard'),
+    '#description' => 'Enter the number of videos to be available in the datacard. This number should be double of what is initially shown.',
     '#required' => TRUE,
-    '#default_value' => variable_get('waywire_leadership_widget_video_count'),
+    '#default_value' => variable_get('waywire_leadership_widget_datacard_count'),
+  );
+  $form['waywire_leadership_widget_node_count'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Number of Videos on the node page'),
+    '#description' => 'Enter the number of videos to be available on the node page. This number should be double of what is initially shown.',
+    '#required' => TRUE,
+    '#default_value' => variable_get('waywire_leadership_widget_node_count'),
   );
 
   return system_settings_form($form);

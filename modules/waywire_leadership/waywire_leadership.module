@@ -176,11 +176,14 @@ function waywire_leadership_process_api_content($importer_id, $tag, $company_nid
 function waywire_leadership_create_json() {
   $companies = waywire_leadership_get_youtube_amplify_companies_from_current_session();
   waywire_leadership_clear_all_cache();
+  $count = 0;
   foreach ($companies as $company) {
+    $count++;
     waywire_leadership_save_cache($company);
   }
 
   // Create json variable based on page
+  echo "$count companies have been processed!\n";
   return '';
 }
 
@@ -206,21 +209,30 @@ function waywire_leadership_save_cache($company) {
   // Get the total number of videos to be used for front end logic
   $total_videos = count($company_videos);
 
-  // Split up into a couple videos per array to be accesse by front end
-  $split_videos = array_chunk($company_videos, variable_get('waywire_leadership_widget_video_count'));
-  foreach ($split_videos as $key => $split) {
-    $page = $key + 1;
-    $json_data = array(
-      'companyName' => $company->title,
-      'page' => $page, // Page Number
-      'total_count' => $total_videos, // Total number of videos for this company
-      'page_count' => count($split), // Total number of videos for this page
-      'videos' => $split, // array of Waywire video data
-    );
+  // Get the number of videos to split on. We have two seperate counts because
+  // the datacard widget can have less videos than the widget on the node level.
+  $split_numbers = array(
+    'datacard' => variable_get('waywire_leadership_widget_datacard_count'),
+    'node' => variable_get('waywire_leadership_widget_node_count')
+  );
 
-    // the json to cache table.  Cid will contain the companie's node id and
-    // the page number. Example: company_100_page_2
-    cache_set('company_' . $company->nid . '_page_' . $page, json_encode($json_data), 'cache_waywire_leadership');
+  // Split up into a couple videos per array to be accessed by front end.
+  foreach ($split_numbers as $type => $split_number) {
+    $split_videos = array_chunk($company_videos, $split_number);
+    foreach ($split_videos as $key => $split) {
+      $page = $key + 1;
+      $json_data = array(
+        'companyName' => $company->title,
+        'page' => $page, // Page Number
+        'total_count' => $total_videos, // Total number of videos for this company
+        'page_count' => count($split), // Total number of videos for this page
+        'videos' => $split, // array of Waywire video data
+      );
+
+      // the json to cache table.  Cid will contain the companie's node id and
+      // the page number. Example: company_100_page_2
+      cache_set('company_' . $company->nid . '_' . $type . '_' . $page, json_encode($json_data), 'cache_waywire_leadership');
+    }
   }
 }
 
@@ -229,14 +241,16 @@ function waywire_leadership_save_cache($company) {
  *
  * @param integer $company_nid
  *  company node id.
+ * @param  string $type
+ *  type of data. Example: node or datacard
  * @param integer $page
  *  the page number of videos.
  *
  * @param mixed $json
  *  either the json or an array of the companies videos.
  */
-function waywire_leadership_get_company_video_json($company_nid, $page = 1, $jsonDecode = TRUE) {
-  $cache = cache_get('company_' . $company_nid . '_page_' . $page, 'cache_waywire_leadership');
+function waywire_leadership_get_company_video_json($company_nid, $type = 'datacard', $page = 1, $jsonDecode = TRUE) {
+  $cache = cache_get('company_' . $company_nid . '_' . $type . '_' . $page, 'cache_waywire_leadership');
   $json = array();
 
   if ($cache) {
@@ -255,34 +269,6 @@ function waywire_leadership_get_company_video_json($company_nid, $page = 1, $jso
  */
 function waywire_leadership_clear_all_cache() {
   cache_clear_all(NULL, 'cache_waywire_leadership');
-}
-
-/**
- * Implements hook_node_view_alter().
- */
-function waywire_leadership_node_view_alter(&$build) {
-  if ($build['#view_mode'] == 'full') {
-    if (isset($build['field_companies'])) {
-      foreach ($build['field_companies']['#items'] as $key => $company) {
-        // Check if this company has youtube amplified checked
-        if (waywire_leadership_is_youtube_amplify($company['nid'])) {
-          // Get that companies videos
-          $waywire_videos[$company['nid']] = waywire_leadership_get_company_video_json($company['nid'], 1);
-        }
-      }
-
-      // Add the videos to the Drupal.settings object
-      if (isset($waywire_videos)) {
-        waywire_leadership_add_videos_to_drupal_settings_object($waywire_videos);
-        foreach ($waywire_videos as $company_nid => $value) {
-          $build['leadership_videos'][] = array(
-            //'#markup' => theme('video_widget', array('nid' => $company_nid)),
-            '#markup' => '<video-widget nid="' . $company_nid . '"></video-widget>',
-          );
-        }
-      }
-    }
-  }
 }
 
 /**
