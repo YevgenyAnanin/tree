@@ -659,3 +659,25 @@ function smg_global_ckeditor_plugin() {
   );
 }
 
+/**
+ * Implements hook_page_alter().
+ */
+function smg_global_page_alter(&$page) {
+
+  // Add a global js function to use as a wrapper for ga event calls
+  $ga_event_fct = <<<EOS
+  function gaTrackLink(link, category, action, label) {
+    try {
+      _gaq.push('_trackEvent', category, action, label);
+      setTimeout(function () {
+        console.log(link.href);
+        //window.location.href = link.href;
+      }, 100);
+    } catch(err) {}
+  }
+EOS;
+  drupal_add_js($ga_event_fct, array('type'=>'inline', 'every_page'=>true));
+
+}
+
+

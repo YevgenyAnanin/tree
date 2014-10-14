@@ -95,6 +95,8 @@ function smg_angular_page_alter(&$page) {
 
     // Add the AngularJS library
     drupal_add_library('smg_angular', 'angularjs');
+    // Add the gaEventWrapper module
+    drupal_add_js(drupal_get_path('module', 'smg_angular') . '/js/smgGaEvent.js');
 
     // Add any AngularJS templates that are defined by other modules through the
     // smg_angular_add_template hook
