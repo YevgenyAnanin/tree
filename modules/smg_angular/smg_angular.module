@@ -50,7 +50,9 @@ function smg_angular_page_alter(&$page) {
   if ($add_angular) {
     // This will fix IE8 problems
     // @see https://docs.angularjs.org/guide/ie
-    $all_custom_elements = array();
+    $all_custom_elements = array(
+      'video-grid',
+    );
     foreach (module_implements('smg_angular_custom_elements') as $module) {
       $custom_elements = module_invoke($module, 'smg_angular_custom_elements');
       foreach ($custom_elements as $element) {

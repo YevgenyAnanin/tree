@@ -5,12 +5,50 @@
  */
 
 /**
- * Implements hook_image_default_styles().
+ * Implementation of hook_image_default_styles().
  */
 function waywire_video_entity_image_default_styles() {
   $styles = array();
 
-  // Exported image style: waywire_video_widget_thumbnail.
+  // Exported image style: waywire_video_widget_grid
+  $styles['waywire_video_widget_grid'] = array(
+    'name' => 'waywire_video_widget_grid',
+    'label' => 'waywire_video_widget_grid',
+    'effects' => array(
+      55 => array(
+        'label' => 'Scale and crop',
+        'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
+        'effect callback' => 'image_scale_and_crop_effect',
+        'dimensions callback' => 'image_resize_dimensions',
+        'form callback' => 'image_resize_form',
+        'summary theme' => 'image_resize_summary',
+        'module' => 'image',
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => '210',
+          'height' => '120',
+        ),
+        'weight' => '1',
+      ),
+      58 => array(
+        'label' => 'Overlay (watermark)',
+        'help' => 'Choose the file image you wish to use as an overlay, and position it in a layer on top of the canvas.',
+        'effect callback' => 'canvasactions_file2canvas_image',
+        'form callback' => 'canvasactions_file2canvas_form',
+        'module' => 'imagecache_canvasactions',
+        'name' => 'canvasactions_file2canvas',
+        'data' => array(
+          'xpos' => 'center',
+          'ypos' => 'center',
+          'alpha' => '100',
+          'path' => 'sites/default/modules/smg_global/modules/waywire_video/images/video_overlay_50.png',
+        ),
+        'weight' => '2',
+      ),
+    ),
+  );
+
+  // Exported image style: waywire_video_widget_thumbnail
   $styles['waywire_video_widget_thumbnail'] = array(
     'name' => 'waywire_video_widget_thumbnail',
     'label' => 'waywire_video_widget_thumbnail',
@@ -34,9 +72,7 @@ function waywire_video_entity_image_default_styles() {
         'label' => 'Overlay (watermark)',
         'help' => 'Choose the file image you wish to use as an overlay, and position it in a layer on top of the canvas.',
         'effect callback' => 'canvasactions_file2canvas_image',
-        'dimensions passthrough' => TRUE,
         'form callback' => 'canvasactions_file2canvas_form',
-        'summary theme' => 'canvasactions_file2canvas_summary',
         'module' => 'imagecache_canvasactions',
         'name' => 'canvasactions_file2canvas',
         'data' => array(
@@ -45,6 +81,8 @@ function waywire_video_entity_image_default_styles() {
           'alpha' => '100',
           'path' => 'sites/default/modules/smg_global/modules/waywire_video/images/video_overlay_50.png',
         ),
+        'dimensions passthrough' => TRUE,
+        'summary theme' => 'canvasactions_file2canvas_summary',
         'weight' => '2',
       ),
     ),
@@ -54,7 +92,7 @@ function waywire_video_entity_image_default_styles() {
 }
 
 /**
- * Implements hook_default_waywire_video_type().
+ * Implementation of hook_default_waywire_video_type().
  */
 function waywire_video_entity_default_waywire_video_type() {
   $items = array();

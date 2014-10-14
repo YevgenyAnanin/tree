@@ -188,6 +188,45 @@ function waywire_leadership_create_json() {
 }
 
 /**
+ * Return a json structure that represents data about ALL the videos that are
+ * available for a given company
+ *
+ * @param $company
+ *  The company object
+ * @return array
+ *  An array that will be turned into a json object
+ */
+function waywire_leadership_get_company_all_videos($company_nid) {
+  $company_videos = array();
+  $company = node_load($company_nid);
+  $waywire_videos = waywire_video_get_all($company_nid);
+
+  if (empty($waywire_videos))
+    return false;
+
+  // For each video set up the main elements needed to display the video.
+  foreach($waywire_videos as $waywire_video) {
+    $company_videos[] = array(
+      'name' => $waywire_video->name,
+      'href' => $waywire_video->data['media_url'],
+      'thumbnail' => image_style_url("waywire_video_widget_grid", $waywire_video->field_waywire_image['und'][0]['uri']),
+    );
+  }
+
+  // Get the total number of videos to be used for front end logic
+  $total_videos = count($company_videos);
+
+  // Create the json structure that will hold all of the data
+  $json_data = array(
+    'companyName' => $company->title,
+    'total_count' => $total_videos,
+    'videos' => $company_videos,
+  );
+
+  return $json_data;
+}
+
+/**
  * Save companies' waywire video entities into the cache table.
  *
  * @param object $company

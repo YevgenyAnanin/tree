@@ -105,6 +105,7 @@ function video_widget_smg_angular_add_template() {
   $templates = array(
     'video' => '/' . drupal_get_path('module','video_widget') . '/video_widget_includes/angular/templates/video.html',
     'videoWidget' => '/' . drupal_get_path('module', 'video_widget') . '/video_widget_includes/angular/templates/videoWidget.html',
+    'videoGrid' => '/' . drupal_get_path('module', 'video_widget') . '/video_widget_includes/angular/templates/videoGrid.html',
   );
 
   return $templates;
