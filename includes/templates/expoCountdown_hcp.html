@@ -1,0 +1,19 @@
+<div class="expo-countdown">
+    <div class="expo-countdown-banner">
+        <img src="#" ng-src="{{logoPath}}" class="expo-countdown-logo"/>
+        <span class="expo-countdown-banner-text">Countdown to {{expoName}}</span>
+        <div class="expo-countdown-days-count expo-countdown-time-count" ng-if="showDays">
+            <countdown-flip-widget type="dayCountdown" countdown="{{dayCountdown}}"></countdown-flip-widget>
+            <span class="expo-countdown-flip-title">DAYS</span>
+        </div>
+        <div class="expo-countdown-hours-count expo-countdown-time-count" ng-if="showHours">
+            <countdown-flip-widget type="hourCountdown" countdown="{{hourCountdown}}"></countdown-flip-widget>
+            <span class="expo-countdown-flip-title">HOURS</span>
+        </div>
+        <div class="expo-countdown-min-count expo-countdown-time-count" ng-if="showMins">
+            <countdown-flip-widget type="minCountdown" countdown="{{minCountdown}}"></countdown-flip-widget>
+            <span class="expo-countdown-flip-title">MINS</span>
+        </div>
+    </div>
+    <div class="expo-countdown-register"><a href="#">REGISTER NOW</a></div>
+</div>

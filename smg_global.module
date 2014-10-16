@@ -34,6 +34,15 @@ function smg_global_menu(){
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
   );
+  // #125 Expo Countdown widget
+  $items['admin/config/content/expo-countdown'] = array(
+    'title' => 'Expo Countdown Widget Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('smg_expo_countdown_settings_form'),
+    'access arguments' => array('administer node'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'smg_global.admin.inc',
+  );
 
   return $items;
 }
@@ -417,6 +426,44 @@ function _smg_global_app_alert_content() {
  */
 function smg_global_page_alter(&$page) {
 
+  // #125 If the Expo Countdown widget is enabled, implement it
+  $is_admin = path_is_admin(current_path());
+  if (variable_get('enable_expo_countdown') && !$is_admin) {
+    $expo_date = variable_get('expo_date');
+    $expo_timezone = variable_get('expo_time_zone', 'America/Chicago');
+    $UTC = new DateTimeZone("UTC");
+    $expo_timezone_obj = new DateTimeZone($expo_timezone);
+    $date = new DateTime($expo_date, $expo_timezone_obj);
+    $date->setTimezone($UTC);
+    $expo_strtotime = strtotime($expo_date);
+    $expo_countdown_settings = array(
+      'year' => date('Y', $expo_strtotime),
+      'month' => date('m', $expo_strtotime),
+      'day' => date('d', $expo_strtotime),
+      'hour' => date('H', $expo_strtotime),
+      'min' => date('i', $expo_strtotime),
+      'expoName' => variable_get('expo_name'),
+      'utcYear' => $date->format('Y'),
+      'utcMonth' => $date->format('m'),
+      'utcDay' => $date->format('d'),
+      'utcHour' => $date->format('H'),
+      'utcMin' => $date->format('i'),
+      'showMin' => variable_get('expo_enable_min', false),
+      'showHour' => variable_get('expo_enable_hours', false),
+    );
+    $smg_global_path = drupal_get_path('module','smg_global');
+    $site_id = variable_get('smg_global_site');
+    $logo_obj = file_load(variable_get('expo_logo'));
+    $logo_path = file_create_url($logo_obj->uri);
+    $expo_countdown_settings['logo_path'] = $logo_path;
+    drupal_add_js(array('expoCountdown' => $expo_countdown_settings), 'setting');
+    drupal_add_library('smg_angular', 'angularjs');
+    drupal_add_js($smg_global_path . '/js/expoCountdown.js');
+    // Add the flipclock css
+    drupal_add_css($smg_global_path . '/css/flipclock.css', array('preprocess'=>true));
+    // Add site specific expo countdown css.  First get site id
+    drupal_add_css($smg_global_path . '/css/expoCountdown_' . $site_id . '.css', array('preprocess'=>true));
+  }
 
 }
 
@@ -726,4 +773,27 @@ function smg_global_get_brand_info() {
   }
 
   return $data;
+}
+
+/**
+ * Implements hook_smg_angular_add_template().
+ */
+function smg_global_smg_angular_add_template() {
+  $site_id = variable_get('smg_global_site');
+  $templates = array(
+    'expoCountdown' => '/' . drupal_get_path('module','smg_global') . '/includes/templates/expoCountdown_' . $site_id . '.html',
+    'flipWidget' => '/' . drupal_get_path('module','smg_global') . '/includes/templates/flipWidget.html',
+  );
+  return $templates;
+}
+
+/**
+ * Implements hook_smg_angular_custom_elements().
+ */
+function smg_global_smg_angular_custom_elements() {
+  $elements = array(
+    'expo-countdown',
+    'countdown-flip-widget',
+  );
+  return $elements;
 }

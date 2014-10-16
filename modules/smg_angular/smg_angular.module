@@ -1,0 +1,130 @@
+<?php
+
+/**
+ * This module provides integration with AngularJS
+ *
+ * @author Yevgeny Ananin <yananin@summitmediagroup.com>
+ *
+ */
+
+/**
+ * Implements hook_library().
+ */
+function smg_angular_library() {
+
+  // Add the angularjs library
+  $libraries['angularjs'] = array(
+    'title' => 'AngularJS',
+    'website' => 'https://angularjs.org/',
+    'version' => '1.2.22',
+    'js' => array(
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular/angular.js' => array(
+        'type' => 'file',
+        'preprocess' => FALSE,
+      ),
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular-sanitize/angular-sanitize.min.js' => array(
+        'type' => 'file',
+        'preprocess' => FALSE,
+      ),
+      /*base_path() . 'sites/all/libraries/angularjs/bower_components/angular-animate/angular-animate.min.js' => array(
+        'type' => 'file',
+        'preprocess' => FALSE,
+      ),*/
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function smg_angular_page_alter(&$page) {
+  $add_angular = TRUE;
+
+  // Don't add angular on the admin pages.
+  if (path_is_admin(current_path())) {
+    $add_angular = FALSE;
+  }
+
+  if ($add_angular) {
+    // This will fix IE8 problems
+    // @see https://docs.angularjs.org/guide/ie
+    $all_custom_elements = array(
+      'video-grid',
+    );
+    foreach (module_implements('smg_angular_custom_elements') as $module) {
+      $custom_elements = module_invoke($module, 'smg_angular_custom_elements');
+      foreach ($custom_elements as $element) {
+        $all_custom_elements[] = $element;
+      }
+    }
+    if (sizeof($all_custom_elements) > 0) {
+      $element_string = '<!--[if lte IE 8]><script>';
+      foreach ($all_custom_elements as $element) {
+        $element_string .= "document.createElement('" . $element . "');";
+      }
+      $element_string .= "</script><![endif]-->";
+      $head_element = array(
+        '#type' => 'markup',
+        '#markup' => $element_string,
+      );
+      drupal_add_html_head($head_element, 'smgAngularCustomElements');
+    }
+
+    // Add object so other angular apps can add their modules to them. In your
+    // angular javascript add your module by adding the following to the end of
+    // the file:
+    //   window.smgAngularDependencies.push(MODULE_NAME);
+    $inline_script = '<script type="text/javascript">window.smgAngularDependencies = [];</script>';
+    $element = array(
+      '#type' => 'markup',
+      '#markup' => $inline_script,
+    );
+    drupal_add_html_head($element, 'smgAngularDependencies');
+
+    // This will add a global app that adds all the needed angular modules to a
+    // page.
+    drupal_add_js('
+      var smgGlobalApp = angular.module("smgGlobalApp", smgAngularDependencies);
+      jQuery(document).ready(function () {
+        angular.bootstrap(document, ["smgGlobalApp"] );
+      });',
+      array('type' => 'inline', 'scope' => 'footer')
+    );
+
+    // Add the AngularJS library
+    drupal_add_library('smg_angular', 'angularjs');
+    // Add the gaEventWrapper module
+    drupal_add_js(drupal_get_path('module', 'smg_angular') . '/js/smgGaEvent.js');
+
+    // Add any AngularJS templates that are defined by other modules through the
+    // smg_angular_add_template hook
+    if(sizeof(module_implements('smg_angular_add_template')) > 0) {
+      $angular_templates = array();
+      foreach(module_implements('smg_angular_add_template') as $module) {
+        $angular_templates = array_merge($angular_templates, module_invoke($module, 'smg_angular_add_template'));
+      }
+
+      drupal_add_js(array('smgAngularTemplates' => $angular_templates), 'setting');
+    }
+  }
+}
+
+/**
+ * Adds markup to the head tag, to add a fix for AngularJS in IE8-, as
+ * per https://docs.angularjs.org/guide/ie.  This function should be called
+ * by any other function, to register any custom elements
+ *
+ * @param string $element
+ *  - Custom AngularJS element
+ */
+function _smg_angular_register_custom_elements($elements) {
+  $all_elements = &drupal_static(__FUNCTION__, array());
+
+  foreach ($elements as $element) {
+    $all_elements[] = $element;
+  }
+
+  return $all_elements;
+}

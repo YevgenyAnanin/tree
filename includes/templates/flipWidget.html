@@ -1,0 +1,16 @@
+<div class="flip-widget flip-clock-wrapper">
+    <ul class="flip play" ng-repeat="digit in countdownDigitsStruct">
+        <li ng-repeat="(number, class) in digit" ng-class="class">
+            <a href="#">
+                <div class="up">
+                    <div class="shadow"></div>
+                    <div class="inn">{{number}}</div>
+                </div>
+                <div class="down">
+                    <div class="shadow"></div>
+                    <div class="inn">{{number}}</div>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>

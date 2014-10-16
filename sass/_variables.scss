@@ -1,0 +1,45 @@
+@mixin box-shadow($h, $v, $b, $s, $c) {
+  -moz-box-shadow: $h $v $b $s $c;
+  -webkit-box-shadow: $h $v $b $s $c;
+  box-shadow: $h $v $b $s $c;
+}
+@mixin border-box() {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+@mixin button($start, $end, $border, $radius: 10px) {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, $start), color-stop(1, $end));
+  background:-moz-linear-gradient(top, $start 5%, $end 100%);
+  background:-webkit-linear-gradient(top, $start 5%, $end 100%);
+  background:-o-linear-gradient(top, $start 5%, $end 100%);
+  background:-ms-linear-gradient(top, $start 5%, $end 100%);
+  background:linear-gradient(to bottom, $start 5%, $end 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$start', endColorstr='$end',GradientType=0);
+  background-color:$start;
+  -moz-border-radius:$radius;
+  -webkit-border-radius:$radius;
+  border-radius:$radius;
+  /*border:1px solid $border;*/
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-weight:bold;
+  padding:5px 7px;
+  text-decoration:none;
+  text-shadow:0px 1px 0px $border;
+}
+@mixin buttonHover($start, $end) {
+  background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, $end), color-stop(1, $start));
+  background:-moz-linear-gradient(top, $end 5%, $start 100%);
+  background:-webkit-linear-gradient(top, $end 5%, $start 100%);
+  background:-o-linear-gradient(top, $end 5%, $start 100%);
+  background:-ms-linear-gradient(top, $end 5%, $start 100%);
+  background:linear-gradient(to bottom, $end 5%, $start 100%);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='$end', endColorstr='$start',GradientType=0);
+  background-color:$end;
+}
+@mixin buttonActive() {
+  position:relative;
+  top:1px;
+}
