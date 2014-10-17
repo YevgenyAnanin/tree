@@ -9,6 +9,9 @@ videoGrid.controller('videoGridCtrl', ['$scope', '$attrs', '$element', function 
   $scope.hasMoreVideos = true;
   $scope.hasPreviousVideos = false;
 
+  $scope.gridWidth = 4;
+  $scope.gridWidthClass = "grid-width-" + $scope.gridWidth;
+
   // Initialize the counter value that tracks which group of videos in the
   // grid the user is viewing
   $scope.currentCount = 1;
@@ -68,6 +71,15 @@ videoGrid.controller('videoGridCtrl', ['$scope', '$attrs', '$element', function 
     if ( $scope.currentCount == 1)
       $scope.hasPreviousVideos = false;
     $scope.changeFirstGroupsMargin();
+  }
+
+  // Function for determining if video is first in grid row
+  $scope.isVideoFirst = function (index) {
+    var videoPos = index + 1;
+    if (videoPos == 1 || (videoPos % $scope.gridWidth == 1))
+      return "is-first-video";
+    else
+      return "not-first-video";
   }
 
 }]);
