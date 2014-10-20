@@ -10,7 +10,7 @@
     <div class="smgVideoGrid-see-previous" ng-if="hasPreviousVideos" ng-class="{'smgVideo-counter-clear':hasPreviousVideos}">
         <span class="smgVideoGrid-see-previous-click" ng-click="decrementCounter()"><< See previous {{countPrevious()}} videos </span>
     </div>
-    <div class="smgVideoGrid-see-more" ng-if="hasMoreVideos" ng-class="{'.smgVideo-counter-clear':!hasPreviousVideos}">
+    <div class="smgVideoGrid-see-more" ng-if="hasMoreVideos" ng-class="{'smgVideo-counter-clear':!hasPreviousVideos}">
         <span class="smgVideoGrid-see-more-click" ng-click="incrementCounter()">See {{countRemaining()}} more videos >></span>
     </div>
 </div>
