@@ -5,11 +5,8 @@ videoGrid.controller('videoGridCtrl', ['$scope', '$attrs', '$element', function 
   // Get all of the videos
   $scope.videos = Drupal.settings.smgVideoGrid.videos;
 
-  // Initialize some other properties
-  $scope.hasMoreVideos = true;
-  $scope.hasPreviousVideos = false;
-
   $scope.gridWidth = 4;
+  $scope.videosInGroup = 12;
   $scope.gridWidthClass = "grid-width-" + $scope.gridWidth;
 
   // Initialize the counter value that tracks which group of videos in the
@@ -21,9 +18,9 @@ videoGrid.controller('videoGridCtrl', ['$scope', '$attrs', '$element', function 
   // Divide the videos into groups
   $scope.videoGroups = {};
   if ( $scope.videos !== 'undefined' ) {
-    for ( i=1; i <= Math.ceil($scope.videos.length / 12); i++ ) {
-      var groupRangeStart = (i - 1) * 12;
-      var groupRangeEnd = ((i) * 12);
+    for ( i=1; i <= Math.ceil($scope.videos.length / $scope.videosInGroup); i++ ) {
+      var groupRangeStart = (i - 1) * $scope.videosInGroup;
+      var groupRangeEnd = ((i) * $scope.videosInGroup);
       $scope.videoGroups[i] = $scope.videos.slice(groupRangeStart, groupRangeEnd);
     }
   }
@@ -31,6 +28,10 @@ videoGrid.controller('videoGridCtrl', ['$scope', '$attrs', '$element', function 
   $scope.gridGroupShow = function (group) {
     return (group == $scope.currentCount)
   }
+
+  // Initialize some other properties
+  $scope.hasMoreVideos = ($scope.totalVideos > $scope.videosInGroup);
+  $scope.hasPreviousVideos = false;
 
   // Function that determines how many videos are left in the scroll
   $scope.countRemaining = function () {
