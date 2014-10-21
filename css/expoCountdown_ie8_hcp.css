@@ -1,0 +1,60 @@
+/* line 7, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .expo-countdown-banner-text {
+  float: left;
+  font-size: 75%;
+  padding-left: 10px;
+}
+
+/* line 10, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .expo-countdown-banner.countdown-quantity-3 {
+  width: 77%;
+}
+
+/* line 13, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown-register {
+  display: inline-block;
+  vertical-align: middle;
+}
+/* line 14, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown-register a {
+  font-size: 84% !important;
+  position: relative;
+  padding-right: 7px !important;
+}
+/* line 18, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown-register a:after {
+  content: "";
+  display: none !important;
+}
+
+/* Flip clock overrides */
+/* line 26, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .flip-clock-wrapper {
+  margin: 0.5em 0.6em 0 0.6em;
+}
+/* line 28, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .flip-clock-wrapper ul {
+  width: 20px;
+  height: 30px;
+  line-height: 28px;
+  margin: 2px;
+}
+/* line 30, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .flip-clock-wrapper ul li {
+  padding-bottom: 0;
+}
+/* line 34, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .flip-clock-wrapper ul li a div.up:after {
+  top: 14px;
+  /*background-color: #000000;*/
+}
+/* line 39, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .flip-clock-wrapper ul li a div div.inn {
+  font-size: 20px;
+  color: #FFFFFF;
+}
+
+/* line 46, ../sass/expoCountdown_ie8_hcp.scss */
+.expo-countdown .expo-countdown-time-count {
+  margin-top: -13px;
+}

@@ -7,6 +7,12 @@ function smg_global_drush_command() {
   $items['smg-global-360-add-fields'] = array(
     'description' => 'Add new fields to 360 content type',
   );
+  $items['smg-global-remove-webform-component'] = array(
+    'description' => 'Specify a webform component to be deleted from ALL WEBFORMS on the site.  Use the form_key parameter.',
+    'arguments' => array(
+      'component' => 'The webform component',
+    ),
+  );
   return $items;
 }
 
@@ -209,6 +215,41 @@ function drush_smg_global_360_add_fields(){
       ),
     );
     field_create_instance($fc_y_instance);
+  }  
+}
+
+/**
+ * Removes one or more webform components
+ */
+function drush_smg_global_remove_webform_component() {
+  $args = func_get_args(); // Get arguments
+
+  // Get all webform nodes
+  $webform_types = webform_variable_get('webform_node_types');
+  $results = array();
+  if ($webform_types) {
+    $results = db_select('node', 'n')
+      ->fields('n')
+      ->condition('n.type', $webform_types, 'IN')
+      ->execute()
+      ->fetchAllAssoc('nid');
+  }
+  $nids = array_keys($results);
+  $nodes = node_load_multiple($nids);
+
+  // Go through each node and look for the supplied components arg(s)
+  foreach ($nodes as $node) {
+    $found_component = FALSE;
+    foreach ($node->webform['components'] as $key => $component) {
+      if (in_array($component['form_key'], $args)) {
+        $found_component = TRUE;
+        unset($node->webform['components'][$key]);
+        drush_log(dt('Removed component ' . $component['form_key'] . ' from ' . $node->title), 'ok');
+      }
+    }
+    if ($found_component) 
+      node_save($node);
   }
   
 }
+

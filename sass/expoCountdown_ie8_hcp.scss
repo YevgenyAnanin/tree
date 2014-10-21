@@ -1,0 +1,48 @@
+$flip-height: 30px;
+$flip-width: $flip-height - 15px;
+$flip-line-height: $flip-height - 2px;
+$flip-divider: $flip-line-height / 2;
+$flip-font-size: $flip-height * (2/3);
+
+.expo-countdown .expo-countdown-banner-text {float: left; font-size: 75%; padding-left: 10px;}
+
+.expo-countdown .expo-countdown-banner {
+  &.countdown-quantity-3 {width: 77%;}
+}
+
+.expo-countdown-register {display:inline-block; vertical-align: middle;
+  a {
+    font-size: 84% !important;
+    position: relative;
+    padding-right: 7px !important;
+    &:after {
+      content: "";
+      display: none !important;
+    }
+  }
+}
+
+/* Flip clock overrides */
+.expo-countdown .flip-clock-wrapper {
+  margin: 0.5em 0.6em 0 0.6em;
+  ul {
+    width: 20px; height: $flip-height; line-height: $flip-line-height; margin: 2px;
+    li {padding-bottom: 0;
+      a {
+        div {
+          &.up {
+            &:after {
+              top:$flip-divider;
+              /*background-color: #000000;*/
+            }
+          }
+          div.inn {font-size: $flip-font-size; color: #FFFFFF;}
+        }
+      }
+    }
+  }
+}
+
+.expo-countdown .expo-countdown-time-count {
+  margin-top: -13px;
+}

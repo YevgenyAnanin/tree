@@ -6,6 +6,8 @@ expoCountdown.controller('expoCountdownCtrl', ['$scope', '$attrs', '$interval', 
 
   $scope.expoName = settings.expoName;
 
+  $scope.registerUrl = settings.registerUrl;
+
   $scope.logoPath = settings.logo_path;
 
   $scope.day = parseInt(settings.utcDay);
@@ -44,6 +46,28 @@ expoCountdown.controller('expoCountdownCtrl', ['$scope', '$attrs', '$interval', 
   $scope.showHours = settings.showHour;
   $scope.showMins = settings.showMin;
 
+  $scope.digitsQuantity = function (countdownType) {
+    var digNum = $scope[countdownType].toString().split("").length;
+    var digNumClass = 'digits-quantity-' + digNum;
+    var classObj = {};
+    classObj[digNumClass] = true;
+    return classObj;
+  };
+
+  /**
+   * For use in ng-class.  Returns a 1, 2, or 3 depending on whether or not we're showing the
+   * hours and/or minute countdowns
+   */
+  $scope.countdownQuantity = function () {
+    var quantity = 1;
+    if ( $scope.showHours ) quantity++;
+    if ( $scope.showMins ) quantity++;
+    var quantityClass = "countdown-quantity-" + quantity;
+    var classObj = {};
+    classObj[quantityClass] = true;
+    return classObj;
+  }
+
   $interval(function () {
     // Change the current date every 60 seconds
     $scope.currentDate = new Date();
@@ -68,30 +92,79 @@ expoCountdown.directive('expoCountdown', ['$timeout', '$window', function ($time
     link: function (scope, elem, attrs) {
 
       var window = jQuery($window);
-
+      
       var centerRegButton = function () {
         var widgetHeight = elem.outerHeight(true);
         var regButton = elem.find(".expo-countdown-register");
         var regButtonHeight = regButton.outerHeight(true);
-        regButton.css({"margin-top":((widgetHeight / 2) - regButtonHeight)});
+        var newMarginTop = ((widgetHeight / 2) - regButtonHeight);
+        if (newMarginTop < 20 && attrs.hasOwnProperty("site") && attrs.site == 'pw') {
+          newMarginTop = 20;
+        }
+        else if (attrs.hasOwnProperty("site") && attrs.site == "hcp") {
+          newMarginTop+= 3;
+        }
+        regButton.css({"margin-top":newMarginTop});
       }
 
-      /*$timeout(function () {
-       centerRegButton();
-       },0);
-       $timeout(function () {
-       centerRegButton();
-       }, 100);*/
       $timeout(function () {
         if (window.innerWidth() > 480){
           centerRegButton();
         }
       }, 800);
-      /*
-       $timeout(function () {
-       centerRegButton();
-       }, 3900);*/
 
+      // Fix widget to page on PW
+      if (window.innerWidth() > 480 && attrs.hasOwnProperty("site") && attrs.site == "pw" && !jQuery("body").hasClass("logged-in")) {
+
+        $timeout(function () {
+
+          var elementPos = elem.offset();
+          var containerWidth = jQuery("#container").width();
+
+          var expoWidgetIsFixed = false;
+
+          window.bind("scroll", function () {
+            if ( window.scrollTop() > elementPos.top ) {
+              elem.css({"position":"fixed", "top": "0", "max-width":containerWidth, "border-bottom":"1px solid #ccc"});
+              expoWidgetIsFixed = true;
+            }
+            else {
+              elem.css({"position":"static","border-bottom":"none"});
+              expoWidgetIsFixed = false;
+            }
+          });
+
+          window.bind("resize", function () {
+            if (expoWidgetIsFixed) {
+              var newContainerWidth = jQuery("#container").width();
+              elem.css({"max-width":newContainerWidth});
+            }
+          });
+
+        }, 100);
+
+      }
+
+      // Fix widget to page on HCP
+      if (window.innerWidth() > 480 && attrs.hasOwnProperty("site") && attrs.site == "hcp" && !jQuery("body").hasClass("logged-in")) {
+
+        $timeout(function () {
+
+          var elementPos = elem.offset();
+          var containerWidth = jQuery(".wrapper-middle").width();
+
+          window.bind("scroll", function () {
+            if ( window.scrollTop() > elementPos.top ) {
+              elem.css({"position":"fixed", "top": "0", "max-width":containerWidth});
+            }
+            else {
+              elem.css({"position":"static"});
+            }
+          });
+
+        }, 100);
+
+      }
 
     },
     templateUrl: expoCountdownTpl

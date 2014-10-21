@@ -1,4 +1,4 @@
-<div class="expo-countdown">
+<div class="expo-countdown expo-countdown-container">
     <div class="expo-countdown-banner">
         <img src="#" ng-src="{{logoPath}}" class="expo-countdown-logo"/>
         <span class="expo-countdown-banner-text">Countdown to {{expoName}}</span>
@@ -15,5 +15,5 @@
         <countdown-flip-widget type="minCountdown" countdown="{{minCountdown}}"></countdown-flip-widget>
         <span class="expo-countdown-flip-title">MINS</span>
     </div>
-    <div class="expo-countdown-register"><a href="#">REGISTER NOW</a></div>
+    <div class="expo-countdown-register"><a onclick="_gaq.push(['_trackEvent','Expo Countdown Widget', 'Register Button Click']);" href="#" ng-href="{{registerUrl}}">REGISTER NOW</a></div>
 </div>

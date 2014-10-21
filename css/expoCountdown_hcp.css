@@ -9,79 +9,112 @@
   width: 100%;
   padding-bottom: 22px;
   border-bottom: 1px solid #A8DAE8;
+  background: #FFFFFF;
+  z-index: 1000;
 }
 
 /* line 19, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-banner {
   display: inline-block;
-  padding: 5px 5px 5px 5px;
+  padding: 5px 5px 3px 5px;
   background: #2477B6;
   color: #FFFFFF;
   font-weight: bold;
   margin: 14px 0 8px;
   font-size: 145%;
   position: relative;
-  height: 22px;
+  height: 20px;
   float: left;
-  width: 75%;
+  width: 80%;
 }
 /* line 20, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-banner:after {
   content: "";
   width: 0;
   height: 0;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
   border-left: 7px solid #2477B6;
   position: absolute;
   left: 100%;
   top: 1px;
 }
-
+/* line 23, ../sass/expoCountdown_hcp.scss */
+.expo-countdown-banner.countdown-quantity-2 {
+  width: 72%;
+}
 /* line 24, ../sass/expoCountdown_hcp.scss */
-.expo-countdown-logo {
-  max-width: 80px;
-  float: left;
+.expo-countdown-banner.countdown-quantity-1 {
+  width: 61%;
 }
 
-/* line 25, ../sass/expoCountdown_hcp.scss */
+/* line 27, ../sass/expoCountdown_hcp.scss */
+.no-sidebars .expo-countdown-banner.countdown-quantity-3 {
+  width: 55%;
+}
+/* line 28, ../sass/expoCountdown_hcp.scss */
+.no-sidebars .expo-countdown-banner.countdown-quantity-2 {
+  width: 47%;
+}
+/* line 29, ../sass/expoCountdown_hcp.scss */
+.no-sidebars .expo-countdown-banner.countdown-quantity-1 {
+  width: 40%;
+}
+
+/* line 31, ../sass/expoCountdown_hcp.scss */
+.expo-countdown-logo {
+  float: left;
+  margin-top: -18px;
+}
+
+/* line 32, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-banner-text {
   float: left;
-  font-size: 90%;
-  padding-left: 10px;
+  font-size: 87%;
+  padding-left: 12px;
+  padding-right: 3px;
 }
 
-/* line 26, ../sass/expoCountdown_hcp.scss */
+/* line 33, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-time-count {
   display: inline-block;
   float: left;
-  margin-top: -19px;
+  margin-top: -16px;
 }
-/* line 27, ../sass/expoCountdown_hcp.scss */
+/* line 34, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-time-count:first-child {
   margin-left: 1.5em;
 }
 
-/* line 32, ../sass/expoCountdown_hcp.scss */
+/* line 39, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-days-count .flip-clock-wrapper {
-  margin-left: 1.6em;
+  /*margin-left:1.6em;*/
+}
+/* line 40, ../sass/expoCountdown_hcp.scss */
+.expo-countdown-days-count.digits-quantity-1 {
+  margin-right: 10px;
 }
 
-/* line 34, ../sass/expoCountdown_hcp.scss */
+/* line 43, ../sass/expoCountdown_hcp.scss */
+.expo-countdown-hours-count.digits-quantity-1 {
+  margin-right: 10px;
+}
+
+/* line 45, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-flip-title {
   display: block;
   text-align: center;
   font-weight: bold;
-  font-size: 75%;
+  font-size: 73%;
   color: #000000;
 }
 
-/* line 35, ../sass/expoCountdown_hcp.scss */
+/* line 46, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-register {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 36, ../sass/expoCountdown_hcp.scss */
+/* line 47, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-register a {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fdb239), color-stop(1, #b96c00));
   background: -moz-linear-gradient(top, #fdb239 5%, #b96c00 100%);
@@ -104,10 +137,13 @@
   text-shadow: 0px 1px 0px #b96c00;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FDB239', endColorstr='#B96C00',GradientType=0);
   color: #FFFFFF;
-  margin-left: 19px;
+  margin-left: 14px;
   border-radius: 5px;
+  font-size: 92%;
+  position: relative;
+  padding-right: 16px;
 }
-/* line 39, ../sass/expoCountdown_hcp.scss */
+/* line 50, ../sass/expoCountdown_hcp.scss */
 .expo-countdown-register a:hover {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #b96c00), color-stop(1, #fdb239));
   background: -moz-linear-gradient(top, #b96c00 5%, #fdb239 100%);
@@ -120,73 +156,48 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#B96C00', endColorstr='#FDB239',GradientType=0);
   text-decoration: none;
 }
-/* line 47, ../sass/expoCountdown_hcp.scss */
-.expo-countdown-register a:link {
-  color: #FFFFFF;
+/* line 58, ../sass/expoCountdown_hcp.scss */
+.expo-countdown-register a:link, .expo-countdown-register a:visited, .expo-countdown-register a:active {
+  color: #FFFFFF !important;
+}
+/* line 62, ../sass/expoCountdown_hcp.scss */
+.expo-countdown-register a:after {
+  content: "";
+  display: inline-block;
+  height: 0;
+  width: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid #FFFFFF;
+  position: absolute;
+  top: 50%;
+  margin-top: -5px;
+  margin-left: 5px;
 }
 
 /* Flip clock overrides */
-/* line 52, ../sass/expoCountdown_hcp.scss */
+/* line 79, ../sass/expoCountdown_hcp.scss */
 .flip-clock-wrapper {
-  margin: 0.5em 0.8em 0 0.8em;
+  margin: 0.5em 0.6em 0 0.6em;
 }
-/* line 54, ../sass/expoCountdown_hcp.scss */
+/* line 81, ../sass/expoCountdown_hcp.scss */
 .flip-clock-wrapper ul {
-  width: 25px;
-  height: 42px;
-  line-height: 40px;
+  width: 22px;
+  height: 36px;
+  line-height: 34px;
   margin: 2px;
 }
-/* line 56, ../sass/expoCountdown_hcp.scss */
+/* line 83, ../sass/expoCountdown_hcp.scss */
 .flip-clock-wrapper ul li {
   padding-bottom: 0;
 }
-/* line 60, ../sass/expoCountdown_hcp.scss */
+/* line 87, ../sass/expoCountdown_hcp.scss */
 .flip-clock-wrapper ul li a div.up:after {
-  top: 20px;
-  background-color: #000000;
+  top: 17px;
+  /*background-color: #000000;*/
 }
-/* line 65, ../sass/expoCountdown_hcp.scss */
+/* line 92, ../sass/expoCountdown_hcp.scss */
 .flip-clock-wrapper ul li a div div.inn {
-  font-size: 28px;
-}
-
-/* Responsive */
-@media (max-width: 800px) {
-  /* line 75, ../sass/expoCountdown_hcp.scss */
-  .expo-countdown-logo {
-    max-width: 60px;
-  }
-
-  /* line 76, ../sass/expoCountdown_hcp.scss */
-  .expo-countdown-banner {
-    font-size: 115%;
-    line-height: 24px;
-  }
-
-  /* Flip clock overrides */
-  /* line 78, ../sass/expoCountdown_hcp.scss */
-  .flip-clock-wrapper {
-    margin: 0.4em 1em;
-  }
-  /* line 80, ../sass/expoCountdown_hcp.scss */
-  .flip-clock-wrapper ul {
-    width: 29px;
-    height: 44px;
-    line-height: 42px;
-    margin: 2px;
-  }
-  /* line 82, ../sass/expoCountdown_hcp.scss */
-  .flip-clock-wrapper ul li {
-    padding-bottom: 0;
-  }
-  /* line 86, ../sass/expoCountdown_hcp.scss */
-  .flip-clock-wrapper ul li a div.up:after {
-    top: 21px;
-    background-color: #000000;
-  }
-  /* line 91, ../sass/expoCountdown_hcp.scss */
-  .flip-clock-wrapper ul li a div div.inn {
-    font-size: 29.33333px;
-  }
+  font-size: 24px;
+  color: #FFFFFF;
 }

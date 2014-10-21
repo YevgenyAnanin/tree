@@ -450,6 +450,7 @@ function smg_global_page_alter(&$page) {
       'utcMin' => $date->format('i'),
       'showMin' => variable_get('expo_enable_min', false),
       'showHour' => variable_get('expo_enable_hours', false),
+      'registerUrl' => variable_get('expo_register_url'),
     );
     $smg_global_path = drupal_get_path('module','smg_global');
     $site_id = variable_get('smg_global_site');
@@ -463,6 +464,15 @@ function smg_global_page_alter(&$page) {
     drupal_add_css($smg_global_path . '/css/flipclock.css', array('preprocess'=>true));
     // Add site specific expo countdown css.  First get site id
     drupal_add_css($smg_global_path . '/css/expoCountdown_' . $site_id . '.css', array('preprocess'=>true));
+
+    // Add IE8 specific css
+    $ie8_css = '/' . $smg_global_path . '/css/expoCountdown_ie8_' . $site_id . '.css';
+    $ie8_css_string = '<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="' . $ie8_css . '" /><![endif]-->';
+    $ie8_css_head = array(
+      '#type' => 'markup',
+      '#markup' => $ie8_css_string,
+    );
+    drupal_add_html_head($ie8_css_head, 'expoCountdownIE8');
   }
 
 }

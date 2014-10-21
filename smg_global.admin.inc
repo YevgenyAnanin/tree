@@ -109,6 +109,12 @@ function smg_expo_countdown_settings_form() {
     '#title' => 'Show how many minutes until the show',
     '#default_value' => variable_get('expo_enable_min'),
   );
+  $form['expo_register_url'] = array(
+    '#type' => 'textfield',
+    '#title' => 'URL for Registration Page',
+    '#description' => 'INCLUDE THE http://',
+    '#default_value' => variable_get('expo_register_url'),
+  );
   $form['#submit'][] = 'expo_countdown_custom_submit';
   return system_settings_form($form);
 }
