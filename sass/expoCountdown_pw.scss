@@ -13,7 +13,7 @@ $flip-max-800-divider: $flip-max-800-line-height / 2;
 $flip-max-800-font-size: $flip-max-800 * (2/3);
 
 #container.expo-countdown {padding-top:4px;}
-#container .expo-countdown {overflow: auto; width:100%; background: #FFFFFF; z-index: 1000;
+#container .expo-countdown {overflow: auto; width:100%; background: #FFFFFF; z-index: 900;
 
 }
 .expo-countdown-banner { display: inline-block; padding: 5px 15px 5px 9.9%; background: #0C56A4; color: #FFFFFF; font-weight: bold; margin:14px 0 8px; font-size: 145%; position: relative; height: 22px; float:left;

@@ -10,7 +10,7 @@
   padding-bottom: 22px;
   border-bottom: 1px solid #A8DAE8;
   background: #FFFFFF;
-  z-index: 1000;
+  z-index: 990;
 }
 
 /* line 19, ../sass/expoCountdown_hcp.scss */

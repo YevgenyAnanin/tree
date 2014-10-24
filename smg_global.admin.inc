@@ -114,6 +114,12 @@ function smg_expo_countdown_settings_form() {
     '#title' => 'URL for Registration Page',
     '#description' => 'INCLUDE THE http://',
     '#default_value' => variable_get('expo_register_url'),
+  );  
+  $form['expo_exclude'] = array(
+    '#type' => 'textarea',
+    '#title' => 'Pages to Exclude Countdown Widget From',
+    '#description' => t('Add pages, each on a new line.  Don\'t include forward slash'),
+    '#default_value' => variable_get('expo_exclude'), 
   );
   $form['#submit'][] = 'expo_countdown_custom_submit';
   return system_settings_form($form);
