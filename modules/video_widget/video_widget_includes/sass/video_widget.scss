@@ -49,7 +49,8 @@ $widget-title-border: 1px solid #972901;
   .videoWidget-wrapper div {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
   .videoWidget-videos {overflow: hidden; float:left; max-width:80%; background-color: #616161; border-top: 1px solid #000000; border-bottom: 1px solid #000000; min-height: 120px; white-space: nowrap;}
   .videoWidget-count-selector {overflow: auto; min-height:1px;
-    //&:hover {cursor:pointer};
+    &.ng-click-active {}
+
   }
   .videoWidget-left-selection, .videoWidget-right-selection { display:inline-block; width:10%; float:left; }
   .videoWidget-left-triangle-wrapper { background:#acacac; background-image: -ms-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -moz-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -o-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #ACACAC), color-stop(1, #828282)); background-image: -webkit-linear-gradient(left, #ACACAC 0%, #828282 100%); background-image: linear-gradient(to right, #ACACAC 0%, #828282 100%); border-radius: 8px 0 0 8px;}
@@ -57,6 +58,13 @@ $widget-title-border: 1px solid #972901;
     &.lastVideoBlock {opacity: 0.42;
       &:hover {cursor: not-allowed;}
     }
+  }
+  .ng-click-active {
+    > .videoWidget-triangle-wrapper {
+      box-shadow: inset 0 0 0 1px #515151/*, inset 0 5px 30px 4px #616161*/; /*border-left: 2px solid #000000;*/
+    }
+    .videoWidget-right-triangle-wrapper {right: 3px; }
+    .videoWidget-left-triangle-wrapper {left: 3px;}
   }
   .videoWidget-triangle-wrapper { position: absolute; width:10%; height:100%; border: 1px solid #000000;
     &:hover {cursor:pointer}

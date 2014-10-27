@@ -52,13 +52,13 @@
   overflow: auto;
   min-height: 1px;
 }
-/* line 54, ../sass/video_widget.scss */
+/* line 55, ../sass/video_widget.scss */
 .full .videoWidget-left-selection, .full .videoWidget-right-selection, .twoVideo .videoWidget-left-selection, .twoVideo .videoWidget-right-selection, .full_pw .videoWidget-left-selection, .full_pw .videoWidget-right-selection {
   display: inline-block;
   width: 10%;
   float: left;
 }
-/* line 55, ../sass/video_widget.scss */
+/* line 56, ../sass/video_widget.scss */
 .full .videoWidget-left-triangle-wrapper, .twoVideo .videoWidget-left-triangle-wrapper, .full_pw .videoWidget-left-triangle-wrapper {
   background: #acacac;
   background-image: -ms-linear-gradient(left, #acacac 0%, #828282 100%);
@@ -69,7 +69,7 @@
   background-image: linear-gradient(to right, #acacac 0%, #828282 100%);
   border-radius: 8px 0 0 8px;
 }
-/* line 56, ../sass/video_widget.scss */
+/* line 57, ../sass/video_widget.scss */
 .full .videoWidget-right-triangle-wrapper, .twoVideo .videoWidget-right-triangle-wrapper, .full_pw .videoWidget-right-triangle-wrapper {
   background: #acacac;
   background-image: -ms-linear-gradient(right, #acacac 0%, #828282 100%);
@@ -80,26 +80,39 @@
   background-image: linear-gradient(to left, #acacac 0%, #828282 100%);
   border-radius: 0 8px 8px 0;
 }
-/* line 57, ../sass/video_widget.scss */
+/* line 58, ../sass/video_widget.scss */
 .full .videoWidget-right-triangle-wrapper.lastVideoBlock, .twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock, .full_pw .videoWidget-right-triangle-wrapper.lastVideoBlock {
   opacity: 0.42;
 }
-/* line 58, ../sass/video_widget.scss */
+/* line 59, ../sass/video_widget.scss */
 .full .videoWidget-right-triangle-wrapper.lastVideoBlock:hover, .twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock:hover, .full_pw .videoWidget-right-triangle-wrapper.lastVideoBlock:hover {
   cursor: not-allowed;
 }
-/* line 61, ../sass/video_widget.scss */
+/* line 63, ../sass/video_widget.scss */
+.full .ng-click-active > .videoWidget-triangle-wrapper, .twoVideo .ng-click-active > .videoWidget-triangle-wrapper, .full_pw .ng-click-active > .videoWidget-triangle-wrapper {
+  box-shadow: inset 0 0 0 1px #515151;
+  /*border-left: 2px solid #000000;*/
+}
+/* line 66, ../sass/video_widget.scss */
+.full .ng-click-active .videoWidget-right-triangle-wrapper, .twoVideo .ng-click-active .videoWidget-right-triangle-wrapper, .full_pw .ng-click-active .videoWidget-right-triangle-wrapper {
+  right: 3px;
+}
+/* line 67, ../sass/video_widget.scss */
+.full .ng-click-active .videoWidget-left-triangle-wrapper, .twoVideo .ng-click-active .videoWidget-left-triangle-wrapper, .full_pw .ng-click-active .videoWidget-left-triangle-wrapper {
+  left: 3px;
+}
+/* line 69, ../sass/video_widget.scss */
 .full .videoWidget-triangle-wrapper, .twoVideo .videoWidget-triangle-wrapper, .full_pw .videoWidget-triangle-wrapper {
   position: absolute;
   width: 10%;
   height: 100%;
   border: 1px solid #000000;
 }
-/* line 62, ../sass/video_widget.scss */
+/* line 70, ../sass/video_widget.scss */
 .full .videoWidget-triangle-wrapper:hover, .twoVideo .videoWidget-triangle-wrapper:hover, .full_pw .videoWidget-triangle-wrapper:hover {
   cursor: pointer;
 }
-/* line 64, ../sass/video_widget.scss */
+/* line 72, ../sass/video_widget.scss */
 .full .videoWidget-triangle, .twoVideo .videoWidget-triangle, .full_pw .videoWidget-triangle {
   position: absolute;
   top: 50%;
@@ -107,7 +120,7 @@
   left: 50%;
   margin-left: -10px;
 }
-/* line 65, ../sass/video_widget.scss */
+/* line 73, ../sass/video_widget.scss */
 .full .videoWidget-triangle, .twoVideo .videoWidget-triangle, .full_pw .videoWidget-triangle {
   position: absolute;
   top: 50%;
@@ -115,7 +128,7 @@
   left: 50%;
   margin-left: -10px;
 }
-/* line 68, ../sass/video_widget.scss */
+/* line 76, ../sass/video_widget.scss */
 .full .videoWidget-triangle-left, .twoVideo .videoWidget-triangle-left, .full_pw .videoWidget-triangle-left {
   width: 0;
   height: 0;
@@ -124,7 +137,7 @@
   border-right: 20px solid #FFFFFF;
   right: 35%;
 }
-/* line 71, ../sass/video_widget.scss */
+/* line 79, ../sass/video_widget.scss */
 .full .videoWidget-triangle-right, .twoVideo .videoWidget-triangle-right, .full_pw .videoWidget-triangle-right {
   width: 0;
   height: 0;
@@ -132,7 +145,7 @@
   border-bottom: 40px solid transparent;
   border-left: 20px solid #FFFFFF;
 }
-/* line 74, ../sass/video_widget.scss */
+/* line 82, ../sass/video_widget.scss */
 .full .videoWidget-title, .twoVideo .videoWidget-title, .full_pw .videoWidget-title {
   float: left;
   clear: both;
@@ -152,13 +165,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* line 75, ../sass/video_widget.scss */
+/* line 83, ../sass/video_widget.scss */
 .full .videoWidget-title div, .twoVideo .videoWidget-title div, .full_pw .videoWidget-title div {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* line 77, ../sass/video_widget.scss */
+/* line 85, ../sass/video_widget.scss */
 .full .videoWidget-widget-title, .twoVideo .videoWidget-widget-title, .full_pw .videoWidget-widget-title {
   display: inline-block;
   font-size: 145%;
@@ -180,124 +193,124 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F25000', endColorstr='#EE9755');
 }
 
-/* line 82, ../sass/video_widget.scss */
+/* line 90, ../sass/video_widget.scss */
 .videoWidget-title:hover {
   cursor: pointer;
 }
 
-/* line 84, ../sass/video_widget.scss */
+/* line 92, ../sass/video_widget.scss */
 .full .videoWidget-video {
   width: 33.33%;
   width: calc(100%/3);
 }
 
-/* line 86, ../sass/video_widget.scss */
+/* line 94, ../sass/video_widget.scss */
 .full_pw .videoWidget-video {
   width: 25%;
 }
 
 @media (max-width: 800px) and (min-width: 480px) {
-  /* line 90, ../sass/video_widget.scss */
+  /* line 98, ../sass/video_widget.scss */
   .videoWidget {
     display: inline-block;
     width: 100%;
   }
 
-  /* line 91, ../sass/video_widget.scss */
+  /* line 99, ../sass/video_widget.scss */
   .videoWidget-video {
     width: 50%;
   }
 }
 @media (min-width: 480px) {
-  /* line 96, ../sass/video_widget.scss */
+  /* line 104, ../sass/video_widget.scss */
   .videoWidget-video img {
     max-width: 90%;
   }
 
-  /* line 98, ../sass/video_widget.scss */
+  /* line 106, ../sass/video_widget.scss */
   #content .videoWidget-video img {
     max-width: 90% !important;
   }
 }
 @media (max-width: 479px) {
-  /* line 103, ../sass/video_widget.scss */
+  /* line 111, ../sass/video_widget.scss */
   .oneVideo.videoWidget {
     display: block;
     width: 60%;
     margin: 0 auto;
   }
-  /* line 104, ../sass/video_widget.scss */
+  /* line 112, ../sass/video_widget.scss */
   .oneVideo .videoWidget-wrapper {
     display: table;
     width: 100%;
   }
-  /* line 105, ../sass/video_widget.scss */
+  /* line 113, ../sass/video_widget.scss */
   .oneVideo .videoWidget-videos {
     display: table-header-group;
     float: none;
     min-height: 125px;
   }
-  /* line 106, ../sass/video_widget.scss */
+  /* line 114, ../sass/video_widget.scss */
   .oneVideo .videoWidget-left-selection {
     display: table-row-group;
   }
-  /* line 107, ../sass/video_widget.scss */
+  /* line 115, ../sass/video_widget.scss */
   .oneVideo .videoWidget-right-selection {
     display: table-footer-group;
   }
-  /* line 108, ../sass/video_widget.scss */
+  /* line 116, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper {
     display: table-cell;
     padding: 10px 0;
   }
-  /* line 109, ../sass/video_widget.scss */
+  /* line 117, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper:active {
     padding-top: 11px;
     -moz-box-shadow: inset 0 0 1px 0 #000000;
     -webkit-box-shadow: inset 0 0 1px 0 #000000;
     box-shadow: inset 0 0 1px 0 #000000;
   }
-  /* line 110, ../sass/video_widget.scss */
+  /* line 118, ../sass/video_widget.scss */
   .oneVideo .videoWidget-video {
     width: 100%;
   }
-  /* line 111, ../sass/video_widget.scss */
+  /* line 119, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle {
     width: 0;
     height: 0;
     margin: 0 auto;
   }
-  /* line 113, ../sass/video_widget.scss */
+  /* line 121, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-left {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-bottom: 15px solid white;
   }
-  /* line 114, ../sass/video_widget.scss */
+  /* line 122, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-right {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-top: 15px solid white;
   }
 
-  /* line 118, ../sass/video_widget.scss */
+  /* line 126, ../sass/video_widget.scss */
   .max480 .ng-hide {
     display: table !important;
   }
-  /* line 119, ../sass/video_widget.scss */
+  /* line 127, ../sass/video_widget.scss */
   .max480.videoWidget {
     background: #ECEDF4;
     margin: 15px 0;
     border-radius: 8px;
     padding-bottom: 12px;
   }
-  /* line 120, ../sass/video_widget.scss */
+  /* line 128, ../sass/video_widget.scss */
   .max480 .videoWidget-videos {
     overflow: hidden;
     white-space: nowrap;
     height: 310px;
   }
-  /* line 121, ../sass/video_widget.scss */
+  /* line 129, ../sass/video_widget.scss */
   .max480 .videoWidget-video {
     width: 90%;
     display: table;
@@ -312,26 +325,26 @@
     -webkit-transition: all ease-in 0.8s;
     transition: all ease-in 0.8s;
   }
-  /* line 124, ../sass/video_widget.scss */
+  /* line 132, ../sass/video_widget.scss */
   .max480 .videoWidget-video.ng-hide-add-active, .max480 .videoWidget-video.ng-hide-remove, .max480 .videoWidget-video.ng-hide-remove-active, .max480 .videoWidget-video.ng-hide-add {
     display: inline-block !important;
     -webkit-transition: all linear 0.8s;
     transition: all linear 0.8s;
   }
-  /* line 129, ../sass/video_widget.scss */
+  /* line 137, ../sass/video_widget.scss */
   .max480 .videoWidget-video.lastNoHide {
     /*margin-bottom: 0;*/
   }
-  /* line 130, ../sass/video_widget.scss */
+  /* line 138, ../sass/video_widget.scss */
   .max480 .videoWidget-video a {
     display: table-cell;
     width: 40%;
   }
-  /* line 131, ../sass/video_widget.scss */
+  /* line 139, ../sass/video_widget.scss */
   .max480 .videoWidget-video a img {
     width: 100%;
   }
-  /* line 133, ../sass/video_widget.scss */
+  /* line 141, ../sass/video_widget.scss */
   .max480 .videoWidget-video::after {
     /*display: table-cell;*/
     content: '\203A';
@@ -351,7 +364,7 @@
     color: #FFFFFF;
     cursor: pointer;
   }
-  /* line 153, ../sass/video_widget.scss */
+  /* line 161, ../sass/video_widget.scss */
   .max480 .videoWidget-title {
     display: table-cell;
     vertical-align: middle;
@@ -361,12 +374,12 @@
     padding-left: 10px;
     white-space: normal;
   }
-  /* line 154, ../sass/video_widget.scss */
+  /* line 162, ../sass/video_widget.scss */
   .max480 .videoWidget-title div {
     overflow: hidden;
     max-height: 120px;
   }
-  /* line 156, ../sass/video_widget.scss */
+  /* line 164, ../sass/video_widget.scss */
   .max480 .videoWidget-widget-title {
     display: block;
     padding: 12px 12px 0;
@@ -374,7 +387,7 @@
     font-weight: bold;
     color: #414040;
   }
-  /* line 157, ../sass/video_widget.scss */
+  /* line 165, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection {
     display: block;
     width: 90%;
@@ -388,20 +401,20 @@
     font-size: 150%;
     cursor: pointer;
   }
-  /* line 159, ../sass/video_widget.scss */
+  /* line 167, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection:before {
     content: "Load More Videos";
   }
-  /* line 160, ../sass/video_widget.scss */
+  /* line 168, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection.lastVideoBlock {
     opacity: 0.4;
   }
-  /* line 162, ../sass/video_widget.scss */
+  /* line 170, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection.lastVideoBlock:hover {
     cursor: not-allowed;
   }
 
-  /* line 166, ../sass/video_widget.scss */
+  /* line 174, ../sass/video_widget.scss */
   #content .videoWidget-video img {
     max-width: 90% !important;
   }
