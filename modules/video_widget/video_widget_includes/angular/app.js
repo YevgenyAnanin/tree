@@ -1,11 +1,8 @@
-var videoWidget = angular.module('videoWidget', ['videoWidgetConfig'/*, 'ngAnimate'*/]);
+var videoWidget = angular.module('videoWidget', ['videoWidgetConfig', 'ngTouch']);
 
-// Bootstrap angularjs manually
-/*
-jQuery(document).ready(function () {
-  angular.bootstrap(document, ['videoWidget'] );
+videoWidget.run(function () {
+  //FastClick.attach(document.body);
 });
-*/
 
 /**
  * The main controller for each video widget
@@ -222,7 +219,7 @@ videoWidget.controller('VideoListCtrl',['$scope', 'getConfig', '$attrs', '$http'
 
 }]);
 
-videoWidget.directive('videoWidget', ['$window', function ($window) {
+videoWidget.directive('videoWidget', ['$window', '$timeout', function ($window, $timeout) {
 
   var videoWidgetTpl = Drupal.settings.smgAngularTemplates.videoWidget;
 
@@ -235,6 +232,18 @@ videoWidget.directive('videoWidget', ['$window', function ($window) {
       attrs.$observe('nid', function (newValue) {
         scope.nid = newValue;
       });
+
+      jQuery(function () {
+        //FastClick.attach(elem);
+      });
+
+      $timeout(function () {
+        elem.find('.videoWidget-count-selector').each(function (i,e) {
+          new FastClick(e);
+        });
+      }, 100);
+
+
     },
     templateUrl: videoWidgetTpl
   };
