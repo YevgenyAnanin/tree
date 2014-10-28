@@ -86,6 +86,7 @@ $widget-title-border: 1px solid #972901;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F25000', endColorstr='#EE9755');
   }
 }
+#content .ng-click-active .videoWidget-right-triangle-wrapper {right:5px;}
 .videoWidget-title {
   &:hover {cursor:pointer;}
 }

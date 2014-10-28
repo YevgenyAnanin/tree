@@ -193,124 +193,129 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F25000', endColorstr='#EE9755');
 }
 
-/* line 90, ../sass/video_widget.scss */
+/* line 89, ../sass/video_widget.scss */
+#content .ng-click-active .videoWidget-right-triangle-wrapper {
+  right: 5px;
+}
+
+/* line 91, ../sass/video_widget.scss */
 .videoWidget-title:hover {
   cursor: pointer;
 }
 
-/* line 92, ../sass/video_widget.scss */
+/* line 93, ../sass/video_widget.scss */
 .full .videoWidget-video {
   width: 33.33%;
   width: calc(100%/3);
 }
 
-/* line 94, ../sass/video_widget.scss */
+/* line 95, ../sass/video_widget.scss */
 .full_pw .videoWidget-video {
   width: 25%;
 }
 
 @media (max-width: 800px) and (min-width: 480px) {
-  /* line 98, ../sass/video_widget.scss */
+  /* line 99, ../sass/video_widget.scss */
   .videoWidget {
     display: inline-block;
     width: 100%;
   }
 
-  /* line 99, ../sass/video_widget.scss */
+  /* line 100, ../sass/video_widget.scss */
   .videoWidget-video {
     width: 50%;
   }
 }
 @media (min-width: 480px) {
-  /* line 104, ../sass/video_widget.scss */
+  /* line 105, ../sass/video_widget.scss */
   .videoWidget-video img {
     max-width: 90%;
   }
 
-  /* line 106, ../sass/video_widget.scss */
+  /* line 107, ../sass/video_widget.scss */
   #content .videoWidget-video img {
     max-width: 90% !important;
   }
 }
 @media (max-width: 479px) {
-  /* line 111, ../sass/video_widget.scss */
+  /* line 112, ../sass/video_widget.scss */
   .oneVideo.videoWidget {
     display: block;
     width: 60%;
     margin: 0 auto;
   }
-  /* line 112, ../sass/video_widget.scss */
+  /* line 113, ../sass/video_widget.scss */
   .oneVideo .videoWidget-wrapper {
     display: table;
     width: 100%;
   }
-  /* line 113, ../sass/video_widget.scss */
+  /* line 114, ../sass/video_widget.scss */
   .oneVideo .videoWidget-videos {
     display: table-header-group;
     float: none;
     min-height: 125px;
   }
-  /* line 114, ../sass/video_widget.scss */
+  /* line 115, ../sass/video_widget.scss */
   .oneVideo .videoWidget-left-selection {
     display: table-row-group;
   }
-  /* line 115, ../sass/video_widget.scss */
+  /* line 116, ../sass/video_widget.scss */
   .oneVideo .videoWidget-right-selection {
     display: table-footer-group;
   }
-  /* line 116, ../sass/video_widget.scss */
+  /* line 117, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper {
     display: table-cell;
     padding: 10px 0;
   }
-  /* line 117, ../sass/video_widget.scss */
+  /* line 118, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle-wrapper:active {
     padding-top: 11px;
     -moz-box-shadow: inset 0 0 1px 0 #000000;
     -webkit-box-shadow: inset 0 0 1px 0 #000000;
     box-shadow: inset 0 0 1px 0 #000000;
   }
-  /* line 118, ../sass/video_widget.scss */
+  /* line 119, ../sass/video_widget.scss */
   .oneVideo .videoWidget-video {
     width: 100%;
   }
-  /* line 119, ../sass/video_widget.scss */
+  /* line 120, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle {
     width: 0;
     height: 0;
     margin: 0 auto;
   }
-  /* line 121, ../sass/video_widget.scss */
+  /* line 122, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-left {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-bottom: 15px solid white;
   }
-  /* line 122, ../sass/video_widget.scss */
+  /* line 123, ../sass/video_widget.scss */
   .oneVideo .videoWidget-triangle.videoWidget-triangle-right {
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
     border-top: 15px solid white;
   }
 
-  /* line 126, ../sass/video_widget.scss */
+  /* line 127, ../sass/video_widget.scss */
   .max480 .ng-hide {
     display: table !important;
   }
-  /* line 127, ../sass/video_widget.scss */
+  /* line 128, ../sass/video_widget.scss */
   .max480.videoWidget {
     background: #ECEDF4;
     margin: 15px 0;
     border-radius: 8px;
     padding-bottom: 12px;
   }
-  /* line 128, ../sass/video_widget.scss */
+  /* line 129, ../sass/video_widget.scss */
   .max480 .videoWidget-videos {
     overflow: hidden;
     white-space: nowrap;
     height: 310px;
   }
-  /* line 129, ../sass/video_widget.scss */
+  /* line 130, ../sass/video_widget.scss */
   .max480 .videoWidget-video {
     width: 90%;
     display: table;
@@ -325,26 +330,26 @@
     -webkit-transition: all ease-in 0.8s;
     transition: all ease-in 0.8s;
   }
-  /* line 132, ../sass/video_widget.scss */
+  /* line 133, ../sass/video_widget.scss */
   .max480 .videoWidget-video.ng-hide-add-active, .max480 .videoWidget-video.ng-hide-remove, .max480 .videoWidget-video.ng-hide-remove-active, .max480 .videoWidget-video.ng-hide-add {
     display: inline-block !important;
     -webkit-transition: all linear 0.8s;
     transition: all linear 0.8s;
   }
-  /* line 137, ../sass/video_widget.scss */
+  /* line 138, ../sass/video_widget.scss */
   .max480 .videoWidget-video.lastNoHide {
     /*margin-bottom: 0;*/
   }
-  /* line 138, ../sass/video_widget.scss */
+  /* line 139, ../sass/video_widget.scss */
   .max480 .videoWidget-video a {
     display: table-cell;
     width: 40%;
   }
-  /* line 139, ../sass/video_widget.scss */
+  /* line 140, ../sass/video_widget.scss */
   .max480 .videoWidget-video a img {
     width: 100%;
   }
-  /* line 141, ../sass/video_widget.scss */
+  /* line 142, ../sass/video_widget.scss */
   .max480 .videoWidget-video::after {
     /*display: table-cell;*/
     content: '\203A';
@@ -364,7 +369,7 @@
     color: #FFFFFF;
     cursor: pointer;
   }
-  /* line 161, ../sass/video_widget.scss */
+  /* line 162, ../sass/video_widget.scss */
   .max480 .videoWidget-title {
     display: table-cell;
     vertical-align: middle;
@@ -374,12 +379,12 @@
     padding-left: 10px;
     white-space: normal;
   }
-  /* line 162, ../sass/video_widget.scss */
+  /* line 163, ../sass/video_widget.scss */
   .max480 .videoWidget-title div {
     overflow: hidden;
     max-height: 120px;
   }
-  /* line 164, ../sass/video_widget.scss */
+  /* line 165, ../sass/video_widget.scss */
   .max480 .videoWidget-widget-title {
     display: block;
     padding: 12px 12px 0;
@@ -387,7 +392,7 @@
     font-weight: bold;
     color: #414040;
   }
-  /* line 165, ../sass/video_widget.scss */
+  /* line 166, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection {
     display: block;
     width: 90%;
@@ -401,20 +406,20 @@
     font-size: 150%;
     cursor: pointer;
   }
-  /* line 167, ../sass/video_widget.scss */
+  /* line 168, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection:before {
     content: "Load More Videos";
   }
-  /* line 168, ../sass/video_widget.scss */
+  /* line 169, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection.lastVideoBlock {
     opacity: 0.4;
   }
-  /* line 170, ../sass/video_widget.scss */
+  /* line 171, ../sass/video_widget.scss */
   .max480 .videoWidget-right-selection.lastVideoBlock:hover {
     cursor: not-allowed;
   }
 
-  /* line 174, ../sass/video_widget.scss */
+  /* line 175, ../sass/video_widget.scss */
   #content .videoWidget-video img {
     max-width: 90% !important;
   }
