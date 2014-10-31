@@ -1,0 +1,29 @@
+@import "variables";
+
+.smgVideoGrid {overflow: hidden; white-space: nowrap; vertical-align: top; margin-bottom: 70px;}
+.smgVideoGrid-video {float:left; width:25%; @include border-box; padding: 5px 10px;
+  a, img {max-width: 100%;}
+  &.is-first-video {clear:both;}
+}
+.smgVideoGrid-video-group {
+  display:inline-block; width: 100%; vertical-align: top;
+  -webkit-transition: all linear 0.8s;
+  transition: all linear 0.8s;
+  &.ng-hide {
+    display: inline-block !important;
+    -webkit-transition: all linear 0.8s;
+    transition: all linear 0.8s;
+  }
+}
+.smgVideoGrid-title {font-weight: bold; white-space: normal;}
+.smgVideoGrid-see-more {float:right; color:#E75700; font-weight: bold; margin:10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.smgVideoGrid-see-previous {float:left; color:#E75700; font-weight: bold; margin:10px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+.smgVideo-counter-clear {clear:both;}

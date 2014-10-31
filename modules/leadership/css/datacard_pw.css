@@ -1,0 +1,96 @@
+/* line 4, ../sass/datacard_pw.scss */
+#sidebar-second #block-leadership-leadership-data-card-block .content {
+  border: none;
+}
+
+/* line 7, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block .block-inner {
+  border: 1px solid #ccc;
+}
+/* line 8, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block .ld-header {
+  padding: 2px 15px 10px 15px;
+  color: #4D4D4d;
+  border-bottom: 1px dotted gray;
+}
+/* line 9, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block .ld-header-top-text {
+  font-size: 17px;
+  font-weight: bold;
+}
+/* line 10, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block .ld-header-bottom-text {
+  font-size: 14px;
+}
+/* line 11, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block h4 {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid;
+  margin: 10px 20px 0px 20px;
+  padding: 0px;
+  color: #e63448;
+  line-height: 21px;
+  text-align: left;
+}
+/* line 12, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block .leadership-menu li {
+  margin-left: 10px;
+}
+/* line 13, ../sass/datacard_pw.scss */
+#block-leadership-leadership-data-card-block .leadership-menu li .link-section a {
+  color: #005496;
+  font-size: 18px;
+}
+
+/* line 15, ../sass/datacard_pw.scss */
+.dataCard-view-profile-button {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f4643f), color-stop(1, #f69a39));
+  background: -moz-linear-gradient(top, #f4643f 5%, #f69a39 100%);
+  background: -webkit-linear-gradient(top, #f4643f 5%, #f69a39 100%);
+  background: -o-linear-gradient(top, #f4643f 5%, #f69a39 100%);
+  background: -ms-linear-gradient(top, #f4643f 5%, #f69a39 100%);
+  background: linear-gradient(to bottom, #f4643f 5%, #f69a39 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$start', endColorstr='$end',GradientType=0);
+  background-color: #f4643f;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /*border:1px solid $border;*/
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 5px 7px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #df2f3c;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F4643F', endColorstr='#F69A39',GradientType=0);
+}
+/* line 17, ../sass/datacard_pw.scss */
+.dataCard-view-profile-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f69a39), color-stop(1, #f4643f));
+  background: -moz-linear-gradient(top, #f69a39 5%, #f4643f 100%);
+  background: -webkit-linear-gradient(top, #f69a39 5%, #f4643f 100%);
+  background: -o-linear-gradient(top, #f69a39 5%, #f4643f 100%);
+  background: -ms-linear-gradient(top, #f69a39 5%, #f4643f 100%);
+  background: linear-gradient(to bottom, #f69a39 5%, #f4643f 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$end', endColorstr='$start',GradientType=0);
+  background-color: #f69a39;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F69A39', endColorstr='#F4643F',GradientType=0);
+}
+/* line 20, ../sass/datacard_pw.scss */
+.dataCard-view-profile-button:active {
+  position: relative;
+  top: 1px;
+}
+
+/* line 22, ../sass/datacard_pw.scss */
+.dataCard-visit-site a {
+  color: #E73649;
+}
+
+/* line 24, ../sass/datacard_pw.scss */
+.dataCard-product-photo a {
+  color: #E73649;
+}

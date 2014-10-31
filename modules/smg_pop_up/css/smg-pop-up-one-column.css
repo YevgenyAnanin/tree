@@ -1,0 +1,94 @@
+/* line 4, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout {
+  overflow: auto;
+}
+/* line 6, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content {
+  width: 95% !important;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+/* line 9, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .form-item.webform-component-radios .form-radios {
+  display: block;
+  width: 100%px;
+  margin: 0 auto;
+  text-align: center;
+}
+/* line 10, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .form-item.webform-component {
+  float: left;
+  display: inline;
+  margin-top: .03em;
+  margin-bottom: .03em;
+}
+/* line 12, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .form-item.webform-component > label {
+  text-align: center;
+  width: 100% !important;
+}
+/* line 15, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .form-item.form-type-radio input {
+  float: none;
+}
+/* line 17, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .form-item input {
+  max-width: 100%;
+}
+/* line 22, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .smg-pop-up-element.radios .form-item .form-type-radio {
+  float: none !important;
+  display: inline;
+}
+/* line 27, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content .form-actions input.form-submit {
+  width: 80% !important;
+}
+/* line 30, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-header-text {
+  font-size: 18px;
+}
+/* line 31, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .smg-pop-up-element {
+  width: 100%;
+  margin-bottom: 10px;
+}
+/* line 33, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .smg-pop-up-element button {
+  text-align: center;
+}
+/* line 35, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout #sp-full-name-wrapper {
+  font-size: 15px;
+}
+/* line 36, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .smg-pop-up-column {
+  float: left;
+}
+/* line 37, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout #modal-content {
+  overflow: auto;
+}
+/* line 38, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-scroll {
+  max-width: 100%;
+}
+/* line 40, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+/* line 41, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content .webform-client-form {
+  max-width: 100%;
+}
+/* line 42, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content #smg-pop-up-column-1 {
+  max-width: 100%;
+}
+
+/* line 44, ../sass/smg-pop-up-one-column.scss */
+div.ctools-modal-content.one-column-layout .modal-content input[type="text"] {
+  width: 100% !important;
+}

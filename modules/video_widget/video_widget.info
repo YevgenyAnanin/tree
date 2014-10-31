@@ -1,0 +1,5 @@
+name = SMG Video Widget
+description = Implements the dynamic video widget using AngularJS
+core = 7.x
+package = SMG
+dependencies[] = smg_angular

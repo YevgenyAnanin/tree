@@ -1,0 +1,57 @@
+#sidebar-second #block-leadership-leadership-votingblock h3.title { background-color:transparent; text-align:center; color:#000; width:132px; background-color:#fff; margin:auto; margin-top:-15px;font-family: 'PT Sans',sans-serif; line-height:15px; padding:0px; font-size: 14px; letter-spacing:0.2em;}
+#sidebar-second #block-leadership-leadership-votingblock h3 .bottom { font-size:17px; }
+.center {text-align:center; font-family: 'PT Sans',sans-serif; }
+#lia-ribben {background-color:red; height:25px; width:312px; margin-left:-16px; background:url("images/2014ribbon.png");}
+#block-leadership-leadership-votingblock .vote {font-size:12px; padding:10px 0 5px 0; }
+#block-leadership-leadership-votingblock h5 {font-size:26px; text-align:center; line-height:25px;}
+#leadership-companies li { color:#c00013; font-size:17px; font-weight:bold; border-bottom: 1px dashed #a8a8a7; list-style:none; text-align:center; padding:10px 0 10px 0;}
+#leadership-companies {
+  height: 132px;
+  width:280px;
+  overflow-y:auto;
+  padding:0px;
+  margin:20px 0 25px 0;
+  background-color: #f7f7f8;
+  background-image: url(images/fallback-gradient.png);
+  background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f7f7f8), to(#d1d1d2));
+  background-image: -webkit-linear-gradient(top, #f7f7f8, #d1d1d2);
+  background-image:    -moz-linear-gradient(top, #f7f7f8, #d1d1d2);
+  background-image:     -ms-linear-gradient(top, #f7f7f8, #d1d1d2);
+  background-image:      -o-linear-gradient(top, #f7f7f8, #d1d1d2);
+  border:1px solid #cfcfd0;
+}
+#leadership-companies::-webkit-scrollbar {
+  width: 7px;
+}
+#leadership-companies::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+}
+#leadership-companies::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+#block-leadership-leadership-votingblock img  {margin:auto; display:block; padding-bottom:5px; }
+#block-leadership-leadership-votingblock .visa { font-size:13px; padding-bottom:15px; padding-top:5px; }
+
+/* Leadership Online Profile */
+.node-type-leadership-online-profile.one-sidebar #main {width:100%;}
+#leadership-online-profile-block {border:1px solid #BEBEBE; position:relative; overflow:auto;}
+#leadership-left-column {display:inline-block; width:30%; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; float:left;}
+#leadership-left-column-content {position:absolute; height:100%; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; max-width:30%; background-color:#F5F8F9;}
+#leadership-left-column-content .item {width:90%; display:block; margin:0 auto; padding:6px 0; border-bottom:1px dotted #999999;}
+#leadership-left-column-content .item:last-child {border:none;}
+#leadership-online-profile-block .label {font-weight:bold;}
+#leadership-left-column-content .field, #leadership-left-column-content .field-items, #leadership-left-column-content .field-item {display:inline-block;}
+#leadership-right-column {display:inline-block; width:67%; float:right; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; padding:20px 10px 15px 0;}
+#leadership-right-column h2 {font-size:170%; padding-bottom:5px; border-bottom:1px dotted #999999;}
+#leadership-logo { padding:8px 15px; margin-bottom:16px; background-image: -ms-linear-gradient(top, #A01A00 0%, #EF5049 100%); background-image: -moz-linear-gradient(top, #A01A00 0%, #EF5049 100%); background-image: -o-linear-gradient(top, #A01A00 0%, #EF5049 100%); background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #A01A00), color-stop(1, #EF5049)); background-image: -webkit-linear-gradient(top, #A01A00 0%, #EF5049 100%); background-image: linear-gradient(to bottom, #A01A00 0%, #EF5049 100%);}
+#leadership-online-profile-block .clear {clear:both;}
+#leadership-online-profile-block .field-name-field-ld-logo {float:left; margin-right:17px;}
+#leadership-online-profile-block .field-name-body {margin-bottom:15px;}
+#leadership-online-profile-block .field-name-body p {font-size:100%;}
+#leadership-training {padding-top:12px; border-top:1px dotted #999999;}
+#leadership-training .field-name-field-ld-training, #leadership-training .field-items, #leadership-training .field-item {display:inline;}
+
+
+

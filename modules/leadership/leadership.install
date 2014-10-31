@@ -1,0 +1,35 @@
+<?php
+/**
+ * @file
+ *  handles installation/uninstallation
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function leadership_uninstall() {
+  variable_del('leadership_session_vocab');
+  variable_del('leadership_session_term');
+  variable_del('leadership_print_due_date');
+  variable_del('leadership_datacard_due_date');
+  variable_del('leadership_online_due_date');
+  variable_del('leadership_role_name');
+  variable_del('profile_notifications_state');
+  variable_del('profile_default_email');
+  variable_del('leadership_role_name');
+  variable_del('leadership_block_logo');
+  variable_del('leadership_company_limit');
+  variable_del('leadership_admin_user_name');
+  variable_del('leadership_admin_user_email');
+}
+
+/**
+ * Increase the weight of the leadership module to 1 so it changes so it runs
+ * after the publish_button text.
+ */
+function leadership_update_7100() {
+    db_update('system')
+    ->fields(array('weight' => 1))
+    ->condition('name', 'leadership', '=')
+    ->execute();
+}

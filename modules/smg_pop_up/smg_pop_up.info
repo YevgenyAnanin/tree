@@ -1,0 +1,4 @@
+name = SMG Pop-Up Registration Form
+description = Create pop-up registration forms and attach them to other content
+package = SMG
+core = 7.x

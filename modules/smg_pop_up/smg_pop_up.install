@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * Implements hook_schema()
+ */
+function smg_pop_up_schema(){
+  $schema['smg_pop_up_layouts'] = array(
+    'description' => 'SMG Pop-UP Layouts',
+    'fields' => array(
+      'entity_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'layout_in_use' => array(
+        'description' => 'Which layout for this webform?',
+        'type' => 'varchar',
+        'length' => '160',
+        'not null' => TRUE,
+        'default' => 'one_column',
+      ),
+    ),
+    'unique keys' => array(
+      'entity_id' => array('entity_id'),
+    ),
+    'primary key' => array('entity_id')
+  );
+  $schema['smg_pop_up_layouts_data'] = array(
+    'description' => 'SMG Pop-UP Layouts Data',
+    'fields' => array(
+      /*'row' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),*/
+      'entity_id' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'layout_type' => array(
+        'description' => 'Either one_column or two_column',
+        'type' => 'varchar',
+        'length' => '160',
+        'not null' => TRUE,
+      ),
+      'layout_saved' => array(
+        'description' => 'Has a template been saved for this form?',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'layout_json' => array(
+        'description' => 'JSON string that stores order/size details for this layout',
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big',
+      ),
+    ),
+    'primary key' => array('entity_id', 'layout_type'),
+  );
+  return $schema;
+}

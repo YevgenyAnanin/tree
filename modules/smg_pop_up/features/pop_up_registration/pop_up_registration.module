@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Pop Up Registration feature.
+ */
+
+include_once('pop_up_registration.features.inc');

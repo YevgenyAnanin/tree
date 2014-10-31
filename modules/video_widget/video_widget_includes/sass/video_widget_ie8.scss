@@ -1,0 +1,10 @@
+.videoWidget-video {
+  > a {display:block;}
+  img {max-width:90%;}
+}
+
+.full .videoWidget-right-triangle-wrapper.lastVideoBlock,
+.twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock
+{
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=42)";
+}

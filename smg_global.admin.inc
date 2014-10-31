@@ -26,27 +26,32 @@ function smg_global_settings_form(){
   foreach ($purf_nodes as $nid => $value) {
     $purf_node_options[$nid] = $value->title;
   }
-  $form['smg_global_settings']['site'] = array(
+  $form['smg_global_site'] = array(
     '#type' => 'select',
     '#title' => 'Specify the brand for this site',
     '#options' => $sites,
     '#default_value' => variable_get('smg_global_site', 'pw'),
   );
-  $form['smg_global_settings']['purf_standard'] = array(
+  $form['smg_global_standard_purf'] = array(
     '#type' => 'select',
     '#title' => 'Select a PURF to use as the standard lead gen PURF',
     '#options' => $purf_node_options,
     '#empty_option' => t('None'),
     '#default_value' => variable_get('smg_global_standard_purf')
   );
-  $form['smg_global_settings']['smg_global_social_media_watch_admin'] = array(
+  $form['smg_global_social_media_watch_admin'] = array(
     '#type' => 'textfield',
     '#title' => 'Social Media Watch Admin',
     '#description' => 'Everytime an article is posted of a company that has social media watch, a notification will sent out to this email.',
     '#default_value' => variable_get('smg_global_social_media_watch_admin'),
   );
-
-  $form['#submit'][] = 'smg_global_settings_form_submit';
+  $form['smg_global_is_production'] = array(
+    '#type' => 'checkbox',
+    '#title' => 'Is current instance of site a Production site',
+    '#description' => 'Toggling this value will determine, for example, whether or not to show minified/concatenated versions of certain js files',
+    '#default_value' => variable_get('smg_global_is_production', false),
+  );
+  //$form['#submit'][] = 'smg_global_settings_form_submit';
 
   return system_settings_form($form);
 }

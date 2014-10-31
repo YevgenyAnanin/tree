@@ -1,0 +1,75 @@
+/* line 3, ../sass/video_grid.scss */
+.smgVideoGrid {
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: top;
+  margin-bottom: 70px;
+}
+
+/* line 4, ../sass/video_grid.scss */
+.smgVideoGrid-video {
+  float: left;
+  width: 25%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 5px 10px;
+}
+/* line 5, ../sass/video_grid.scss */
+.smgVideoGrid-video a, .smgVideoGrid-video img {
+  max-width: 100%;
+}
+/* line 6, ../sass/video_grid.scss */
+.smgVideoGrid-video.is-first-video {
+  clear: both;
+}
+
+/* line 8, ../sass/video_grid.scss */
+.smgVideoGrid-video-group {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+  -webkit-transition: all linear 0.8s;
+  transition: all linear 0.8s;
+}
+/* line 12, ../sass/video_grid.scss */
+.smgVideoGrid-video-group.ng-hide {
+  display: inline-block !important;
+  -webkit-transition: all linear 0.8s;
+  transition: all linear 0.8s;
+}
+
+/* line 18, ../sass/video_grid.scss */
+.smgVideoGrid-title {
+  font-weight: bold;
+  white-space: normal;
+}
+
+/* line 19, ../sass/video_grid.scss */
+.smgVideoGrid-see-more {
+  float: right;
+  color: #E75700;
+  font-weight: bold;
+  margin: 10px;
+}
+/* line 20, ../sass/video_grid.scss */
+.smgVideoGrid-see-more:hover {
+  cursor: pointer;
+}
+
+/* line 24, ../sass/video_grid.scss */
+.smgVideoGrid-see-previous {
+  float: left;
+  color: #E75700;
+  font-weight: bold;
+  margin: 10px;
+}
+/* line 25, ../sass/video_grid.scss */
+.smgVideoGrid-see-previous:hover {
+  cursor: pointer;
+}
+
+/* line 29, ../sass/video_grid.scss */
+.smgVideo-counter-clear {
+  clear: both;
+}

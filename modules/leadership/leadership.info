@@ -1,0 +1,7 @@
+name = Leadership
+description = Handles Leadership in Packaging & Leadership in Automation & Premier Suppliers
+core = 7.x
+dependencies[] = content_complete
+dependencies[] = taxonomy_map
+dependencies[] = waywire_leadership
+dependencies[] = smg_angular

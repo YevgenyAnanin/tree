@@ -1,0 +1,14 @@
+name = Waywire Video
+description = Waywire Video Entity Type
+core = 7.x
+
+dependencies[] = entity
+dependencies[] = views
+
+files[] = waywire_video.admin.inc
+files[] = waywire_video_type.admin.inc
+files[] = views/waywire_video.views.inc
+files[] = views/waywire_video_handler_link_field.inc
+files[] = views/waywire_video_handler_delete_link_field.inc
+files[] = views/waywire_video_handler_edit_link_field.inc
+files[] = views/waywire_video_handler_waywire_video_operations_field.inc

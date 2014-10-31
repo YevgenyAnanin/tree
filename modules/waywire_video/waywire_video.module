@@ -1,0 +1,489 @@
+<?php
+
+/**
+ * @file
+ * Module for the Waywire Video Entity.
+ */
+
+/**
+ * Implement hook_entity_info().
+ */
+function waywire_video_entity_info() {
+  $return['waywire_video'] = array(
+    'label' => t('Waywire Video'),
+    // The entity class and controller class extend the classes provided by the
+    // Entity API
+    'entity class' => 'WayWireVideo',
+    'controller class' => 'WayWireVideoController',
+    'base table' => 'waywire_video',
+    'fieldable' => TRUE,
+    'entity keys' => array(
+        'id' => 'id',
+        'bundle' => 'type',
+    ),
+    // Bundles are defined by the waywire video types below
+    'bundles' => array(),
+    // Bundle keys tell the FieldAPI how to extract information from the bundle objects
+    'bundle keys' => array(
+      'bundle' => 'type',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'creation callback' => 'waywire_video_create',
+    'access callback' => 'waywire_video_access',
+    'module' => 'waywire_video',
+    // The information below is used by the WaywireVideoUIController (which extends the EntityDefaultUIController)
+    'admin ui' => array(
+      'path' => 'admin/content/waywire_videos',
+      'file' => 'waywire_video.admin.inc',
+      'controller class' => 'WaywireVideoUIController',
+      'menu wildcard' => '%waywire_video',
+    ),
+  );
+  // The entity that holds information about the entity types
+  $return['waywire_video_type'] = array(
+    'label' => t('Waywire Video Type'),
+    'entity class' => 'WaywireVideoType',
+    'controller class' => 'WaywireVideoTypeController',
+    'base table' => 'waywire_video_type',
+    'fieldable' => FALSE,
+    'bundle of' => 'waywire_video',
+    'exportable' => TRUE,
+    'entity keys' => array(
+      'id' => 'id',
+      'name' => 'type',
+      'label' => 'label',
+    ),
+    'access callback' => 'waywire_video_type_access',
+    'module' => 'waywire_video',
+    // Enable the entity API's admin UI.
+    'admin ui' => array(
+      'path' => 'admin/structure/waywire_video_types',
+      'file' => 'waywire_video_type.admin.inc',
+      'controller class' => 'WaywireVideoTypeUIController',
+    ),
+  );
+
+  return $return;
+}
+
+/**
+ * Implements hook_entity_info_alter().
+ */
+function waywire_video_entity_info_alter(&$entity_info) {
+  foreach (waywire_video_get_types() as $type => $info) {
+    $entity_info['waywire_video']['bundles'][$type] = array(
+      'label' => $info->label,
+      'admin' => array(
+        'path' => 'admin/structure/waywire_video_types/manage/%waywire_video_type',
+        'real path' => 'admin/structure/waywire_video_types/manage/' . $type,
+        'bundle argument' => 4,
+        'access arguments' => array('administer waywire video types'),
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function waywire_video_permission() {
+  // We set up permisssions to manage entity types, manage all entities and the
+  // permissions for each individual entity
+  $permissions = array(
+    'administer waywire video types' => array(
+      'title' => t('Administer waywire video types'),
+      'description' => t('Create and delete fields for waywire video types, and set their permissions.'),
+    ),
+    'administer waywire videos' => array(
+      'title' => t('Administer waywire videos'),
+      'description' => t('Edit and delete all waywire videos'),
+    ),
+  );
+
+  //Generate permissions per waywire video
+  foreach (waywire_video_get_types() as $type) {
+    $type_name = check_plain($type->type);
+    $permissions += array(
+      "edit any $type_name waywire video" => array(
+        'title' => t('%type_name: Edit any waywire video', array('%type_name' => $type->label)),
+      ),
+      "view any $type_name waywire video" => array(
+        'title' => t('%type_name: View any waywire video', array('%type_name' => $type->label)),
+      ),
+    );
+  }
+  return $permissions;
+}
+
+/**
+ * Determines whether the given user has access to a waywire_video.
+ *
+ * @param string $op
+ *   The operation being performed. One of 'view', 'update', 'create', 'delete'
+ *   or just 'edit' (being the same as 'create' or 'update').
+ * @param object $waywire_video
+ *   Optionally a waywire video or a waywire video type to check access for. If nothing is
+ *   given, access for all waywire videos is determined.
+ * @param string $account
+ *   The user to check for. Leave it to NULL to check for the global user.
+ *
+ * @return boolean
+ *   Whether access is allowed or not.
+ */
+function waywire_video_access($op, $waywire_video = NULL, $account = NULL) {
+  if (user_access('administer waywire_videos', $account)) {
+    return TRUE;
+  }
+  if (isset($waywire_video->type) && $type_name = $waywire_video->type) {
+    $op = ($op == 'view') ? 'view' : 'edit';
+    if (user_access("$op any $type_name waywire_video", $account)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Access callback for the entity API.
+ */
+function waywire_video_type_access($op, $type = NULL, $account = NULL) {
+  return user_access('administer waywire video types', $account);
+}
+
+/**
+ * Gets an array of all waywire video types, keyed by the type name.
+ *
+ * @param string $type_name
+ *   If set, the type with the given name is returned.
+ * @return WaywireVideoType[]
+ *   Depending whether $type isset, an array of waywire video types or a single one.
+ */
+function waywire_video_get_types($type_name = NULL) {
+  // entity_load will get the Entity controller for our waywire video entity and call the load
+  // function of that object - we are loading entities by name here.
+  $types = entity_load_multiple_by_name('waywire_video_type', isset($type_name) ? array($type_name) : FALSE);
+  return isset($type_name) ? reset($types) : $types;
+}
+
+/**
+ * Implements hook_entity_property_info_alter().
+ */
+function waywire_video_entity_property_info_alter(&$info) {
+  foreach($info['waywire_video']['properties'] as $field_name => $data) {
+    $info['waywire_video']['properties'][$field_name]['setter callback'] = 'entity_property_verbatim_set';
+  }
+  foreach($info['waywire_video_type']['properties'] as $field_name => $data) {
+    $info['waywire_video_type']['properties'][$field_name]['setter callback'] = 'entity_property_verbatim_set';
+  }
+}
+
+/**
+ * Menu argument loader; Load a waywire video type by string.
+ *
+ * @param $type
+ *   The machine-readable name of a waywire video type to load.
+ * @return
+ *   A waywire video type array or FALSE if $type does not exist.
+ */
+function waywire_video_type_load($type) {
+  return waywire_video_get_types($type);
+}
+
+/**
+ * fetch a waywire video object. make sure that the wildcard you choose
+ * in the waywire video entity definition fits the function name here.
+ *
+ * @param int $id
+ *   integer specifying the waywire id.
+ * @param $reset
+ *   a boolean indicating that the internal cache should be reset.
+ * @return
+ *   a fully-loaded $waywire_video object or false if it cannot be loaded.
+ *
+ * @see waywire_video_load_multiple()
+ */
+function waywire_video_load($id, $reset = FALSE) {
+  $waywire_videos = waywire_video_load_multiple(array($id), array(), $reset);
+  return reset($waywire_videos);
+}
+
+/**
+ * Load multiple waywire videos based on certain conditions.
+ *
+ * @param $ids
+ *   An array of waywire video IDs.
+ * @param $conditions
+ *   An array of conditions to match against the {waywire_video} table.
+ * @param $reset
+ *   A boolean indicating that the internal cache should be reset.
+ * @return
+ *   An array of waywire_video objects, indexed by id.
+ *
+ * @see entity_load()
+ * @see waywire_video_load()
+ */
+function waywire_video_load_multiple($ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('waywire_video', $ids, $conditions, $reset);
+}
+
+/**
+ * Deletes a waywire_video.
+ *
+ * @param  object $waywire_video
+ */
+function waywire_video_delete(WaywireVideo $waywire_video) {
+  $waywire_video->delete();
+}
+
+/**
+ * Create a waywire video object.
+ */
+function waywire_video_create($values = array()) {
+  return entity_get_controller('waywire_video')->create($values);
+}
+
+/**
+ * Saves a waywire video to the database.
+ *
+ * @param $waywire_video
+ *   The waywire video object.
+ */
+function waywire_video_save(WaywireVideo $waywire_video) {
+  return $waywire_video->save();
+}
+
+/**
+ * Saves a waywire video type to the db.
+ */
+function waywire_video_type_save(WaywireVideoType $type) {
+  $type->save();
+}
+
+/**
+ * Deletes a waywire video type from the db.
+ */
+function waywire_video_type_delete(WaywireVideoType $type) {
+  $type->delete();
+}
+
+/**
+ * URI callback for waywire videos.
+ */
+function waywire_video_uri(WaywireVideo $waywire_video){
+  return array(
+    'path' => 'waywire_video/' . $waywire_video->id,
+  );
+}
+
+/**
+ * Delete multiple waywire videos.
+ *
+ * @param array $ids
+ *   An array of waywire video IDs.
+ */
+function waywire_video_delete_multiple(array $ids) {
+  entity_get_controller('waywire_video')->delete($ids);
+}
+
+/**
+ * Menu title callback for showing individual entities
+ */
+function waywire_video_page_title(WaywireVideo $waywire_video){
+  return $waywire_video->name;
+}
+
+/**
+ * Sets up content to show an individual waywire video.
+ *
+ * @param int $waywire_video
+ *   the waywire video id.
+ * @param string $view_mode
+ *   the view mode of the entity.
+ *
+ * @return  object $content
+ *   the content object.
+ */
+function waywire_video_page_view($waywire_video, $view_mode = 'full') {
+  $controller = entity_get_controller('waywire_video');
+  $content = $controller->view(array($waywire_video->id => $waywire_video));
+  drupal_set_title($waywire_video->name);
+  return $content;
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function waywire_video_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'waywire_video') . '/views',
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function waywire_video_theme() {
+  return array(
+    'waywire_video_add_list' => array(
+      'variables' => array('content' => array()),
+      'file' => 'waywire_video.admin.inc',
+    ),
+    'waywire_video' => array(
+      'render element' => 'elements',
+      'template' => 'waywire-video',
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function waywire_video_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if ($root_path == 'admin/content/waywire_videos') {
+    $item = menu_get_item('admin/content/waywire_videos/add');
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
+ * Get waywire videos
+ *
+ * @param  int $node_id
+ *  Node Id.
+ *
+ * @return array $waywire_videos
+ *  Waywire video entities.
+ */
+function waywire_video_get_all($node_id = NULL) {
+  $waywire_videos = array();
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'waywire_video');
+  if ($node_id) {
+    $query->propertyCondition('node_id', $node_id);
+  }
+  $result = $query->execute();
+
+  if (isset($result['waywire_video'])) {
+    $entity_ids = array_keys($result['waywire_video']);
+    $waywire_videos = entity_load('waywire_video', $entity_ids);
+  }
+
+  return $waywire_videos;
+}
+
+/**
+ * The class used for waywire video entities.
+ */
+class WaywireVideo extends Entity {
+
+  public function __construct($values = array()) {
+    parent::__construct($values, 'waywire_video');
+  }
+
+  protected function defaultLabel() {
+    return $this->name;
+  }
+
+  protected function defaultUri() {
+    return array('path' => 'waywire_video/' . $this->id);
+  }
+
+}
+
+/**
+ * The class used for waywire video type entities
+ */
+class WaywireVideoType extends Entity {
+
+  public $type;
+  public $label;
+
+  public function __construct($values = array()) {
+    parent::__construct($values, 'waywire_video_type');
+  }
+
+}
+
+/**
+ * The Controller for waywire video entities.
+ */
+class WaywireVideoController extends EntityAPIController {
+  public function __construct($entityType) {
+    parent::__construct($entityType);
+  }
+
+  /**
+   * Create a waywire video - we first set up the values that are specific
+   * to our waywire video schema but then also go through the EntityAPIController
+   * function.
+   *
+   * @param $type
+   *   The machine-readable type of the waywire video.
+   *
+   * @return
+   *   A waywire video object with all default fields initialized.
+   */
+  public function create(array $values = array()) {
+    // Add values that are specific to our Waywire Video
+    $values += array(
+      'id' => '',
+      'title' => '',
+      'node_id' => '',
+      'created' => '',
+      'changed' => '',
+      'data' => '',
+    );
+
+    $waywire_video = parent::create($values);
+    return $waywire_video;
+  }
+
+  /**
+   * Overriding the buldContent function to add entity specific fields
+   */
+  public function buildContent($entity, $view_mode = 'full', $langcode = NULL, $content = array()) {
+    $content = parent::buildContent($entity, $view_mode, $langcode, $content);
+    return $content;
+  }
+
+}
+
+/**
+ * The Controller for Waywire Video entities.
+ */
+class WaywireVideoTypeController extends EntityAPIControllerExportable {
+  public function __construct($entityType) {
+    parent::__construct($entityType);
+  }
+
+   /**
+   * Create a waywire video type - we first set up the values that are specific
+   * to our waywire video type schema but then also go through the EntityAPIController
+   * function.
+   *
+   * @param $type
+   *   The machine-readable type of the waywire video.
+   *
+   * @return
+   *   A waywire video type object with all default fields initialized.
+   */
+  public function create(array $values = array()) {
+    // Add values that are specific to our waywire video.
+    $values += array(
+      'id' => '',
+      'is_new' => TRUE,
+      'data' => '',
+    );
+    $waywire_video_type = parent::create($values);
+    return $waywire_video_type;
+  }
+
+}

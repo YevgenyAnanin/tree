@@ -1,0 +1,16 @@
+<div class="smgVideoGrid">
+    <div class="smgVideoGrid-title-wrapper title-wrapper"><span class="title">Browse {{totalVideos}} videos</span></div>
+    <div class="smgVideoGrid-video-group" ng-repeat="videoGroup in videoGroups" ng-show="gridGroupShow($index + 1)" ng-class="{'first':$first}">
+        <div class="smgVideoGrid-video" ng-repeat="video in videoGroup" ng-class="[isVideoFirst($index), gridWidthClass]">
+            <a href="#" ng-href="{{video.href}}" smg-grid-lightbox><img src="#" ng-src="{{video.thumbnail}}" alt=""/></a>
+            <span class="smgVideoGrid-title"><div>{{video.name | cut:false:40:'...'}}</div></span>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="smgVideoGrid-see-previous" ng-if="hasPreviousVideos" ng-class="{'smgVideo-counter-clear':hasPreviousVideos}">
+        <span class="smgVideoGrid-see-previous-click" ng-click="decrementCounter()"><< See previous {{countPrevious()}} videos </span>
+    </div>
+    <div class="smgVideoGrid-see-more" ng-if="hasMoreVideos" ng-class="{'smgVideo-counter-clear':!hasPreviousVideos}">
+        <span class="smgVideoGrid-see-more-click" ng-click="incrementCounter()">See {{countRemaining()}} more videos >></span>
+    </div>
+</div>

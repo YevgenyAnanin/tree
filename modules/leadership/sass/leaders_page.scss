@@ -1,0 +1,21 @@
+.page-leaders {
+  #block-system-main .logo {float:left; padding-right:20px;}
+  #block-system-main .node {width:100%; margin-top:10px; float:left; border:none; padding-top:0px;}
+  #block-system-main .node .content {margin-right:40px; margin-left:60px;}
+  h1 {font-family:'Ubuntu',Arial,Helvetica,Tahoma,sans-serif; font-weight:500; font-size:25px; margin:10px 0px 0px 0px; padding:0px; clear:none;padding-top:12px;}
+  p {font-family:'Ubuntu',Arial,Helvetica,Tahoma,sans-serif; font-weight:400; font-size:14px; line-height:23px;}
+  #content .node .content h2 {font-family:'Ubuntu',Arial,Helvetica,Tahoma,sans-serif; font-weight:500; font-size:16px !important; color:#fff !important; padding:3px 0px 3px 10px; margin:10px 0px 18px 0px; background-color:#027AC6;}
+  #content .node .content h3 {font-family:'Ubuntu',Arial,Helvetica,Tahoma,sans-serif; font-weight:500; font-size:16px !important; border-bottom:1px dotted #666; padding:0px 0px 5px 0px; margin:0px; color:#000;}
+  li {font-family:'Ubuntu',Arial,Helvetica,Tahoma,sans-serif; font-weight:400; font-size:13px; padding:0px 0px 10px 0px; margin:0px; list-style:none;}
+  li a {font-family:'Ubuntu',Arial,Helvetica,Tahoma,sans-serif; font-weight:500; font-size:14px;}
+  ul {margin:0px; padding:6px 0px 10px 5px;}
+  .column-1 {width:30%; margin-right:30px; float:left;}
+  .column-2{width:30%; margin-right:30px; float:left;}
+  .column-3 {width:30%; float:left;}
+  #content .node a, #content .node a:link, #content .node a:visited, #content .node a:active {color:#027AC6 !important; text-decoration:none;}
+  a:hover {text-decoration:underline; color:#027AC6; }
+  .category-container {display:inline-block; width:100%; padding-bottom:20px;}
+  .intro1 {width:47%; float:left; margin-right:30px;}
+  .intro2 {width:47%; float:left;}
+  .intro3 {width:100%; display:inline-block;}
+}

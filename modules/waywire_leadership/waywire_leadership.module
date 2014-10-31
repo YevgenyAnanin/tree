@@ -1,0 +1,342 @@
+<?php
+/**
+ * @file
+ * Module for integrating waywire videos into leadership.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function waywire_leadership_menu() {
+  $items['waywire_leadership/create'] = array(
+    'title' => 'Test',
+    'page callback' => 'waywire_leadership_create_entities_for_all_companies',
+    'access arguments' => array('administer_leadership'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['waywire_leadership/create/json'] = array(
+    'title' => 'Create JSON',
+    'page callback' => 'waywire_leadership_create_json',
+    'access arguments' => array('administer_leadership'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/leadership/waywire'] = array(
+    'title' => 'Waywire Leadership Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('waywire_leadership_settings_form'),
+    'access arguments' => array('administer_leadership'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'waywire_leadership.admin.inc',
+  );
+  // Perhaps use the js module in the future to improve performance on this.
+  $items['waywire_leadership/get/json/%'] = array(
+    'title' => 'Get Waywire Leadership Company Data',
+    'delivery callback' => 'drupal_json_output',
+    'page callback'     => 'waywire_leadership_get_company_video_json',
+    'page arguments' => array(3),
+    'access callback'   => true,
+  );
+
+  return $items;
+}
+
+/**
+ * Create video entities for all youtube amplify companies from the current
+ * session.
+ */
+function waywire_leadership_create_entities_for_all_companies() {
+  $companies = waywire_leadership_get_youtube_amplify_companies_from_current_session();
+
+  foreach ($companies as $company) {
+    // Get the videos based on playlist id
+    if ($company->field_waywire_playlist_id_value) {
+      // @TODO handle playlist query
+    }
+    // Get Videos based on on tag
+    elseif ($company->field_waywire_tag_value) {
+      waywire_leadership_process_api_content(variable_get('waywire_leadership_importer_id'), $company->field_waywire_tag_value, $company->nid);
+    }
+    else {
+      watchdog('waywire_leadership', 'There wasn\'t a tag name or playlist id for Company: %company_name Nid: %nid', array(
+        '%company_name' => $company->title,
+        '%nid' => $company->nid,
+      ));
+    }
+  }
+
+  return '';
+}
+
+/**
+ * Get the companies from the current session that have youtube amplified
+ * checked.
+ *
+ * @return array $result
+ *  an array of objects that hold company fields.
+ */
+function waywire_leadership_get_youtube_amplify_companies_from_current_session() {
+
+  // Get all company profiles in current session
+  $query = db_select('node', 'node')
+    ->fields('node', array('title', 'nid'))
+    ->condition('type', 'company')
+    ->condition('status', '1')
+    ->orderBy('title', 'asc');
+
+  $query->leftJoin('field_data_field_ld_session', 'session', 'node.nid = session.entity_id');
+  $query->condition('session.field_ld_session_tid', variable_get('leadership_session_term'));
+  $query->leftJoin('field_data_field_youtube_amplified', 'youtube_amplify', 'node.nid = youtube_amplify.entity_id');
+  $query->condition('youtube_amplify.field_youtube_amplified_value', 1);
+  $query->leftJoin('field_data_field_waywire_playlist_id', 'waywire_playlist_id', 'node.nid = waywire_playlist_id.entity_id');
+  $query->addField('waywire_playlist_id', 'field_waywire_playlist_id_value');
+  $query->leftJoin('field_data_field_waywire_tag', 'waywire_tag', 'node.nid = waywire_tag.entity_id');
+  $query->addField('waywire_tag', 'field_waywire_tag_value');
+  $result = $query->execute()->fetchAll();
+
+  return $result;
+}
+
+/**
+ * Checks if a company has Youtube Amplified checked and it is in the current
+ * session.
+ *
+ * @param  integer $nid
+ *   node id.
+ * @return  boolean $has_youtube_amplify_checked
+ */
+function waywire_leadership_is_youtube_amplify($nid) {
+  $query = new EntityFieldQuery();
+  $has_youtube_amplify_checked = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'company')
+    ->propertyCondition('nid', $nid)
+    ->fieldCondition('field_youtube_amplified', 'value', 1)
+    ->fieldCondition('field_ld_session', 'tid', variable_get('leadership_session_term'))
+    ->count()
+    ->execute();
+
+  return $has_youtube_amplify_checked;
+}
+
+/**
+ * Generate API Content waywire api call using feeds programatically.
+ *
+ * @param  string $importer_id
+ *   The feed name.
+ * @param  string $tag
+ *   The tag string that a video is tagged in waywire.
+ * @param  integer $company_nid
+ *   The company node id of the video.
+ * @param  string  $method
+ *   The Waywire api call.
+ * @param  integer $page
+ *   The page number of the videos from Waywire.
+ * @param  integer $per_page
+ *   The number of videos you want Waywire to give you.
+ * @param  string $sort
+ *   The sort paramater.
+ */
+function waywire_leadership_process_api_content($importer_id, $tag, $company_nid,
+  $method = 'find', $page = 1, $per_page = FALSE, $sort='recent') {
+
+  // Set a default number of videos to be on a page.
+  if (!$per_page) {
+    $per_page =  variable_get('waywire_leadership_widget_page_count');
+  }
+
+  // The Waywire url that is used for api calls.
+  $api_url = variable_get('waywire_leadership_url') . '/api/content/' . $method;
+  // Query paramaters that append to url.
+  $query = array(
+    'page' => $page,
+    'per_page' => $per_page,
+    'vq' => $tag,
+  );
+  $source_url = $api_url . '?' . http_build_query($query);
+
+  $feeds_source = feeds_source($importer_id);
+  $config = $feeds_source->getConfig();
+  // Add source url and company node id to config.
+  $config['FeedsHTTPFetcherAppendHeaders']['source'] = $source_url;
+  $config['FeedsHTTPFetcherAppendHeaders']['company_nid'] = $company_nid;
+
+  $feeds_source->setConfig($config);
+  $feeds_source->save();  // Weird if you don't save it doesn't work.
+
+  while (FEEDS_BATCH_COMPLETE != $feeds_source->import());
+
+  // Clean up states.
+  $feeds_source->state(FEEDS_FETCH);
+  $feeds_source->state(FEEDS_PROCESS);
+  $feeds_source->state(FEEDS_PROCESS_CLEAR);
+}
+
+/**
+ * Create JSON strings into cache tables for each company.
+ */
+function waywire_leadership_create_json() {
+  $companies = waywire_leadership_get_youtube_amplify_companies_from_current_session();
+  waywire_leadership_clear_all_cache();
+  $count = 0;
+  foreach ($companies as $company) {
+    $count++;
+    waywire_leadership_save_cache($company);
+  }
+
+  // Create json variable based on page
+  echo "$count companies have been processed!\n";
+  return '';
+}
+
+/**
+ * Return a json structure that represents data about ALL the videos that are
+ * available for a given company
+ *
+ * @param $company
+ *  The company object
+ * @return array
+ *  An array that will be turned into a json object
+ */
+function waywire_leadership_get_company_all_videos($company_nid) {
+  $company_videos = array();
+  $company = node_load($company_nid);
+  $waywire_videos = waywire_video_get_all($company_nid);
+
+  if (empty($waywire_videos))
+    return false;
+
+  // For each video set up the main elements needed to display the video.
+  foreach($waywire_videos as $waywire_video) {
+    $company_videos[] = array(
+      'name' => $waywire_video->name,
+      'href' => $waywire_video->data['media_url'],
+      'thumbnail' => image_style_url("waywire_video_widget_grid", $waywire_video->field_waywire_image['und'][0]['uri']),
+    );
+  }
+
+  // Get the total number of videos to be used for front end logic
+  $total_videos = count($company_videos);
+
+  // Create the json structure that will hold all of the data
+  $json_data = array(
+    'companyName' => $company->title,
+    'total_count' => $total_videos,
+    'videos' => $company_videos,
+  );
+
+  return $json_data;
+}
+
+/**
+ * Save companies' waywire video entities into the cache table.
+ *
+ * @param object $company
+ *  company data from waywire_leadership_get_youtube_amplify_companies_from_current_session().
+ */
+function waywire_leadership_save_cache($company) {
+  $company_videos = array();
+  $waywire_videos = waywire_video_get_all($company->nid);
+
+  // For each video set up the main elements needed to display the video.
+  foreach($waywire_videos as $waywire_video) {
+    $company_videos[] = array(
+      'name' => $waywire_video->name,
+      'href' => $waywire_video->data['media_url'],
+      'thumbnail' => image_style_url("waywire_video_widget_thumbnail", $waywire_video->field_waywire_image['und'][0]['uri']),
+    );
+  }
+
+  // Get the total number of videos to be used for front end logic
+  $total_videos = count($company_videos);
+
+  // Get the number of videos to split on. We have two seperate counts because
+  // the datacard widget can have less videos than the widget on the node level.
+  $split_numbers = array(
+    'datacard' => variable_get('waywire_leadership_widget_datacard_count'),
+    'node' => variable_get('waywire_leadership_widget_node_count')
+  );
+
+  // Split up into a couple videos per array to be accessed by front end.
+  foreach ($split_numbers as $type => $split_number) {
+    $split_videos = array_chunk($company_videos, $split_number);
+    foreach ($split_videos as $key => $split) {
+      $page = $key + 1;
+      $json_data = array(
+        'companyName' => $company->title,
+        'page' => $page, // Page Number
+        'total_count' => $total_videos, // Total number of videos for this company
+        'page_count' => count($split), // Total number of videos for this page
+        'videos' => $split, // array of Waywire video data
+      );
+
+      // the json to cache table.  Cid will contain the companie's node id and
+      // the page number. Example: company_100_page_2
+      cache_set('company_' . $company->nid . '_' . $type . '_' . $page, json_encode($json_data), 'cache_waywire_leadership');
+    }
+  }
+}
+
+/**
+ * Get company video json.
+ *
+ * @param integer $company_nid
+ *  company node id.
+ * @param  string $type
+ *  type of data. Example: node or datacard
+ * @param integer $page
+ *  the page number of videos.
+ *
+ * @param mixed $json
+ *  either the json or an array of the companies videos.
+ */
+function waywire_leadership_get_company_video_json($company_nid, $type = 'datacard', $page = 1, $jsonDecode = TRUE) {
+  $cache = cache_get('company_' . $company_nid . '_' . $type . '_' . $page, 'cache_waywire_leadership');
+  $json = array();
+
+  if ($cache) {
+    if ($jsonDecode) {
+      $json = json_decode($cache->data);
+    }
+    else {
+      $json = $cache->data;
+    }
+  }
+  return $json;
+}
+
+/**
+ * Clear the waywire_leadership cache
+ */
+function waywire_leadership_clear_all_cache() {
+  cache_clear_all(NULL, 'cache_waywire_leadership');
+}
+
+/**
+ * Adds the videos to to the Drupal.settings.waywire_leadership object. If
+ * videos were already added in a previous call it will look up the static
+ * variable and update it.
+ *
+ * @param array $videos
+ *   an array of company data that contains videos.
+ */
+function waywire_leadership_add_videos_to_drupal_settings_object($videos) {
+  $js = &drupal_static('drupal_add_js');
+  $run_drupal_add_js = TRUE;
+  if (isset($js['settings']['data'][0])) {
+    foreach ($js['settings']['data'] as $key => $data) {
+      if (isset($js['settings']['data'][$key]['waywire_leadership'])) {
+        $run_drupal_add_js = FALSE;
+        foreach ($videos as $nid => $data) {
+          if (!isset($js['settings']['data'][$key]['waywire_leadership'][$nid])) {
+            $js['settings']['data'][$key]['waywire_leadership'][$nid] = $data;
+          }
+        }
+      }
+    }
+  }
+
+  // Only run drupal_add_js if it never been run before (only for waywire
+  // videos).
+  if ($run_drupal_add_js) {
+    drupal_add_js(array('waywire_leadership' => $videos), 'setting');
+  }
+}

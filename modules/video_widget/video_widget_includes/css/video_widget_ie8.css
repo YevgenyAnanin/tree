@@ -1,0 +1,14 @@
+/* line 2, ../sass/video_widget_ie8.scss */
+.videoWidget-video > a {
+  display: block;
+}
+/* line 3, ../sass/video_widget_ie8.scss */
+.videoWidget-video img {
+  max-width: 90%;
+}
+
+/* line 6, ../sass/video_widget_ie8.scss */
+.full .videoWidget-right-triangle-wrapper.lastVideoBlock,
+.twoVideo .videoWidget-right-triangle-wrapper.lastVideoBlock {
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=42)";
+}

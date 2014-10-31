@@ -1,0 +1,6 @@
+name = Feeds: Waywire Processor
+description = Feeds processor for custom entity type waywire video
+core = 7.x
+package = Feeds
+dependencies[] = feeds
+dependencies[] = ctools

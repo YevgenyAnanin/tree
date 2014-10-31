@@ -26,11 +26,24 @@ function smg_angular_library() {
         'type' => 'file',
         'preprocess' => FALSE,
       ),
-      /*base_path() . 'sites/all/libraries/angularjs/bower_components/angular-animate/angular-animate.min.js' => array(
+      base_path() . 'sites/all/libraries/angularjs/bower_components/angular-touch/angular-touch.js' => array(
         'type' => 'file',
         'preprocess' => FALSE,
-      ),*/
+      ),
     ),
+  );
+  // Add the minified and concatenated version of angular files
+  $libraries['angularjsMinConcat'] = array(
+    'title' => 'AngularJS Minified and Concatenated',
+    'website' => 'https://angularjs.org/',
+    'version' => '1.2.22',
+    'js' => array(
+      base_path() . 'sites/all/libraries/angularjs/prod/angular_compressed_min.js' => array(
+        'type' => 'file',
+        'preprocess' => false,
+      ),
+    ),
+
   );
 
   return $libraries;
@@ -94,7 +107,7 @@ function smg_angular_page_alter(&$page) {
     );
 
     // Add the AngularJS library
-    drupal_add_library('smg_angular', 'angularjs');
+    drupal_add_library('smg_angular', 'angularjsMinConcat');
     // Add the gaEventWrapper module
     drupal_add_js(drupal_get_path('module', 'smg_angular') . '/js/smgGaEvent.js');
 

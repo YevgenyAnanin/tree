@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * Module for implementing a dynamic video widget using AngularJS
+ *
+ * @author Yevgeny Ananin <yananin@summitmediagroup.com>
+ */
+
+/**
+ * Implements hook_theme
+ */
+function video_widget_theme($existing, $type, $theme, $path) {
+  return array(
+    'video_widget' => array(
+      'template' => 'video_widget_includes/templates/video-widget',
+      'variables' => array('nid' => NULL),
+    ),
+  );
+}
+
+/*
+ * Implements hook_menu().
+ */
+function video_widget_menu() {
+  // #46 Build out a menu router path that can supply templates to angular,
+  // since angular loads files through ajax and they can't be referenced with
+  // a relative path
+  $items['video-widget/resource/%/%'] = array(
+    'page callback' => 'video_widget_resource',
+    'page arguments' => array(2,3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+    'file' => 'video_widget_includes/video-widget.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Adds the video widget javascript/css files if they haven't been added yet.
+ */
+function video_widget_add_js() {
+  $has_video_widget_js = &drupal_static('has_video_widget');
+
+  if ($has_video_widget_js == NULL) {
+
+    $js_extension = (variable_get('smg_global_is_production', false)) ? '.min.js' : '.js';
+
+    $video_widget_path = drupal_get_path('module', 'video_widget');
+    drupal_add_js($video_widget_path.'/video_widget_includes/js/videoWidget_config_' . variable_get('smg_global_site') . $js_extension);
+    drupal_add_js($video_widget_path."/video_widget_includes/js/fastclick{$js_extension}");
+    // Add the files for our Angular app
+    drupal_add_js($video_widget_path."/video_widget_includes/angular/app{$js_extension}");
+    //drupal_add_js('http://summitmediagroup.magnify.net/embed/player/lightbox.js', array('type' => 'external', 'group' => JS_LIBRARY, 'weight' => -100));
+    drupal_add_js($video_widget_path."/video_widget_includes/js/lightbox{$js_extension}");
+    drupal_add_css($video_widget_path.'/video_widget_includes/css/video_widget.css');
+
+    // Add IE8 specific css
+    $ie8_css = $video_widget_path . '/video_widget_includes/css/video_widget_ie8.css';
+    $ie8_css_string = '<!--[if lte IE 8]><link rel="stylesheet" type="text/css" href="' . $ie8_css . '" /><![endif]-->';
+    $ie8_css_head = array(
+      '#type' => 'markup',
+      '#markup' => $ie8_css_string,
+    );
+    drupal_add_html_head($ie8_css_head, 'smgVideoWidgetIE8');
+    $has_video_widget_js = TRUE;
+  }
+}
+
+/**
+ * Any code (anywhere on the site) that wants to add the video widget to the page
+ * MUST call this function, to let the video widget module know that it should add
+ * the app.js file
+ *
+ * @param bool $extra
+ *  If the caller of this function wants to add extra js and/or css files, they can
+ *  provide an array like array('js' => array('path_to_file1', 'path_to_file2'), 'css' => array('path'))
+ * @return array
+ */
+function _video_widget_add_widget($extra = FALSE) {
+  $extra_js = &drupal_static(__FUNCTION__, array());
+
+  if ($extra) {
+    if (isset($extra['js'])) {
+      $extra_js['js'][] = $extra['js'];
+    }
+    if (isset($extra['css'])) {
+      $extra_js['css'][] = $extra['css'];
+    }
+  }
+
+  // Delta will keep track of how many times this function was called
+  if (!isset($extra_js['delta'])) {
+    $extra_js['delta'] = 0;
+  }
+  else {
+    $extra_js['delta']++;
+  }
+
+  return $extra_js;
+}
+
+/*
+ * Implements hook_smg_angular_add_template()
+ */
+function video_widget_smg_angular_add_template() {
+  $templates = array(
+    'video' => '/' . drupal_get_path('module','video_widget') . '/video_widget_includes/angular/templates/video.html',
+    'videoWidget' => '/' . drupal_get_path('module', 'video_widget') . '/video_widget_includes/angular/templates/videoWidget.html',
+    'videoGrid' => '/' . drupal_get_path('module', 'video_widget') . '/video_widget_includes/angular/templates/videoGrid.html',
+  );
+
+  return $templates;
+}
+
+/**
+ * Implements hook_smg_angular_custom_elements().
+ */
+function video_widget_smg_angular_custom_elements() {
+  $custom_elements = array('video-widget','video-slider');
+  return $custom_elements;
+}
