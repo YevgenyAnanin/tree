@@ -1,0 +1,23 @@
+@import "variables";
+
+.ld-vote-button-wrapper {margin: 7px auto; }
+.ld-vote-button {
+  @include button(#f24537, #B51702, #901900);
+  padding: 3px 30px; font-size: 18px; border-radius: 15px; width: 100%; display: block; margin: 0 auto; text-align: center; border:1px solid rgb(78, 58, 58); @include border-box; text-transform: uppercase;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#B51702',GradientType=0);
+  &:hover {@include buttonHover(#F24537,#B51702);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#B51702', endColorstr='#f24537',GradientType=0);
+  }
+  &:active {@include buttonActive;}
+}
+.dataCard-view-profile-button { @include button(#901900, #DE4000, #901900);
+  font-size: 18px; filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#901900', endColorstr='#DE4000',GradientType=0);
+  &:hover {@include buttonHover(#901900, #DE4000);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#DE4000', endColorstr='#901900',GradientType=0);
+  }
+  &:active {@include buttonActive;}
+}
+.dataCard-visit-site a {color: #1D87B6;}
+.dataCard-product-photo {
+  a {color: #1D87B6;}
+}

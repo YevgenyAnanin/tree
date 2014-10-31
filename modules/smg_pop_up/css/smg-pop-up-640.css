@@ -1,0 +1,14 @@
+#modalContent {left:0 !important;}
+#modalContent .ctools-modal-content {width:95% !important; margin:0 auto; box-sizing:border-box; -ms-box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;}
+div.ctools-modal-content #modal-content .webform-client-form {margin-bottom:120px; float:none !important;} 
+div.ctools-modal-content .modal-scroll {float:none !important;}
+div.ctools-modal-content .smg-pop-up-column {float:none !important; width:100% !important;}
+div.ctools-modal-content .modal-header {padding-top:10px !important;}
+div.ctools-modal-content .modal-header #modal-title {font-size:180% !important;}
+div.ctools-modal-content .modal-header-text {font-size:18px !important; margin-bottom:4px !important;} 
+div.ctools-modal-content #sp-full-name-wrapper {margin-top:-3px !important; width:100%;}
+div.ctools-modal-content #sp-full-name-wrapper #not-sp-user {float:none;} 
+div.ctools-modal-content .modal-content .form-actions input.form-submit {margin-top: 30px; height: 45px;}
+div.ctools-modal-content .modal-content .form-actions input.form-submit {width:90% !important; font-size:150% !important;} 
+div.ctools-modal-content .modal-content .form-item.webform-component > label, div.ctools-modal-content .modal-content .form-item.webform-component > label .form-required {font-size:130% !important; -webkit-text-size-adjust: 100%;}
+html {-webkit-text-size-adjust: 100%;}

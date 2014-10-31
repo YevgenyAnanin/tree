@@ -1,0 +1,67 @@
+@import "variables";
+
+.leadership-menu {
+  > li {position:relative;
+    &:before, &::before {content:" "; position: absolute; height:100%; width:15%; left:-15%;}
+  }
+}
+.dataCard { padding:15px; @include box-shadow(0, 0, 7px, 4px, #CCCCCC); border: 1px solid #B6B6B6; border-radius: 8px; display:none; background: #FFFFFF; z-index: 1000; position:absolute; right:107%;
+  .full .videoWidget-widget-title {
+    font-size: 120%; padding: 8px 15px; margin-top: 5px;
+  }
+}
+.dataCard-after-arrow {
+  position: absolute; left: 100%;
+  &:after, &::after, &:before, &::before {content:""; width:0; height: 0; position:absolute; border: solid transparent;}
+  &:after, &::after {border-color: rgba(255,255,255,0); border-left-color: #ffffff; border-width:10px; margin-top:-10px;}
+  &:before, &::before {border-color: rgba(182, 182, 182, 0); border-left-color: #B6B6B6; border-width: 13px; margin-top:-13px;}
+}
+.dataCard-top {font-family: 'PT Sans',sans-serif; overflow: auto;}
+.dataCard-top-section {float:left; display:inline-block; }
+.dataCard-contact {width:20%; padding: 5px; @include border-box();}
+.dataCard-contact-name {font-weight: bold;}
+.dataCard-company {width:40%; padding: 5px 7px; @include border-box();}
+.dataCard-company-logo {margin-bottom: 10px; }
+.dataCard-view-profile-button {
+  a {color:#FFFFFF;
+    &:active, &:hover {text-decoration: none;}
+  }
+  font-size: 13px;
+}
+.dataCard-visit-site {display:inline-block;
+  &:before, &::before {content:"|"; padding:0 3px; color: #000000;}
+}
+.dataCard-company-product-summary {border-top:1px dotted #808080; margin-top:3px; font-size:100%; line-height: 100%; font-style: italic; padding-top: 5px;
+  p {font-size: 100%; line-height: 100%;}
+}
+.dataCard-company-teaser {
+  &:before, &::before {content: "\00BB \0020"; color: #1D87B6; font-family: Arial, Helvetica, sans-serif;}
+}
+.dataCard-product-photos {width:40%;}
+.dataCard-product-photo {display:inline-block; float:left; width:50%; @include border-box(); padding:5px;
+  &.odd {clear:both;}
+  img {border:1px solid #999999;}
+}
+
+.block-leadership {
+  > .block-inner {background:#FBFBFF;}
+  h4 {text-align: center; font-size:150%; margin-bottom: 0;}
+  .ld-vote-message {text-align:center;
+    &:first-child {margin-top:15px;}
+  }
+  .leadership-menu {margin-top: 15px; list-style-type: none; padding-left: 10px; background: #FFFFFF;
+    > li {
+      padding: 4px 0;
+      .icon-section {display:inline-block;}
+      .link-section {display:inline-block;
+        a {color:#1C87B6; font-weight: bold; font-size: 130%; margin-left: 5px; border-bottom: 1px dotted #1C87B6; padding-bottom: 2px;
+          &:hover {text-decoration: none;}
+        }
+      }
+    }
+  }
+}
+.ie-mask {overflow: hidden; -moz-border-radius:10px;  -webkit-border-radius:10px;  border-radius:10px; width:90%; }
+
+.ld-vote-prize {margin:10px 0; text-align: center;}
+

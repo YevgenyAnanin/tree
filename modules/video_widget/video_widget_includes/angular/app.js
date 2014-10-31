@@ -390,7 +390,7 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
     require: 'videoContainerStyle',
     restrict: 'A',
     scope: true,
-    controller: function ($scope, $element) {
+    controller: ["$scope", "$element", function ($scope, $element) {
       this.changeVideoContainerHeight = function () {
 
         var videosContainer = $element;
@@ -447,7 +447,7 @@ videoWidget.directive('videoContainerStyle',['$window', '$timeout', function ($w
         }
       };
 
-    },
+    }],
     link: function (scope, element, attrs, currentCtrl) {
 
       //$timeout(currentCtrl.changeVideoContainerHeight,0);

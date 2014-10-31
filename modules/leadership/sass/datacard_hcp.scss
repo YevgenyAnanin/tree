@@ -1,0 +1,20 @@
+@import "variables";
+
+.ld-header { padding: 0 10px 5px 10px; border-bottom:1px solid #c5c5c5;
+  h4 { font-size:20px; font-weight:bold; text-align:left; line-height: 15px; }
+  .ld-header-bottom-text { font-size:14px; }
+}
+#block-leadership-leadership-all-and-datacard  {
+  .leadership-menu li .link-section a { color: #000; font-weight: bold; text-decoration: none; font-family: 'PT Sans',sans-serif; font-size: 17px; border-bottom:none; }
+  .leadership-menu li .link-section a:hover { text-decoration: none; color: #0094BA; }
+}
+.dataCard-view-profile-button { @include button(#33bdef, #019ad2, #057fd0); border-radius: 13px;
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bdef', endColorstr='#019ad2',GradientType=0);
+  &:hover {@include buttonHover(#33bdef, #019ad2);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#019ad2', endColorstr='#33bdef',GradientType=0);
+  }
+  &:active {@include buttonActive;}
+  a {color: #FFFFFF !important;}
+}
+.dataCard-company-teaser {margin-top: 5px;}
+.block-leadership .leadership-menu > li { margin-left: 8px; }

@@ -1,0 +1,38 @@
+<div class="dataCard">
+    <div class="dataCard-top">
+        <div class="dataCard-contact dataCard-top-section">
+            <div class="dataCard-contact-image">
+                <img ng-if="contactPhotoPath" ng-src="{{contactPhotoPath}}" />
+            </div>
+            <div class="dataCard-contact-name">
+                {{contactName}}{{contactShowComma()}}
+            </div>
+            <div class="dataCard-contact-title">
+                {{contactTitle}}
+            </div>
+        </div> <!-- / .dataCard-contact  -->
+        <div class="dataCard-company dataCard-top-section">
+            <div ng-if="companyLogoPath" class="dataCard-company-logo">
+                <img ng-src="{{companyLogoPath}}" />
+            </div>
+            <div class="dataCard-view-profile-button"><a ng-click="gaEvent('/node/' + companyNid,'Leadership Action', 'Data Card to Profile Page Click', companyName);" href="" smg-anchor-ga-event>View Profile</a></div>
+            <div class="dataCard-visit-site">
+                <a ng-if="companyWebsite" ng-click="gaEvent(companyWebsite, 'Leadership Action', 'Data Card to Company Website Click', companyName)" href="" smg-anchor-ga-event>Visit Site</a>
+            </div>
+            <div class="dataCard-company-product-summary" ng-bind-html="productSummary"></div>
+            <div class="dataCard-company-teaser">
+                {{teaser}}
+            </div>
+        </div> <!-- //.dataCard-company  -->
+        <div class="dataCard-product-photos dataCard-top-section">
+            <div class="dataCard-product-photo" ng-repeat="photo in photos" ng-class-odd="'odd'">
+                <img ng-src="{{photo.url}}" />
+                <a ng-click="gaEvent(photo.link, 'Leadership Action', 'Data Card to Company Website Click', companyName);" href="" smg-anchor-ga-event>{{photo.title}}</a>
+            </div>
+        </div> <!-- //.dataCard-product-photos -->
+    </div> <!-- //.dataCard-top -->
+    <div class="dataCard-bottom">
+        <compile-video-widget ng-if="companyHasWaywireVideos" nid="{{companyNid}}" tid="{{tid}}"></compile-video-widget>
+    </div>
+    <div class="dataCard-after-arrow"></div>
+</div>

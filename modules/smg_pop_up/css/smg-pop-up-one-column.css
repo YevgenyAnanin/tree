@@ -1,0 +1,15 @@
+div.ctools-modal-content.one-column-layout .modal-content {width:95% !important; padding-right:20px; padding-left:20px;}
+div.ctools-modal-content.one-column-layout .modal-content .form-item.webform-component-radios .form-radios {display:block; width:100%px; margin:0 auto; text-align:center;} 
+div.ctools-modal-content.one-column-layout .modal-content .form-item.webform-component > label {text-align:center; width:100% !important;}
+div.ctools-modal-content.one-column-layout .modal-content .form-item.webform-component {float:left; display:inline; margin-top:.03em; margin-bottom:.03em;}
+div.ctools-modal-content.one-column-layout .modal-content .form-item.form-type-radio input {float:none;}
+div.ctools-modal-content.one-column-layout .modal-content .smg-pop-up-element.radios .form-item .form-type-radio {float:none !important; display:inline;}
+div.ctools-modal-content.one-column-layout .modal-header-text {font-size:18px;} 
+div.ctools-modal-content.one-column-layout .smg-pop-up-element {width:100%; margin-bottom:10px;}
+div.ctools-modal-content.one-column-layout .smg-pop-up-element button {text-align:center;}
+div.ctools-modal-content.one-column-layout #sp-full-name-wrapper {font-size:15px;}
+div.ctools-modal-content.one-column-layout .smg-pop-up-column {float:left;}
+div.ctools-modal-content.one-column-layout {overflow:auto;}
+div.ctools-modal-content.one-column-layout #modal-content {overflow:auto;}
+div.ctools-modal-content.one-column-layout .modal-content .form-actions input.form-submit {width:80% !important;}
+div.ctools-modal-content.one-column-layout .modal-content input[type="text"] {width:100% !important;}

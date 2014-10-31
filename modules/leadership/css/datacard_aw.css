@@ -1,0 +1,109 @@
+/* line 3, ../sass/datacard_aw.scss */
+.ld-vote-button-wrapper {
+  margin: 7px auto;
+}
+
+/* line 4, ../sass/datacard_aw.scss */
+.ld-vote-button {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24537), color-stop(1, #b51702));
+  background: -moz-linear-gradient(top, #f24537 5%, #b51702 100%);
+  background: -webkit-linear-gradient(top, #f24537 5%, #b51702 100%);
+  background: -o-linear-gradient(top, #f24537 5%, #b51702 100%);
+  background: -ms-linear-gradient(top, #f24537 5%, #b51702 100%);
+  background: linear-gradient(to bottom, #f24537 5%, #b51702 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$start', endColorstr='$end',GradientType=0);
+  background-color: #f24537;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /*border:1px solid $border;*/
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 5px 7px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #901900;
+  padding: 3px 30px;
+  font-size: 18px;
+  border-radius: 15px;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid #4e3a3a;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  text-transform: uppercase;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#B51702',GradientType=0);
+}
+/* line 8, ../sass/datacard_aw.scss */
+.ld-vote-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #b51702), color-stop(1, #f24537));
+  background: -moz-linear-gradient(top, #b51702 5%, #f24537 100%);
+  background: -webkit-linear-gradient(top, #b51702 5%, #f24537 100%);
+  background: -o-linear-gradient(top, #b51702 5%, #f24537 100%);
+  background: -ms-linear-gradient(top, #b51702 5%, #f24537 100%);
+  background: linear-gradient(to bottom, #b51702 5%, #f24537 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$end', endColorstr='$start',GradientType=0);
+  background-color: #b51702;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#B51702', endColorstr='#f24537',GradientType=0);
+}
+/* line 11, ../sass/datacard_aw.scss */
+.ld-vote-button:active {
+  position: relative;
+  top: 1px;
+}
+
+/* line 13, ../sass/datacard_aw.scss */
+.dataCard-view-profile-button {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #901900), color-stop(1, #de4000));
+  background: -moz-linear-gradient(top, #901900 5%, #de4000 100%);
+  background: -webkit-linear-gradient(top, #901900 5%, #de4000 100%);
+  background: -o-linear-gradient(top, #901900 5%, #de4000 100%);
+  background: -ms-linear-gradient(top, #901900 5%, #de4000 100%);
+  background: linear-gradient(to bottom, #901900 5%, #de4000 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$start', endColorstr='$end',GradientType=0);
+  background-color: #901900;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /*border:1px solid $border;*/
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 5px 7px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #901900;
+  font-size: 18px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#901900', endColorstr='#DE4000',GradientType=0);
+}
+/* line 15, ../sass/datacard_aw.scss */
+.dataCard-view-profile-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #de4000), color-stop(1, #901900));
+  background: -moz-linear-gradient(top, #de4000 5%, #901900 100%);
+  background: -webkit-linear-gradient(top, #de4000 5%, #901900 100%);
+  background: -o-linear-gradient(top, #de4000 5%, #901900 100%);
+  background: -ms-linear-gradient(top, #de4000 5%, #901900 100%);
+  background: linear-gradient(to bottom, #de4000 5%, #901900 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$end', endColorstr='$start',GradientType=0);
+  background-color: #de4000;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DE4000', endColorstr='#901900',GradientType=0);
+}
+/* line 18, ../sass/datacard_aw.scss */
+.dataCard-view-profile-button:active {
+  position: relative;
+  top: 1px;
+}
+
+/* line 20, ../sass/datacard_aw.scss */
+.dataCard-visit-site a {
+  color: #1D87B6;
+}
+
+/* line 22, ../sass/datacard_aw.scss */
+.dataCard-product-photo a {
+  color: #1D87B6;
+}

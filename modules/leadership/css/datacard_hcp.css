@@ -1,0 +1,87 @@
+/* line 3, ../sass/datacard_hcp.scss */
+.ld-header {
+  padding: 0 10px 5px 10px;
+  border-bottom: 1px solid #c5c5c5;
+}
+/* line 4, ../sass/datacard_hcp.scss */
+.ld-header h4 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: left;
+  line-height: 15px;
+}
+/* line 5, ../sass/datacard_hcp.scss */
+.ld-header .ld-header-bottom-text {
+  font-size: 14px;
+}
+
+/* line 8, ../sass/datacard_hcp.scss */
+#block-leadership-leadership-all-and-datacard .leadership-menu li .link-section a {
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'PT Sans',sans-serif;
+  font-size: 17px;
+  border-bottom: none;
+}
+/* line 9, ../sass/datacard_hcp.scss */
+#block-leadership-leadership-all-and-datacard .leadership-menu li .link-section a:hover {
+  text-decoration: none;
+  color: #0094BA;
+}
+
+/* line 11, ../sass/datacard_hcp.scss */
+.dataCard-view-profile-button {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #33bdef), color-stop(1, #019ad2));
+  background: -moz-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+  background: -webkit-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+  background: -o-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+  background: -ms-linear-gradient(top, #33bdef 5%, #019ad2 100%);
+  background: linear-gradient(to bottom, #33bdef 5%, #019ad2 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$start', endColorstr='$end',GradientType=0);
+  background-color: #33bdef;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  /*border:1px solid $border;*/
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 5px 7px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #057fd0;
+  border-radius: 13px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bdef', endColorstr='#019ad2',GradientType=0);
+}
+/* line 13, ../sass/datacard_hcp.scss */
+.dataCard-view-profile-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #019ad2), color-stop(1, #33bdef));
+  background: -moz-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+  background: -webkit-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+  background: -o-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+  background: -ms-linear-gradient(top, #019ad2 5%, #33bdef 100%);
+  background: linear-gradient(to bottom, #019ad2 5%, #33bdef 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$end', endColorstr='$start',GradientType=0);
+  background-color: #019ad2;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#019ad2', endColorstr='#33bdef',GradientType=0);
+}
+/* line 16, ../sass/datacard_hcp.scss */
+.dataCard-view-profile-button:active {
+  position: relative;
+  top: 1px;
+}
+/* line 17, ../sass/datacard_hcp.scss */
+.dataCard-view-profile-button a {
+  color: #FFFFFF !important;
+}
+
+/* line 19, ../sass/datacard_hcp.scss */
+.dataCard-company-teaser {
+  margin-top: 5px;
+}
+
+/* line 20, ../sass/datacard_hcp.scss */
+.block-leadership .leadership-menu > li {
+  margin-left: 8px;
+}

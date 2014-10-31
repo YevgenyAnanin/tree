@@ -1,0 +1,25 @@
+@import "variables";
+
+#sidebar-second #block-leadership-leadership-data-card-block {
+  .content { border:none; }
+}
+#block-leadership-leadership-data-card-block {
+  .block-inner { border: 1px solid #ccc; }
+  .ld-header { padding:2px 15px 10px 15px; color:#4D4D4d; border-bottom:1px dotted gray; }
+  .ld-header-top-text { font-size:17px; font-weight:bold; }
+  .ld-header-bottom-text { font-size:14px; }
+  h4 { font-size: 18px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid; margin: 10px 20px 0px 20px; padding: 0px; color: #e63448; line-height: 21px; text-align: left; }
+  .leadership-menu li { margin-left:10px; }
+  .leadership-menu li .link-section a { color:#005496; font-size:18px; }
+}
+.dataCard-view-profile-button { @include button(#F4643F, #F69A39, #DF2F3C);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#F4643F', endColorstr='#F69A39',GradientType=0);
+  &:hover {@include buttonHover(#F4643F, #F69A39);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#F69A39', endColorstr='#F4643F',GradientType=0);
+  }
+  &:active {@include buttonActive;}
+}
+.dataCard-visit-site a {color:#E73649;}
+.dataCard-product-photo {
+  a {color: #E73649;}
+}

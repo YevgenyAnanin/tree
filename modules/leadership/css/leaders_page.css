@@ -1,0 +1,124 @@
+/* line 2, ../sass/leaders_page.scss */
+.page-leaders #block-system-main .logo {
+  float: left;
+  padding-right: 20px;
+}
+/* line 3, ../sass/leaders_page.scss */
+.page-leaders #block-system-main .node {
+  width: 100%;
+  margin-top: 10px;
+  float: left;
+  border: none;
+  padding-top: 0px;
+}
+/* line 4, ../sass/leaders_page.scss */
+.page-leaders #block-system-main .node .content {
+  margin-right: 40px;
+  margin-left: 60px;
+}
+/* line 5, ../sass/leaders_page.scss */
+.page-leaders h1 {
+  font-family: 'Ubuntu',Arial,Helvetica,Tahoma,sans-serif;
+  font-weight: 500;
+  font-size: 25px;
+  margin: 10px 0px 0px 0px;
+  padding: 0px;
+  clear: none;
+  padding-top: 12px;
+}
+/* line 6, ../sass/leaders_page.scss */
+.page-leaders p {
+  font-family: 'Ubuntu',Arial,Helvetica,Tahoma,sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 23px;
+}
+/* line 7, ../sass/leaders_page.scss */
+.page-leaders #content .node .content h2 {
+  font-family: 'Ubuntu',Arial,Helvetica,Tahoma,sans-serif;
+  font-weight: 500;
+  font-size: 16px !important;
+  color: #fff !important;
+  padding: 3px 0px 3px 10px;
+  margin: 10px 0px 18px 0px;
+  background-color: #027AC6;
+}
+/* line 8, ../sass/leaders_page.scss */
+.page-leaders #content .node .content h3 {
+  font-family: 'Ubuntu',Arial,Helvetica,Tahoma,sans-serif;
+  font-weight: 500;
+  font-size: 16px !important;
+  border-bottom: 1px dotted #666;
+  padding: 0px 0px 5px 0px;
+  margin: 0px;
+  color: #000;
+}
+/* line 9, ../sass/leaders_page.scss */
+.page-leaders li {
+  font-family: 'Ubuntu',Arial,Helvetica,Tahoma,sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  padding: 0px 0px 10px 0px;
+  margin: 0px;
+  list-style: none;
+}
+/* line 10, ../sass/leaders_page.scss */
+.page-leaders li a {
+  font-family: 'Ubuntu',Arial,Helvetica,Tahoma,sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+/* line 11, ../sass/leaders_page.scss */
+.page-leaders ul {
+  margin: 0px;
+  padding: 6px 0px 10px 5px;
+}
+/* line 12, ../sass/leaders_page.scss */
+.page-leaders .column-1 {
+  width: 30%;
+  margin-right: 30px;
+  float: left;
+}
+/* line 13, ../sass/leaders_page.scss */
+.page-leaders .column-2 {
+  width: 30%;
+  margin-right: 30px;
+  float: left;
+}
+/* line 14, ../sass/leaders_page.scss */
+.page-leaders .column-3 {
+  width: 30%;
+  float: left;
+}
+/* line 15, ../sass/leaders_page.scss */
+.page-leaders #content .node a, .page-leaders #content .node a:link, .page-leaders #content .node a:visited, .page-leaders #content .node a:active {
+  color: #027AC6 !important;
+  text-decoration: none;
+}
+/* line 16, ../sass/leaders_page.scss */
+.page-leaders a:hover {
+  text-decoration: underline;
+  color: #027AC6;
+}
+/* line 17, ../sass/leaders_page.scss */
+.page-leaders .category-container {
+  display: inline-block;
+  width: 100%;
+  padding-bottom: 20px;
+}
+/* line 18, ../sass/leaders_page.scss */
+.page-leaders .intro1 {
+  width: 47%;
+  float: left;
+  margin-right: 30px;
+}
+/* line 19, ../sass/leaders_page.scss */
+.page-leaders .intro2 {
+  width: 47%;
+  float: left;
+}
+/* line 20, ../sass/leaders_page.scss */
+.page-leaders .intro3 {
+  width: 100%;
+  display: inline-block;
+}

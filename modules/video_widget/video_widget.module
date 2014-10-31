@@ -44,13 +44,15 @@ function video_widget_add_js() {
 
   if ($has_video_widget_js == NULL) {
 
+    $js_extension = (variable_get('smg_global_is_production', false)) ? '.min.js' : '.js';
+
     $video_widget_path = drupal_get_path('module', 'video_widget');
-    drupal_add_js($video_widget_path.'/video_widget_includes/js/videoWidget_config_' . variable_get('smg_global_site') . '.js');
-    drupal_add_js($video_widget_path.'/video_widget_includes/js/fastclick.js');
+    drupal_add_js($video_widget_path.'/video_widget_includes/js/videoWidget_config_' . variable_get('smg_global_site') . $js_extension);
+    drupal_add_js($video_widget_path."/video_widget_includes/js/fastclick{$js_extension}");
     // Add the files for our Angular app
-    drupal_add_js($video_widget_path.'/video_widget_includes/angular/app.js');
+    drupal_add_js($video_widget_path."/video_widget_includes/angular/app{$js_extension}");
     //drupal_add_js('http://summitmediagroup.magnify.net/embed/player/lightbox.js', array('type' => 'external', 'group' => JS_LIBRARY, 'weight' => -100));
-    drupal_add_js($video_widget_path.'/video_widget_includes/js/lightbox.js');
+    drupal_add_js($video_widget_path."/video_widget_includes/js/lightbox{$js_extension}");
     drupal_add_css($video_widget_path.'/video_widget_includes/css/video_widget.css');
 
     // Add IE8 specific css
