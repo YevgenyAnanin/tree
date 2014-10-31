@@ -1,0 +1,66 @@
+@import "variables";
+
+.smg-pop-up-hidden-links {display:none;}
+div.ctools-modal-content {overflow:auto; border-radius:13px; -webkit-border-radius:13px; -moz-border-radius:13px; background:#fff;}
+div.ctools-modal-content {
+  #modal-content {overflow:auto;}
+  .modal-header {background-color:#FFF; padding:20px 10px 5px 25px; border-radius:13px; -webkit-border-radius:13px; -moz-border-radius:13px;
+    #modal-title {color:#0079BF; font-size:230%; float:left;}
+  }
+  .modal-scroll {float:left;}
+  .modal-content {
+    border:1px solid #B4D4E3; border-radius:13px; -webkit-border-radius:13px; -moz-border-radius:13px; overflow-y:scroll; margin: 0 auto; background-color:#EFF8FC; box-sizing: border-box; -ms-box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box;
+    input.form-text {border:1px solid #B4D4E3; background:#FFF; border-radius:13px; -webkit-border-radius:13px; -moz-border-radius:13px;}
+    input.form-text, button {height:30px; color:#000;}
+    button {font-size:150%; padding-left:10px; height:36px; border-radius:9px; -webkit-border-radius:9px; -moz-border-radius:9px;}
+    .form-item {float:left; width:100%; margin-top:1em; margin-bottom:1em;
+      &.webform-component {
+        > label {width:auto; clear:both; padding:0 0 6px 6px;}
+        > label, > label span.form-required {color:#198AC8;}
+      }
+      label {font-size:130%;}
+      input, button {float:left; clear: both;}
+    }
+    .smg-pop-up-element {
+      &.radios {
+        .form-item {
+          .form-type-radio {
+            float:left; margin-right:15px; width:auto;
+            label {font-weight:bold; padding-left:4px;}
+          }
+        }
+      }
+    }
+    .form-actions {
+      float:left; width:100%; margin-top:1em; margin-bottom:1em;
+      input {
+        &.form-submit {
+          border:none; padding:0 20px; font-weight:bold; font-family:Arial, Helvetica, sans-serif; height:36px; background:#0079BF; float:none; margin:0 auto; border-radius:9px; -webkit-border-radius:9px; -moz-border-radius:9px; font-size:180%; width:50%; box-shadow:inset 0 -2px 1px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25); -moz-box-shadow:inset 0 -2px 1px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25); -webkit-box-shadow:inset 0 -2px 1px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.25); display:block; color:white;
+          &:active {position:relative; top:2px; box-shadow:inset 0 -2px 1px rgba(239, 248, 252, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9); -moz-box-shadow:inset 0 -2px 1px rgba(239, 248, 252, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9); -webkit-box-shadow:inset 0 -2px 1px rgba(239, 248, 252, 1), inset 0 0px 3px rgba(0, 0, 0, 0.9);}
+          &:focus {outline:0;}
+          &:active:after { content: " "; width: 100%; height: 2px; background: #EFF8FC; position: absolute; bottom: 10px; left: 0; }
+        }
+      }
+    }
+  }
+  .smg-pop-up-column {
+    .smg-pop-up-element {float:left; padding: 0 15px; @include border-box;}
+  }
+}
+div.ctools-modal-content .modal-content .ui-multiselect-menu .ui-multiselect-checkboxes {overflow:auto; /*max-height:200px;*/}
+div.ctools-modal-content #modal-content .webform-client-form {float:left;}
+div.ctools-modal-content .modal-content #smg-pop-up-required-note {float:left; color:#999999; margin-bottom:10px; font-size:13px;}
+div.ctools-modal-content .modal-header-text {float:left; margin-bottom:15px; clear:both; max-width:95%;}
+div.ctools-modal-content .disclaimer {float:left; clear:both;}
+div.ctools-modal-content .disclaimer-text {clear:both; display:block; width:90%; margin:10px auto; font-size:13px; color:#999999; line-height:18px;}
+div.ctools-modal-content #sp-full-name-wrapper {/*float:left; margin-top:-12px;*/ margin-bottom:15px; clear:both; width:100%;}
+div.ctools-modal-content #sp-full-name-wrapper {font-weight:bold;}
+div.ctools-modal-content #sp-full-name-wrapper #not-sp-user {color:#4679bd; margin-left:5px;}
+div.ctools-modal-content #sp-full-name-wrapper a#not-sp-user {float:none !important;}
+div.ctools-modal-content input[type="text"] {-webkit-user-select: text;}
+div.ctools-modal-content .modal-content input.form-text.error, button.ui-multiselect.error {border: 1px solid #c00;}
+div.ctools-modal-content .modal-content .webform-component-radios.error {border:1px solid #c00; border-radius: 12px; -webkit-border-radius:12px; -moz-border-radius:12px; background-image:none !important;}
+
+
+
+

@@ -1,0 +1,44 @@
+@import "variables";
+
+div.ctools-modal-content {
+  &.one-column-layout {
+    overflow: auto;
+    .modal-content {
+      width:95% !important; padding-right:20px; padding-left:20px;
+      .form-item {
+        &.webform-component-radios .form-radios {display:block; width:100%px; margin:0 auto; text-align:center;}
+        &.webform-component {
+          float:left; display:inline; margin-top:.03em; margin-bottom:.03em;
+          > label {text-align:center; width:100% !important;}
+        }
+        &.form-type-radio {
+          input {float:none;}
+        }
+        input {max-width: 100%;}
+      }
+      .smg-pop-up-element {
+        &.radios {
+          .form-item {
+            .form-type-radio {float:none !important; display:inline;}
+          }
+        }
+      }
+      .form-actions {
+        input.form-submit {width:80% !important;}
+      }
+    }
+    .modal-header-text {font-size:18px;}
+    .smg-pop-up-element {
+      width:100%; margin-bottom:10px;
+      button {text-align: center;}
+    }
+    #sp-full-name-wrapper {font-size:15px;}
+    .smg-pop-up-column {float: left; }
+    #modal-content {overflow: auto;}
+    .modal-scroll {max-width: 100%;}
+  }
+  * {@include border-box;}
+  .webform-client-form {max-width: 100%;}
+  #smg-pop-up-column-1 {max-width: 100%;}
+}
+div.ctools-modal-content.one-column-layout .modal-content input[type="text"] {width:100% !important;}
