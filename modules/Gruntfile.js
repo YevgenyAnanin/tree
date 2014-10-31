@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: 'video_widget/video_widget_includes/js',
-          src: ['**/*.js'/*, '!fastclick.js'*/],
+          src: ['**/*.js', '!**/*.min.js'],
           dest: 'video_widget/video_widget_includes/js',
           ext: '.min.js',
           extDot: 'first'
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: 'leadership/angular/js',
-          src: '**/*.js',
+          src: ['**/*.js', '!**/*.min.js'],
           dest: 'leadership/angular/js',
           ext: '.min.js',
           extDot: 'first'
