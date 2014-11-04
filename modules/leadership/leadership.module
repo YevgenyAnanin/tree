@@ -437,11 +437,19 @@ function leadership_get_data_card_content($node) {
 
   // If it is mapped, then get the companies based on the mapping.
   if ($mapping) {
-    foreach($mapping as $tid) {
-      $companies = leadership_get_companies_with_term($site_id, $tid, TRUE);
+    // Store already ran tids so we don't have repeat companies.
+    $already_used_tids = array();
 
-      foreach ($companies as $company) {
-        $data[$tid][] = $company;
+    foreach($mapping as $tid) {
+      // Prevent companies from being added multiple times.
+      if (!in_array($tid, $already_used_tids)) {
+        $companies = leadership_get_companies_with_term($site_id, $tid, TRUE);
+
+        foreach ($companies as $company) {
+          $data[$tid][] = $company;
+        }
+
+        $already_used_tids[] = $tid;
       }
     }
   }
@@ -730,12 +738,15 @@ function template_preprocess_leadership_datacard(&$vars) {
     $term = taxonomy_term_load($taxonomy_tid);
     $vars['taxonomy_name'][$taxonomy_tid] = $term->name;
 
-    foreach ($content as $company_data) {
+    foreach ($content as $key => $company_data) {
       // Add the companies videos's to the waywire_leadership object
       $company = waywire_leadership_get_company_video_json($company_data->nid);
       if ($company) {
         $json[$company_data->nid] = $company_data->waywire_videos[$company_data->nid];
       }
+
+      // Trim the title so it fits correctly in the block.
+      $category_content[$taxonomy_tid][$key]->title = views_trim_text(array('max_length' => 29, 'ellipsis' => TRUE),  $category_content[$taxonomy_tid][$key]->title);
     }
 
     // Add the datacard info for use with Angular
