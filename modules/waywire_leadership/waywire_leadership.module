@@ -307,7 +307,7 @@ function waywire_leadership_get_company_video_json($company_nid, $type = 'dataca
  * Clear the waywire_leadership cache
  */
 function waywire_leadership_clear_all_cache() {
-  cache_clear_all(NULL, 'cache_waywire_leadership');
+  cache_clear_all('company', 'cache_waywire_leadership', TRUE);
 }
 
 /**
