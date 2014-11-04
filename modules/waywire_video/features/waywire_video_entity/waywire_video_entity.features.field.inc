@@ -59,7 +59,7 @@ function waywire_video_entity_field_default_fields() {
             'field_injector_field' => '',
             'field_injector_position' => 'before_paragraph_1',
             'image_link' => '',
-            'image_style' => 'waywire_video_widget_thumbnail',
+            'image_style' => '',
           ),
           'type' => 'image',
           'weight' => '0',

@@ -34,7 +34,9 @@ function waywire_video_entity_image_default_styles() {
         'label' => 'Overlay (watermark)',
         'help' => 'Choose the file image you wish to use as an overlay, and position it in a layer on top of the canvas.',
         'effect callback' => 'canvasactions_file2canvas_image',
+        'dimensions passthrough' => TRUE,
         'form callback' => 'canvasactions_file2canvas_form',
+        'summary theme' => 'canvasactions_file2canvas_summary',
         'module' => 'imagecache_canvasactions',
         'name' => 'canvasactions_file2canvas',
         'data' => array(
@@ -53,7 +55,7 @@ function waywire_video_entity_image_default_styles() {
     'name' => 'waywire_video_widget_thumbnail',
     'label' => 'waywire_video_widget_thumbnail',
     'effects' => array(
-      34 => array(
+      61 => array(
         'label' => 'Scale and crop',
         'help' => 'Scale and crop will maintain the aspect-ratio of the original image, then crop the larger dimension. This is most useful for creating perfectly square thumbnails without stretching the image.',
         'effect callback' => 'image_scale_and_crop_effect',
@@ -68,11 +70,13 @@ function waywire_video_entity_image_default_styles() {
         ),
         'weight' => '1',
       ),
-      35 => array(
+      62 => array(
         'label' => 'Overlay (watermark)',
         'help' => 'Choose the file image you wish to use as an overlay, and position it in a layer on top of the canvas.',
-        'effect callback' => 'canvasactions_file2canvas_image',
+        'effect callback' => 'canvasactions_file2canvas_effect',
+        'dimensions passthrough' => TRUE,
         'form callback' => 'canvasactions_file2canvas_form',
+        'summary theme' => 'canvasactions_file2canvas_summary',
         'module' => 'imagecache_canvasactions',
         'name' => 'canvasactions_file2canvas',
         'data' => array(
@@ -81,8 +85,6 @@ function waywire_video_entity_image_default_styles() {
           'alpha' => '100',
           'path' => 'sites/default/modules/smg_global/modules/waywire_video/images/video_overlay_50.png',
         ),
-        'dimensions passthrough' => TRUE,
-        'summary theme' => 'canvasactions_file2canvas_summary',
         'weight' => '2',
       ),
     ),
