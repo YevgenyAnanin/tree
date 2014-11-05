@@ -509,17 +509,6 @@ function smg_global_page_alter(&$page) {
 EOS;
   drupal_add_js($ga_event_fct, array('type'=>'inline', 'every_page'=>true));
 
-  if ($is_admin) {
-    // Random string
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $random_string = '';
-    for ($i = 0; $i < 5; $i++) {
-      $random_string .= $characters[rand(0, strlen($characters) - 1)];
-    }
-    $override_ckeditor_cache = "CKEDITOR.timestamp = '" . $random_string . "';";
-    drupal_add_js($override_ckeditor_cache, array('type' => 'inline', 'scope' => 'footer', 'weight' => 1000));
-  }
-
 }
 
 /**
