@@ -1,0 +1,33 @@
+<?php
+
+/*function playbook_fields_field_schema($field) {
+    switch ($field['type']) {
+        case 'playbook_textfield':
+            $columns = array(
+                'value' => array(
+                    'type' => 'varchar',
+                    'length' => 256,
+                ),
+                'accela_id' => array(
+                    'type' => 'varchar',
+                    'length' => 32,
+                ),
+                'silverpop_field' => array(
+                    'type' => 'varchar',
+                    'length' => 64,
+                ),
+            );
+            $indexes = array(
+                'mapping' => array('accela_id', 'silverpop_field')
+            );
+            break;
+        default:
+            $columns = array();
+            $indexes = array();
+    }
+
+    return array(
+        'columns' => $columns,
+        'indexes' => $indexes,
+    );
+}*/

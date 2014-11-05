@@ -1,0 +1,4 @@
+name = Playbook Fields
+description = Adds fields for use in SMG playbooks
+core = 7.x
+package = SMG

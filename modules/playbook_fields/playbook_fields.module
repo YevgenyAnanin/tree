@@ -1,0 +1,2721 @@
+<?php
+
+/**
+ * @file playbook_fields.module
+ * author: Josh Salisbury
+ * Defines new webform components for use in Summit Media Group playbooks
+ */
+
+/**
+ * implements hook_boot
+ */
+/*function playbook_fields_boot() {
+  $js = '(function($){ $(document).ready(function() {} ); })(jQuery)';
+  drupal_add_js($js);
+}*/
+
+/**
+ * Implements hook_webform_component_info
+ */
+function playbook_fields_webform_component_info() {
+  $components = array();
+
+  $components['smg_textfield'] = array(
+    'label' => t('SMG Textfield'),
+    'description' => t('Textfield with linked Accelaworks ID and Silverpop field'),
+    'features' => array(
+      'email_name' => TRUE,
+      'spam_analysis' => TRUE,
+    ),
+    'file' => 'includes/smg_textfield.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_textarea'] = array(
+    'label' => t('SMG Textarea'),
+    'description' => t('Textarea with linked Accelaworks ID and Silverpop field'),
+    'features' => array(
+      'email_name' => TRUE,
+      'spam_analysis' => TRUE,
+    ),
+    'file' => 'includes/smg_textarea.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_email'] = array(
+    'label' => t('SMG Email'),
+    'description' => t('Email address with linked Accelaworks ID and Silverpop field'),
+    'features' => array(
+      'email_address' => TRUE,
+      'email_name' => TRUE,
+      'spam_analysis' => TRUE,
+    ),
+    'file' => 'includes/smg_email.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_select'] = array(
+    'label' => t('SMG Select'),
+    'description' => t('Select field with linked Accelaworks ID and Silverpop field'),
+    'features' => array(
+      'default_value' => FALSE,
+      'email_address' => TRUE,
+      'email_name' => TRUE,
+    ),
+    'file' => 'includes/smg_select.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_hidden'] = array(
+    'label' => t('SMG Hidden'),
+    'description' => t('Hidden field with linked Accelaworks ID and Silverpop field'),
+    'features' => array(
+      'required' => FALSE,
+      'description' => FALSE,
+      'email_address' => TRUE,
+      'email_name' => TRUE,
+      'title_display' => FALSE,
+      'private' => FALSE,
+    ),
+    'file' => 'includes/smg_hidden.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_newsletter'] = array(
+    'label' => t('SMG Newsletter'),
+    'description' => t('Include all of the hidden newsletters.  The user will be automatically signed up to each newsletter.'),
+    'features' => array(
+      'required' => FALSE,
+      'description' => FALSE,
+      'email_address' => TRUE,
+      'email_name' => TRUE,
+      'title_display' => FALSE,
+      'private' => FALSE,
+    ),
+    'file' => 'includes/smg_newsletter.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_markup'] = array(
+    'label' => t('SMG Markup'),
+    'description' => t('Displays text as HTML in the form; does not render a field.'),
+    'features' => array(
+      'csv' => FALSE,
+      'default_value' => FALSE,
+      'description' => FALSE,
+      'email' => FALSE,
+      'required' => FALSE,
+      'conditional' => FALSE,
+      'title_display' => FALSE,
+      'private' => FALSE,
+    ),
+    'file' => 'includes/smg_markup.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_grid'] = array(
+    'label' => t('SMG Grid'),
+    'description' => t('Allows creation of grid questions, denoted by radio buttons.'),
+    'features' => array(
+      'conditional' => FALSE,
+      'default_value' => FALSE,
+      'title_inline' => FALSE,
+    ),
+    'file' => 'includes/smg_grid.inc',
+    'module' => 'playbook_fields',
+  );
+  $components['smg_password'] = array(
+    'label' => t('SMG Password'),
+    'description' => t('Allows creation of passwords'),
+    'features' => array(
+      'csv' => FALSE,
+      'default_value' => FALSE,
+      'required' => TRUE,
+      'conditional' => FALSE,
+      'group' => TRUE,
+      'title_inline' => FALSE,
+    ),
+    'file' => 'includes/smg_password.inc',
+    'module' => 'playbook_fields',
+  );
+
+  return $components;
+}
+
+/**
+ * Modify the default list of prebuilt options to include our own list of world countries
+ * and US states/Canadian provinces
+ */
+function playbook_fields_webform_select_options_info_alter(&$items) {
+  $items['countries'] = array(
+    'title' => t('Countries'),
+    'options callback' => 'playbook_fields_options_countries',
+    'file' => 'includes/smg_select.inc',
+    'module' => 'playbook_fields',
+  );
+  $items['united_states'] = array(
+    'title' => t('US/Canada states'),
+    'options callback' => 'playbook_fields_options_states',
+    'file' => 'includes/smg_select.inc',
+    'module' => 'playbook_fields',
+  );
+  $items['force_countries'] = array(
+    'title' => t('Force.com Countries'),
+    'options_callback' => 'playbook_fields_options_force_countries',
+    'file' => 'includes/smg_select.inc',
+    'module' => 'playbook_fields',
+  );
+}
+
+/**
+ * Implements hook_webform_submission_actions
+ * Registers the ability to resend any submission data to external services
+ */ // TODO TODO TODO
+/*function playbook_fields_webform_submission_actions($node, $submission) {
+  if (webform_results_access($node)) {
+    $actions['myaction'] = array(
+      'title' => t('Do my action'),
+      'href' => 'node/' . $node->nid . '/submission/' . $submission->sid . '/myaction',
+      'query' => drupal_get_destination(),
+    );
+  }
+
+  return $actions;
+}/*
+
+/**
+ * Searches $fields for fields with accela ids known to be lead score fields
+ * and applies the appropriate algorithm to compute them
+ */
+function playbook_fields_lead_scores (&$fields, $nid) {
+
+  foreach ($fields as &$field) {
+    switch ($field['leadworks_id']) {
+      case '82':
+        if ($nid == 14229) {
+          $project = isset($fields['project']['values'][0]) ? $fields['project']['values'][0] : '';
+          $project_stage = isset($fields['project_stage']['values'][0]) ? $fields['project_stage']['values'][0] : '';
+          $project_scope = isset($fields['project_scope']['values'][0]) ? $fields['project_scope']['values'][0] : '';
+          $company_type = isset($fields['company_type']['values'][0]) ? $fields['company_type']['values'][0] : '';
+          $machines_shipped = isset($fields['machines_shipped_last_year']['values'][0]) ? $fields['machines_shipped_last_year']['values'][0] : '';
+          $projects_completed = isset($fields['projects_completed_last_year']['values'][0]) ? $fields['projects_completed_last_year']['values'][0] : '';
+          $job_duties = isset($fields['job_duties']['values'][0]) ? $fields['job_duties']['values'][0] : '';
+
+          // the conditional logic for the scoring algorithm (see http://dev.summitpublish.com/wiki/projects/playbooks/aw_factory)
+          if((in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($project_stage, array('Gathering requirements, researching','RFQ sent out in 4-12 months', 'RFQ sent out <4 months')))
+             || (in_array($project_scope, array('Upgrading several lines in one plant', 'Upgrading/adding lines in multiple plants', 'Building a brand new plant')))
+             || (($company_type == 'Machine builder') && (in_array($machines_shipped, array('26 to 50', '51 to 75'))))
+             || (($company_type == 'Systems integration') && (in_array($projects_completed, array('16 to 30', 'More than 30'))))
+          ) {
+            $score = 'Hot';
+          } elseif (in_array($project, array('Probably 1-2 years from now', 'Probably 3-5 years from now')) || $project_stage == 'RFQ already sent out' || $company_type == 'Machine builder') {
+            $score = 'Medium';
+          } elseif (in_array($project_stage, array('Quotes received', 'Vendor(s) chosen'))) {
+            $score = 'Implementation';
+          } elseif ($project == 'No Project') {
+            $score = 'No Project';
+          } elseif ($company_type == 'Automation supplier' && $job_duties == 'Sales/Marketing/Business Development') {
+            $score = 'Supplier';
+          } else {
+            $score = 'Future';
+          }
+          $field['values'] = array($score);
+        }
+        break;
+    }
+
+    switch ($field['accela_id']) {
+      case '50207206/182': // Continuous & Batch Process Playbook
+        $industry = isset($fields['industry']['values'][0]) ? $fields['industry']['values'][0] : '';
+        $job_duties = isset($fields['job_duties']['values'][0]) ? $fields['job_duties']['values'][0] : '';
+        $project_stage = isset($fields['project_stage']['values'][0]) ? $fields['project_stage']['values'][0] : '';
+        $project_plans = isset($fields['project_plans']['values'][0]) ? $fields['project_plans']['values'][0] : '';
+
+        if ($industry == 'Automation supplier' && $job_duties == 'Sales/Marketing/Business Development') {
+          $score = 'Supplier';
+        } elseif ($project_plans == 'No project') {
+          $score = 'No Project';
+        } else {
+          switch (substr($project_stage, 0, 1)) {
+            case '2': //Currently writing functional spec
+            case '3': //Functional spec written, RFQs will be sent out in 4-12 months
+            case '4': //RFQs will be sent out in less than 4 months
+              $score = 'Hot';
+              break;
+            case '1': //Waiting on funding approval
+            case '5': //RFQs already sent out
+            case '6': //RFQs received, making determination
+              $score = 'Medium';
+              break;
+            case '7': //Vendor chosen, implementation started
+            case '8': //Implementation started more than 6 months ago
+              $score = 'Implementation';
+              break;
+            default: //If we reach this, an error has occurred
+              $score = 'Error';
+              break;
+          }
+        }
+        $field['values'] = array($score);
+        break;
+      case '50233985/84': // Food Safety Playbook
+        $project = isset($fields['project']['values'][0]) ? $fields['project']['values'][0] : '';
+        $expansion = isset($fields['expansion_plans']['values'][0]) ? $fields['expansion_plans']['values'][0] : '';
+        $spending = isset($fields['anticipated_spend_next_2_yrs']['values'][0]) ? $fields['anticipated_spend_next_2_yrs']['values'][0] : '';
+        $future_spend = isset($fields['future_spend_levels']['values'][0]) ? $fields['future_spend_levels']['values'][0] : '';
+        $country = isset($fields['country']['values'][0]) ? $fields['country']['values'][0] : '';
+
+        if (strtoupper($country) != 'UNITED STATES' && strtoupper($country) != 'CANADA') {
+          $score = 'Lower';
+        } elseif ($project == 'Yes, and it\'s funded' || $expansion == 'Expanding in the U.S.' || $spending == '$1 million to $3 million' || $spending == '$3 million to $5 million' || $spending == 'More than $5 million') {
+          $score = 'Hot';
+        } elseif ($project == 'Yes, but in conceptual stage' || $expansion == 'Expanding outside the U.S.' || $future_spend == 'Spending more next 12 mos') {
+          $score = 'Warm';
+        } else {
+          $score = 'Lower';
+        }
+        $field['values'] = array($score);
+        break;
+      case '51260555/45': // Labeling Playbook (Materials Lead Score)
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $label_vendor = isset($fields['machinery_vendor_be_selected']['values'][0]) ? $fields['machinery_vendor_be_selected']['values'][0] : '';
+        $spending = isset($fields['spend_on_labels_per_year']['values'][0]) ? $fields['spend_on_labels_per_year']['values'][0] : '';
+        $industry = isset($fields['whats_your_industry_or_product']['values'][0]) ? $fields['whats_your_industry_or_product']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($label_vendor, array('3 months', '6 months', '12 months', 'More than 12 months'))) {
+          $score = 'Hot';
+        } elseif (! in_array($spending, array('Not sure', 'We do not buy labels'))) {
+          $score = 'Medium';
+        } else {
+          $score = 'Future';
+        }
+        $field['values'] = array($score);
+        break;
+      case '51180720/29': // Labeling Playbook (Machinery Lead Score)
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $label_vendor = isset($fields['machinery_vendor_be_selected']['values'][0]) ? $fields['machinery_vendor_be_selected']['values'][0] : '';
+        $industry = isset($fields['whats_your_industry_or_product']['values'][0]) ? $fields['whats_your_industry_or_product']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($label_vendor, array('3 months', '6 months', '12 months', 'More than 12 months'))) {
+          $score = 'Hot';
+        } elseif ($project == 'No, just collecting info') {
+          $score = 'Future';
+        } else {
+          $score = 'Medium';
+        }
+        $field['values'] = array($score);
+        break;
+      case '51325409/48': // Flexible Playbook (Materials Lead Score)
+        $industry = isset($fields['industry']['values'][0]) ? $fields['industry']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $vendor = isset($fields['film_vendor_be_selected']['values'][0]) ? $fields['film_vendor_be_selected']['values'][0] : '';
+        $spending = isset($fields['spending_per_year']['values'][0]) ? $fields['spending_per_year']['values'][0] : '';
+
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded','Yes, but not yet funded')) && in_array($vendor, array('3 months','6 months','12 months','More than 12 months'))) {
+          $score = 'Hot';
+        } elseif (! in_array($spending, array('Not sure','We do not buy flexible packaging'))) {
+          $score = 'Medium';
+        } else {
+          $score = 'Future';
+        }
+        $field['values'] = array($score);
+        break;
+      case '51325409/47': // Flexible Playbook (Machinery Lead Score)
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $machinery_vendor = isset($fields['machinery_vendor_be_selected']['values'][0]) ? $fields['machinery_vendor_be_selected']['values'][0] : '';
+        $industry = isset($fields['industry']['values'][0]) ? $fields['industry']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($machinery_vendor, array('3 months', '6 months', '12 months', 'More than 12 months'))) {
+          $score = 'Hot';
+        } elseif ($project == 'No, just collecting info') {
+          $score = 'Future';
+        } else {
+          $score = 'Medium';
+        }
+        $field['values'] = array($score);
+        break;
+      case '51325451/57': // Package Development Playbook (Materials Lead Score)
+        $industry = isset($fields['industry']['values'][0]) ? $fields['industry']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $vendor = isset($fields['vendor_selected']['values'][0]) ? $fields['vendor_selected']['values'][0] : '';
+        $production = isset($fields['volume_produced']['values'][0]) ? $fields['volume_produced']['values'][0] : '';
+
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded','Yes, but not yet funded')) && in_array($vendor, array('3 months','6 months','12 months','More than 12 months'))) {
+          $score = 'Hot';
+        } elseif (! in_array($production, array('Not sure','Doesn\'t apply to us'))) {
+          $score = 'Medium';
+        } else {
+          $score = 'Future';
+        }
+        $field['values'] = array($score);
+        break;
+      case '50112617/83': // End-of-Line Playbook (Machinery Lead Score)
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $machinery_vendor = isset($fields['machinery_vendors_be_selected']['values'][0]) ? $fields['machinery_vendors_be_selected']['values'][0] : '';
+        $industry = isset($fields['industry']['values'][0]) ? $fields['industry']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+
+        //if (in_array($industry, array('Packaging Machinery', 'Controls, Components, Integration Services, Line Automation', 'Packaging Distributor', 'Package Design Firm', 'Raw Materials Supplier', 'Converted Package or Component'))) {
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($machinery_vendor, array('3 months', '6 months', '12 months', 'More than 12 months'))) {
+          $score = 'Hot';
+        //} elseif ($project == 'No, just collecting info') {
+        //  $score = 'Future';
+        } else {
+          $score = 'Medium';
+        }
+        $field['values'] = array($score);
+        break;
+      case '50112580/57': // Primary Packaging Line Playbook (Machinery Lead Score)
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+        $machinery_vendor = isset($fields['machinery_vendors_be_selected']['values'][0]) ? $fields['machinery_vendors_be_selected']['values'][0] : '';
+        $industry = isset($fields['industry']['values'][0]) ? $fields['industry']['values'][0] : '';
+        $us_or_canada = in_array(strtoupper($fields['country']['values'][0]), array('UNITED STATES', 'CANADA'));
+
+        //if (in_array($industry, array('Packaging Machinery', 'Controls, Components, Integration Services, Line Automation', 'Packaging Distributor', 'Package Design Firm', 'Raw Materials Supplier', 'Converted Package or Component'))) {
+        if (in_array($industry, array('Packaging machinery supplier','Packaging materials supplier','Automation supplier'))) {
+          $score = 'Supplier';
+        } elseif (! $us_or_canada) {
+          $score = 'International';
+        } elseif (in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($machinery_vendor, array('3 months', '6 months', '12 months', 'More than 12 months'))) {
+          $score = 'Hot';
+        } elseif ($project == 'No, just collecting info') {
+          $score = 'Future';
+        } else {
+          $score = 'Medium';
+        }
+        $field['values'] = array($score);
+        break;
+      case '50112640/105': // Machinery Automation Playbook (Machinery Lead Score)
+        $stance = isset($fields['controls_platform_stance']['values'][0]) ? $fields['controls_platform_stance']['values'][0] : '';
+        $project = isset($fields['project_in_the_works']['values'][0]) ? $fields['project_in_the_works']['values'][0] : '';
+
+        if ($stance == 'Open to change') {
+          $score = 'Hot';
+        } elseif (substr($project, 0, 3) == 'Yes') {
+          $score = 'Medium';
+        } else {
+          $score = 'Future';
+        }
+        $field['values'] = array($score);
+        break;
+      case '07011985/071': // Factory & Machine Automation Playbook see http://dev.summitpublish.com/wiki/projects/playbooks/aw_factory
+        $project = isset($fields['project']['values'][0]) ? $fields['project']['values'][0] : '';
+        $project_stage = isset($fields['project_state']['values'][0]) ? $fields['project_state']['values'][0] : '';
+        $project_scope = isset($fields['project_scope']['values'][0]) ? $fields['project_scope']['values'][0] : '';
+        $company_type = isset($fields['company_type']['values'][0]) ? $fields['company_type']['values'][0] : '';
+        $machines_shipped = isset($fields['machines_shipped_last_year']['values'][0]) ? $fields['machines_shipped_last_year']['values'][0] : '';
+        $projects_completed = isset($fields['projects_completed_last_year']['values'][0]) ? $fields['projects_completed_last_year']['values'][0] : '';
+        $job_duties = isset($fields['job_duties']['values'][0]) ? $fields['job_duties']['values'][0] : '';
+
+        // the conditional logic for the scoring algorithm (see http://dev.summitpublish.com/wiki/projects/playbooks/aw_factory)
+        if((in_array($project, array('Yes, funded', 'Yes, but not yet funded')) && in_array($project_stage, array('Gathering requirements, researching','RFQ sent out in 4-12 months', 'RFQ sent out <4 months')))
+           || (in_array($project_scope, array('Upgrading several lines in one plant', 'Upgrading/adding lines in multiple plants', 'Building a brand new plant')))
+           || (($company_type == 'Machine builder') && (in_array($machines_shipped, array('26 to 50', '51 to 75'))))
+           || (($company_type == 'Systems integration') && (in_array($projects_completed, array('16 to 30', 'More than 30'))))
+        ) {
+          $score = 'Hot';
+        } elseif (in_array($project, array('Probably 1-2 years from now', 'Probably 3-5 years from now')) || $project_stage == 'RFQ already sent out' || $company_type == 'Machine builder') {
+          $score = 'Medium';
+        } elseif (in_array($project_stage, array('Quotes received', 'Vendor(s) chosen'))) {
+          $score = 'Implementation';
+        } elseif ($project == 'No Project') {
+          $score = 'No Project';
+        } elseif ($company_type == 'Automation supplier' && $job_duties == 'Sales/Marketing/Business Development') {
+          $score = 'Supplier';
+        } else {
+          $score = 'Future';
+        }
+        $field['values'] = array($score);
+        break;
+    }
+  }
+}
+
+/**
+ * Create automatic machine names values given human-readable names
+ */
+function playbook_fields_machine_name($human_name, $returned) {
+  $return = strtolower($human_name);
+  $return = preg_replace('/[^\w-]/', '-', $return);       // change illegal characters to dashes
+  $return = preg_replace('/-{2,}/', '-', $return);        // collapse all multiple dashes
+  $return = trim($return, " \t\n\r\0\x0B-");              // trim bs whitespace
+  while (in_array($return, $returned)) {
+    $return = "-$return";                               //prepend dashes until we have a unique index
+  }
+
+  return $return;
+}
+
+/**
+ * Takes a text block definition of select component options
+ * Returns an array of options
+ * Each option is an array keyed by 'slug', 'value', and 'accela_id'
+ */
+function playbook_fields_parse_select_component($text) {
+  static $cache = array();
+
+  // Keep each processed option block in an array indexed by the MD5 hash of
+  // the option text and the value of the $flat variable.
+  $md5 = md5($text);
+
+  // Check if this option block has been previously processed.
+  if (!isset($cache[$md5])) {
+    $options = array();
+    $rows = array_filter(explode("\n", trim($text)));
+    $group = NULL;
+    $indices = array();
+    foreach ($rows as $option) {
+      $option = trim($option);
+      /**
+        * If the Key of the option is within < >, treat as an optgroup
+        *
+        * <Group 1>
+        *   creates an optgroup with the label "Group 1"
+        *
+        * <>
+        *   Unsets the current group, allowing items to be inserted at the root element.
+        */
+      if (preg_match('/^\<([^>]*)\>$/', $option, $matches)) {
+        if (empty($matches[1])) {
+          unset($group);
+        } else {
+          $group = $matches[1];
+        }
+      }
+      /// case: "submit value"|"display value"|"accelaworks id"
+      elseif (preg_match('/^([^|]*)\|([^|]+)\|([^|]+)$/', $option, $matches)) {
+        $slug = trim($matches[1]); // "submit value"
+        $value = trim($matches[2]);
+        $accela_id = trim($matches[3]);
+        $index = $slug?$slug:$value;
+        //$index = playbook_fields_machine_name($preindex, $indices); ///< automatically generate component index
+        //$indices[] = $index;
+        $options[$index] = array(
+          'slug' => $slug,
+          'value' => $value,
+          'accela_id' => $accela_id,
+        );
+        //isset($group) ? $options[$group][$index] = $value : $options[$index] = $value;
+      }
+      /// case: "submit value"|"display value"
+      elseif (preg_match('/^([^|]+)\|([^|]+)$/', $option, $matches)) {
+        $slug = trim($matches[1]);
+        $value = trim($matches[2]);
+        $index = $slug?$slug:$value;
+        //$index = playbook_fields_machine_name($preindex, $indices);
+        //$indices[] = $index;
+        $options[$index] = array(
+          'slug' => $slug,
+          'value' => $value,
+          'accela_id' => null,
+        );
+        //isset($group) ? $options[$group][$index] = $value : $options[$index] = $value;
+      }
+      /// case: "submit and display value"
+      else {
+        $value = $option;
+        $index = $value;
+        //$index = playbook_fields_machine_name($value, $indices);
+        //$indices[] = $index;
+        $options[$index] = array(
+          'slug' => null,
+          'value' => $value,
+          'accela_id' => null,
+        );
+        //isset($group) ? $options[$group][$index] = $value : $options[$index] = $value;
+      }
+    }
+
+    $cache[$md5] = $options;
+  }
+
+  // Recover cached values
+  return $cache[$md5];
+}
+
+/**
+ * returns a random string of length $len
+ * string is composed of letters a-z and digits 0-9
+ */
+function rand_str($len) {
+  $str = '';
+  for ($i=0; $i<$len; $i++) {
+    $j = mt_rand(87, 122);
+    if ($j < 97)
+      $j-=39;
+    $str .= chr($j);
+  }
+  return $str;
+}
+
+/**
+ * check for existing cookie for this user and compare against database
+ * ensure db and cookie agree
+ * issue new cookie if needed
+ */
+function playbook_fields_set_cookie($email, $is_stage_one = FALSE) {
+  $email = strtolower($email);
+  $query = db_select('cookie_email', 'c');
+  $query->fields('c', array('token'));
+  $query->condition('c.email', $email);
+  $res = $query->execute()->fetchAssoc();
+  $db_token = $res?$res['token']:FALSE; // get existing db token
+
+  if ($is_stage_one && empty($_COOKIE['reader_token'])) {
+    $cookie_name = 'reader_token_s1';
+  } else {
+    setcookie('reader_token_s1', '', time() - 3600, '/'); // expire cookie 'reader_token_s1'
+    $cookie_name = 'reader_token';
+  }
+  $c_token = isset($_COOKIE[$cookie_name])?$_COOKIE[$cookie_name]:FALSE; // get existing cookie
+
+  if ($db_token && $c_token && $db_token==$c_token) { // db and cookie agree (known user)
+    $token = $db_token;
+  } elseif ($db_token) { // no cookie, or db and cookie disagree
+    setcookie($cookie_name, $db_token, time() + 60*60*24*365, '/'); // set to expire in 1 year
+
+    $query = db_update('cookie_email');
+    $query->fields(array(
+      'last_issued' => date('Y-m-d H:i:s'),
+      'last_issued_ip_address' => $_SERVER['REMOTE_ADDR'],
+      'last_issued_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+    ));
+    $query->condition('email', $email);
+    $query->execute();
+
+    $token = $db_token;
+  } else {
+    $new_token = rand_str(16); // make a new token
+
+    setcookie($cookie_name, $new_token, time() + 60*60*24*365, '/');
+    $query = db_insert('cookie_email');
+    $query->fields(array(
+      'email' => $email,
+      'token' => $new_token,
+      'created' => date('Y-m-d H:i:s'),
+      'last_issued' => date('Y-m-d H:i:s'),
+      'last_issued_ip_address' => $_SERVER['REMOTE_ADDR'],
+      'last_issued_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+    ));
+    $query->execute();
+
+    if ($query) {
+      $token = $new_token;
+    } else {
+      $token = FALSE;
+    }
+  }
+
+  return $token;
+}
+
+/**
+ * Get Silverpop data associated with given email
+ */
+function playbook_fields_get_silverpop_contact_by_email($email) {
+  //require_once(drupal_get_path('module', 'playbook_fields') . '/includes/silverpop_soap_client.inc');
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/silverpop_xml_client.inc');
+  try {
+    //$client = new SilverpopSoapClient();
+    $client = new SilverpopXMLClient();
+    $contact = $client->getContact($email);
+  } catch (Exception $e) {
+    // debugging email, sent to me
+    $to = 'jsalisbury@summitmediagroup.com';
+    $params = array(
+        'to'      => $to,
+        'subject' => 'Silverpop getContact error!',
+        'body'    => array('silverpop fields: ' . print_r($contact, TRUE)),
+        'headers' => array(
+          'From'      => $to,
+          'Reply-To'  => $to,
+        ),
+    );
+
+    drupal_mail('playbook_fields', 'sp_api_error', $to, language_default(), $params);
+    $contact = array('Email' => $email);
+  }
+
+  return $contact;
+}
+
+/**
+ * Get Silverpop contact with the given Encoded Reader ID
+ */
+function playbook_fields_get_silverpop_contact_by_reader_id($id) {
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/silverpop_xml_client.inc');
+  try {
+    $client = new SilverpopXMLClient();
+    $contact = $client->getContact($id, 'ENCODED_RECIPIENT_ID');
+  } catch (Exception $e) {
+    // debugging email, sent to me
+    $to = 'jsalisbury@summitmediagroup.com';
+    $params = array(
+        'to'      => $to,
+        'subject' => 'Silverpop getContact by ID error!',
+        'body'    => array('silverpop fields: ' . print_r($contact, TRUE)),
+        'headers' => array(
+          'From'      => $to,
+          'Reply-To'  => $to,
+        ),
+    );
+
+    drupal_mail('playbook_fields', 'sp_api_error', $to, language_default(), $params);
+    $contact = array();
+  }
+
+  return $contact;
+}
+
+/**
+ * Implements hook_webform_submission_insert
+ *
+ *******************************************
+ ******** called on form submission ********
+ *******************************************
+ */
+function playbook_fields_webform_submission_insert($node, $submission) {
+
+  //ddl($node);
+  //ddl($submission);
+  /// Include _webform_smg_accela_post, _webform_smg_silverpop_post, and _webform_smg_gotowebinars_post
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/external_submit.inc');
+  /// Include _webform_smg_select_options
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/smg_select.inc');
+  /// Include Silverpop integration classes
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/silverpop_soap_client.inc');
+
+  $fields = array();
+  $accelaworks_sponsor_ids = array(); // This campaign's sponsors' Accela IDs
+  $leadworks_sponsor_ids = array(); // This campaign's sponsors' Leadworks IDs
+
+  $master_accela_campaign_id =    isset($node->field_master_accelaworks_id['und']) ? trim($node->field_master_accelaworks_id['und'][0]['value']) : '';
+  $master_leadworks_campaign_id = isset($node->field_master_leadworks_id['und']) ? trim($node->field_master_leadworks_id['und'][0]['value']) : '';
+  $billcode =                     isset($node->field_accelaworks_billcode['und']) ? trim($node->field_accelaworks_billcode['und'][0]['value']) : '';
+  $webinar_id =                   isset($node->field_gotowebinar_webinar_id['und']) ? trim($node->field_gotowebinar_webinar_id['und'][0]['value']) : '';
+  $sp_program_id =                isset($node->field_silverpop_program_id['und']) ? trim($node->field_silverpop_program_id['und'][0]['value']) : '';
+  $is_stage_one =                 isset($node->field_stage_one_form['und']) ? (trim($node->field_stage_one_form['und'][0]['value']) == '1' ? TRUE : FALSE) : FALSE;
+  $stage_one_email =              null;
+
+  /// Collect all sponsors' Accela IDs and Leadworks IDs
+  if (isset($node->content['field_sponsor'])) {
+    foreach ($node->content['field_sponsor']['#items'] as $form_id => $collection_id) {
+      $accela_id = $node->content['field_sponsor'][$form_id]['entity']['field_collection_item'][$collection_id['value']]['#entity']->field_sponsor_accelaworks_id;
+      if (isset($accela_id['und'])) {
+        $accelaworks_sponsor_ids[] = trim($accela_id['und'][0]['value']);
+      }
+      $leadworks_id = $node->content['field_sponsor'][$form_id]['entity']['field_collection_item'][$collection_id['value']]['#entity']->field_sponsor_leadworks_id;
+      if (isset($leadworks_id['und'])) {
+        $leadworks_sponsor_ids[] = trim($leadworks_id['und'][0]['value']);
+      }
+    }
+  }
+
+  /// Populate $fields array with form submission values
+  foreach ($node->webform['components'] as $component_id => $component) {
+    $form_key = $component['form_key'];
+    $fields[$form_key]['name'] =              isset($component['extra']['db_label']) ? $component['extra']['db_label'] : $component['name'];
+    $fields[$form_key]['type'] =              $component['type'];
+    $fields[$form_key]['accela_id'] =         isset($component['extra']['accela_id']) ? preg_replace('/\s/', '', $component['extra']['accela_id']) : '';
+    $fields[$form_key]['leadworks_id'] =      isset($component['extra']['leadworks_id']) ? $component['extra']['leadworks_id'] : '';
+    $fields[$form_key]['silverpop_field'] =   isset($component['extra']['silverpop_field']) ? $component['extra']['silverpop_field'] : '';
+    $fields[$form_key]['salesforce_field'] =  isset($component['extra']['salesforce_field']) ? $component['extra']['salesforce_field'] : '';
+    $fields[$form_key]['gotowebinar_field'] = isset($component['extra']['gotowebinar_field']) ? $component['extra']['gotowebinar_field'] : '';
+    $fields[$form_key]['values'] =            isset($submission->data[$component_id]['value']) ? $submission->data[$component_id]['value'] : array(); // These values are arrays
+    $fields[$form_key]['multiple'] =          FALSE; // only a default, see below
+    $fields[$form_key]['prepend'] =       isset($component['extra']['prepend']) ? $component['extra']['prepend'] : FALSE;
+    $fields[$form_key]['dependency'] =       isset($component['extra']['dependency']) ? $component['extra']['dependency'] : FALSE;
+
+    // If the field has the "stage one key" box checked (only smg_email has this), remember it
+    if (isset($component['extra']['stage_one']) && $component['extra']['stage_one'] == TRUE && isset($fields[$form_key]['values'][0])) {
+      $stage_one_email = $fields[$form_key]['values'][0];
+    }
+    if ($component['type'] == 'smg_select') {
+      /// Get the text of the select options to translate submitted machine indices to slugs or display names
+      /// The last argument is populated with the per-option Accela ids, if they exist
+      $fields[$form_key]['keys'] = _webform_smg_select_options($component, TRUE, TRUE, $slugs, $accela_ids);
+      $fields[$form_key]['slugs'] = $slugs;
+      $fields[$form_key]['option_accela_ids'] = $accela_ids;
+      $fields[$form_key]['multiple'] = ($component['extra']['multiple'] == TRUE);
+
+      $options = playbook_fields_parse_select_component($component['extra']['items']);
+      /// Change the submitted value/s to slugs, if set, or display names otherwise
+      foreach ($fields[$form_key]['values'] as &$value) {
+        if (isset($options[$value]['slug']) && $options[$value]['slug'])
+          $value = $options[$value]['slug'];
+        else if (isset($options[$value]['value']))
+          $value = $options[$value]['value'];
+      }
+    } elseif ($component['type'] == 'smg_grid') {
+      $fields[$form_key]['keys'] = _webform_smg_select_options_from_text($component['extra']['questions'], TRUE, TRUE, $dummy, $accela_ids, $leadworks_ids);
+      _webform_smg_select_options_from_text($component['extra']['options'], TRUE, TRUE, $slugs, $dummy);
+      $fields[$form_key]['slugs'] = $slugs;
+      $fields[$form_key]['option_accela_ids'] = $accela_ids;
+      $fields[$form_key]['option_leadworks_ids'] = $leadworks_ids;
+    } elseif ($component['type'] == 'smg_email') {
+      $email_address = isset($fields[$form_key]['values'][0])?$fields[$form_key]['values'][0]:FALSE;
+    }
+  }
+
+  /// Replace the tokens %field[field_name] with the submitted value of field_name
+  /// Replace the token %timestamp with the current date
+  foreach ($fields as $form_key => &$field) {
+    if ($field['type'] == 'smg_hidden' && preg_match_all('/%field\[([^\[\]]+)\]/', $field['values'][0], $matches)) {
+      foreach ($matches[1] as $match) {
+        if (array_key_exists($match, $fields)) {
+          $field['values'][0] = str_replace('%field[' . $match . ']', $fields[$match]['values'][0], $field['values'][0]);
+        }
+      }
+    }
+    if ($field['type'] == 'smg_hidden' && preg_match_all('/%timestamp\[([^\[\]]+)\]/', $field['values'][0], $matches)) {
+      foreach ($matches[1] as $match) {
+        $field['values'][0] = str_replace('%timestamp[' . $match . ']', date($match), $field['values'][0]);
+      }
+    }
+
+    // For SMG PURF #2134.  Go through the fields and unset any field that has a value of SMG_PURF_IGNORE_QUESTION.
+    if(isset($field['values'][0]) && $field['values'][0] === 'SMG_PURF_IGNORE_QUESTION'){
+      unset($fields[$form_key]);
+    }
+
+    // #2237 - Set to Not applicable if it has a dependency
+    if($field['type'] == 'smg_select') {
+      if($field['dependency'] && isset($field['values'][0]) && !$field['values'][0]) {
+        $field['values'][0] = 'Not applicable';
+      }
+    }
+
+    // #2326
+    if($field['type'] == 'smg_password' && isset($field['values']) && ($field['values'][0] == 'Not applicable' || $field['values'][0] == '')){
+      unset($fields[$form_key]);
+    }
+  }
+
+  /// Determine the lead score for this submission
+  playbook_fields_lead_scores($fields, $node->nid);
+
+  /// If csource is blank, defaut to site name
+  if (isset($fields['csource'])) {
+    $fields['csource']['values'] = isset($fields['csource']['values']) ? $fields['csource']['values'] : array(variable_get('site_name'));
+  }
+  //watchdog('smg_pop_up', $email_address);
+  // Set a cookie if one is not already set
+  if ($email_address && !(isset($_COOKIE['spUserIDTrue'])) && !(isset($_COOKIE['smg_pop_up_auto_submit']))) {
+    playbook_fields_set_cookie($email_address, $is_stage_one);
+  }
+
+  /// If a stage-one email is set, send an email with a link to the pre-populated form
+  if ($stage_one_email != null) {
+    $contact = playbook_fields_get_silverpop_contact_by_email($stage_one_email);
+    $data_exists = (isset($contact['Email only']) && $contact['Email only'] != 'Yes') ? TRUE : FALSE;
+
+    // #2187 - Changing this so it only checks for the reader_token since all stage one form will add the 'reader_token_s1'
+    // $has_cookie = isset($_COOKIE['reader_token']) || isset($_COOKIE['reader_token_s1']);
+    $has_cookie = isset($_COOKIE['reader_token']);
+
+    $query = db_select('stage_one_email', 'soe');
+    $query->fields('soe', array('token'));
+    $query->condition('soe.email', $stage_one_email);
+    $pet = $query->execute()->fetchAssoc(); //pre-existing token
+
+    if ($pet) {
+      $token = $pet['token'];
+
+      $query = db_update('stage_one_email');
+      $query->fields(array(
+        'touched' => date('Y-m-d H:i:s')
+      ));
+      $query->execute();
+    } else {
+      $token = rand_str(10);
+
+      $query = db_insert('stage_one_email');
+      $query->fields(array(
+        'email' => $stage_one_email,
+        'token' => $token,
+        'touched' => date('Y-m-d H:i:s'),
+      ));
+
+      if ($query->execute() == null) {
+        $token = null;
+      }
+    }
+
+    //if we were able to find or make a token for pre-population and the user is in Silverpop and no cookie is set, send the email
+    if ($token && $data_exists && !$has_cookie) {
+      $redirect = url($node->webform['redirect_url'], array(
+        'absolute' => TRUE,
+        'query' => array(
+          'sot' => $token,
+        ),
+      ));
+      $site_urls = array(
+        'Packaging World' => 'packworld.com',
+        'Healthcare Packaging' => 'healthcarepackaging.com',
+        'Automation World' => 'automationworld.com',
+      );
+      $from = 'subscriptions@' . $site_urls[variable_get('site_name')];
+      $params = array(
+        'token' => $token,
+        'subject' => 'Important: Your ' . variable_get('site_name') . ' subscription request',
+        'body' => array(
+          'Thanks for requesting a subscription. Please follow the link below to a pre-populated form that contains your data, saving you time. You can make any changes you want before submitting the subscription request.',
+          '<a href="' . $redirect . '?sot=' . $token . '">Subscription Form</a>',
+        ),
+      );
+
+      //drupal_mail('playbook_fields', 'stage_one', $stage_one_email, language_default(), $params, $from);
+      $subject = 'Important: Your ' . variable_get('site_name') . ' subscription request';
+
+      $body = '<html><body>';
+      $body .= "<p>Thanks for requesting a subscription.</p>\r\n";
+      $body .= "<p>Please follow the link below to a pre-populated form that contains your data, saving you time.</p>\r\n";
+      $body .= "<p>You can make any changes you want before submitting the subscription request.</p>\r\n";
+      $body .= '<p><a href="' . $redirect . '">Your pre-populated subscription form &gt;&gt;</a></p>' . "\r\n";
+      $body .= '</body></html>';
+
+      $headers = "From: $from\r\n";
+      $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+      mail($stage_one_email, $subject, $body, $headers);
+
+      $_SESSION['stage_two_prepopulate'] = TRUE;
+    } else {
+      $_SESSION['stage_two_prepopulate'] = FALSE;
+    }
+  }
+
+  // This session variable holds the values submitted with this stage form to be populated in the next form the user visits (stage two)
+  $_SESSION['form_submission'] = $fields;
+  // post the data to external services
+  //_webform_smg_accela_post($fields, $accelaworks_sponsor_ids, $master_accela_campaign_id, $billcode);
+
+  // Let other modules make any modifications as needed
+  if(sizeof(module_implements('playbook_fields_update_fields_before_post')) > 0) {
+    $fields = module_invoke_all('playbook_fields_update_fields_before_post', $node, $fields);
+  }
+
+  playbook_fields_leadworks_post($fields, $leadworks_sponsor_ids, $master_leadworks_campaign_id);
+  $recipient_id = _webform_smg_silverpop_post($fields);
+  _webform_smg_gotowebinars_post($fields, $webinar_id, $node);
+  //_webform_smg_ringlead_post($fields);
+
+  // finally, add the silverpop contact to the specified silverpop program
+  if ($recipient_id && $sp_program_id)
+    playbook_fields_add_contact_to_program($recipient_id, $sp_program_id);
+}
+
+/**
+ * Implements hook_webform_component_render_alter
+ * Invoked via drupal_alter() in webform/webform.module
+ */
+function playbook_fields_webform_component_render_alter(&$element, &$component) {
+  //$element['#required'] = FALSE; //XXX uncomment to make all fields non required
+  if (isset($component['extra']['style'])) {
+    $element['#attributes']['style'] = $component['extra']['style'];
+  }
+}
+
+/**
+ * Generate appropriate javascript and set "required" states for dependent fields
+ * @param boolean $js_wrap Specified whether or not to use the playbook_fields_jquery_wrap function
+ */
+function playbook_fields_dependencies(&$form, $form_state, $js_wrap = TRUE) {
+  $js_tests = '';
+  $js_dependees = '';
+  $dependees = array();
+  $checkbox_grid = array();
+
+  // If the user attempted to submit the form, find every smg_grid component and unpack the submitted values into the top level of $form_state['input']['submitted']
+  if (isset($form_state['input']['submitted'])) {
+    foreach ($form['submitted'] as $key => $form_element) {
+      $type = isset($form_element['#webform_component']['type'])?$form_element['#webform_component']['type']:'';
+      if ($type == 'smg_grid') {
+        $grid = $form_state['input']['submitted'][$key];
+        foreach ($grid as $q => $a) {
+          //rewrite the name in the format expected by playbook_fields_is_visible
+          $new_name = "$key-$q";
+          $form_state['input']['submitted'][$new_name] = $a;
+        }
+      }
+    }
+  }
+
+  foreach ($form['submitted'] as $key => &$form_element) {
+    // If this field has dependencies defined, use them to compute visibility and mandatoriness
+    if (isset($form_element['#webform_component']['extra']['dependency'])) {
+      // playbook_fields_extract_dependencies appends all dependees in $form_element's dependencies to the end of $dependees
+      $deps = playbook_fields_extract_dependencies($form_element['#webform_component']['extra']['dependency'], $dependees);
+
+      if (empty($deps)) {
+        continue;
+      }
+
+      // Generate a javascript version of the appropriate dependency test to embed in the form page
+      $js_test = playbook_fields_dependency_js($deps);
+      $form_id = drupal_clean_css_identifier('webform-component-' . $form_element['#webform_component']['form_key']);
+
+      switch($form_element['#type']) {
+        case 'webform_grid':
+          // Get ids from checkbox id so I can use the same code as the radio grid
+          if($form_element['#grid_type'] == 'checkbox') {
+            $grid_id = str_replace(" ", "-", strtolower($form_element['#webform_component']['form_key']));
+            foreach($form_element['#grid_questions'] as $grid_question_slug => $grid_question) {
+              foreach($form_element['#grid_options'] as $grid_option_slug => $grid_option) {
+                // It would be better to user drupal_html_class() but the webforms module uses the below.
+                // You will need to set up a slug because as you can see it doesn't fix everything (', /, etc..)
+                $filteredQuestion = strtr($grid_question_slug, array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+                $filteredGridOption = strtr($grid_option_slug, array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+                $checkbox_grid[] = $grid_id . "-" . $filteredQuestion . "-" . $filteredGridOption;
+              }
+            }
+          }
+        break;
+      }
+
+      // Concatenate js tests
+      $js_tests = <<<JS_TESTS
+        $js_tests
+
+        if ( $js_test ) {
+          $('#$form_id input[type != radio]:hidden').each(function() {
+            $(this).val('');
+          });
+          $('#$form_id').show();
+        } else {
+          $('#$form_id input[type != radio]').each(function() {
+            $(this).val('Not applicable');
+          });
+          $('#$form_id').hide();
+        }
+JS_TESTS;
+
+      // If the user attempted to submit, determine if this field should have been hidden. If so, make it not required
+      if (isset($form_state['input']['submitted'])) {
+        $is_visible = playbook_fields_is_visible($form_state['input']['submitted'], $deps);
+        if (!$is_visible) {
+          $form_element['#required'] = FALSE;
+        }
+      }
+
+    }
+  }
+
+  if($checkbox_grid) {
+    foreach($checkbox_grid as $checkbox_id) {
+      $form_div_class = "form-item-submitted-$checkbox_id";
+      $js_dependees = <<<JS_DEPENDEES
+        $js_dependees
+
+        if ($('div.$form_div_class').length > 0) {
+          $('div.$form_div_class input[type="checkbox"]').change(function() {
+            updateVisibility();
+          });
+        }
+JS_DEPENDEES;
+    }
+  }
+
+  // Add onChange hooks for all form dependees
+  foreach($dependees as $dependee) {
+    $form_id = "edit-submitted-$dependee";
+    $form_div_class = "form-item-submitted-$dependee";
+
+    $js_dependees = <<<JS_DEPENDEES
+    $js_dependees
+
+      if ($('#$form_id').length > 0) {
+        $('#$form_id').change(function() {
+          updateVisibility();
+        });
+      }
+      else if ($('div.$form_div_class').length > 0) {
+        $('div.$form_div_class input[type="radio"]').change(function() {
+          updateVisibility();
+        });
+      }
+JS_DEPENDEES;
+  }
+
+  // Assemble final inline javascript
+  // XXX one-shot inline solution for Food Safety playbook below
+  $js = <<<JS
+
+      // Enable jquery multiselect widget for all select fields
+      $(".webform-client-form:not(.mobile-webform) select").each(function() {
+        isMulti = is_multi($(this));
+
+        $(this).multiselect({
+          noneSelectedText: 'Please choose',
+          selectedList: 1,
+          classes: 'playbook-multiselect',
+          header: false,
+          multiple: isMulti,
+          height: 'auto'
+        });
+      });
+
+      // Add a notice to the bottom of the multiselect drop-down for the Equipment Sought option on the Food Safety Playbook and resize that drop-down to 430 pixels
+      $("div[class ~= 'ui-multiselect-menu']:has(label[for ^= 'ui-multiselect-edit-submitted-equipment-sought'])").append("<div style=\"margin:5px 0; font-weight:bold;\">Click anywhere outside this box when done.</div>");
+      if($(".webform-client-form select[id = 'edit-submitted-equipment-sought']").length){
+        $(".webform-client-form:not(.mobile-webform) select[id = 'edit-submitted-equipment-sought']").multiselect({ height:430 });
+      }
+
+      // Add red "required" asterisk after appropriate smg_markup webform elements
+      $("#playbook-form-inner div.form-item:has(select.required, input.required)").each(function () {
+        if($(this).prev('.webform-component-smg_markup').find('span.form-required').length === 0) {
+          $(this).prev('.webform-component-smg_markup').append('<span class="form-required" title="This field is required.">*</span>');
+        }
+      });
+
+      function is_multi(e) {
+        if ('prop' in e) {
+          return e.prop('multiple');
+        } else {
+          return e.attr('multiple'); //old versions of jQuery do not include the 'prop' function, so we use 'attr' instead
+        }
+      }
+
+      function hasValue(needle, id) {
+
+        ele = $('#' + id);
+        //needle = needle.toLowerCase();
+
+        // if the IDed element doesn't exist, try matching groups of elements
+        if (ele.length == 0) {
+
+          // this selector uses jQuery's "contains prefix" operator '|='
+          trs = $('table.webform-grid tr').has('input[id |= "' + id + '"]');
+          eles = trs.find('input');
+
+          if (trs.length == 1) {
+            for (i=0; i<eles.length; i++) {
+              if (eles.eq(i).val() == needle) {
+                return eles.eq(i).is(':checked');
+              }
+              // If checkbox in grid then check if checked
+              if(eles.eq(i).attr('type') == 'checkbox') {
+                return eles.eq(i).is(':checked');
+              }
+            }
+          } else {
+            for (i=0; i<eles.length; i++) {
+              // This test assumes the webforms pattern of naming each radio in a set with an ordinal suffix '-1', '-2', etc
+              if (eles.eq(i).val() == needle && eles.eq(i).is(':checked'))
+                return true;
+            }
+            return false;
+          }
+        }
+
+        isMulti = is_multi(ele);
+        isCheckbox = is_checkbox(ele);
+        haystack = ele.val();
+
+        if (!haystack && !isCheckbox) {
+          return needle == '';
+        }
+        else if (isCheckbox) {
+          haystackFound = false;
+          ele.find("input").each(function(i,e){
+            if($(e).attr("value") == needle && $(e).is(":checked")){
+              haystackFound = true;
+            }
+          });
+          return haystackFound;
+        }
+
+        //some browsers return a multi-select as a csv string
+        if (typeof haystack == 'string' && isMulti) {
+          haystack = haystack.toLowerCase().replace(' ', '-').split(',');
+        }
+
+        if (typeof haystack == 'string') {
+          //return haystack.toLowerCase().replace(' ', '-') == needle;
+          return haystack == needle;
+        } else if (typeof haystack == 'object') {
+          //haystack = haystack.toString().toLowerCase().replace(' ', '-').split(',');
+          return $.inArray(needle, haystack) != -1;
+        }
+      }
+
+      function is_checkbox(ele){
+        if(ele.hasClass('form-checkboxes')){
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+
+      function beginsWith(needle, id) {
+        ele = $('#' + id);
+
+        isMulti = is_multi(ele);
+        haystack = ele.val();
+
+        if (!haystack) {
+          return needle == '';
+        }
+
+        if (typeof haystack == 'string' && isMulti) {
+          haystack = haystack.split(',');
+        }
+
+        if (typeof haystack == 'string') {
+          return haystack.slice(0, needle.length) == needle;
+        } else if (typeof haystack == 'object') {
+          for (i=0; i<haystack.length; i++) {
+            if (haystack[i].slice(0, needle.length) == needle) {
+              return true;
+            }
+          }
+          return false;
+        }
+      }
+
+      function updateVisibility() {
+        $js_tests
+      }
+
+      $js_dependees
+
+      updateVisibility();
+
+      // #2174
+      // Go through each select list
+      $('.webform-client-form:not(.mobile-webform) .webform-component-select select').each(function(index) {
+        selectList = $(this);
+        selectListCount = selectList.find('option').size();
+        // If a select list has more than 16 list items it will max it out at 430
+        if(selectListCount > 16) {
+          $("select[id = " + selectList.attr('id') + "]").multiselect({ height:430 });
+        }
+      });
+JS;
+
+  if($js_wrap){
+    $js = playbook_fields_jquery_wrap($js);
+  }
+  return $js;
+}
+
+/**
+ * Attempt to prepopulate the form with reader data from Silverpop
+ * @param $form: the form to prepopulate
+ * @param $key: the email address of the person to load. Email is Silverpop's primary key
+ */
+function playbook_fields_prepopulate(&$form, $key, $type='email') {
+
+  if($form['#node']->type == 'mobile_webform'){
+      return;
+  }
+
+  switch ($type) {
+    case 'email':
+      $contact = playbook_fields_get_silverpop_contact_by_email($key);
+      break;
+    case 'reader_id':
+      $contact = playbook_fields_get_silverpop_contact_by_reader_id($key);
+      break;
+  }
+  foreach ($form['submitted'] as &$form_element) {
+    if(is_array($form_element) && array_key_exists('#webform_component', $form_element)){
+      $component = $form_element['#webform_component'];
+
+      if (isset($component['extra']['silverpop_field']) && isset($component['extra']['prepopulate']) && $component['extra']['prepopulate'] == true) {
+        if (array_key_exists($component['extra']['silverpop_field'], $contact) && stripos($component['extra']['silverpop_field'], 'Aggregate') === false) {
+          $sp_value = $contact[$component['extra']['silverpop_field']];
+
+          if ($component['type'] == 'smg_select') {
+            $options = playbook_fields_parse_select_component($component['extra']['items']);
+            $defaults = array();
+
+            if ($component['extra']['multiple']) {
+              $values = explode(';', $sp_value);
+            } else {
+              $values = array($sp_value);
+            }
+
+            foreach ($options as $k => $option) {
+              if (in_array($k, $values)) {
+                $defaults[] = $k;
+              }
+            }
+
+            $form_element['#default_value'] = count($defaults) == 1 ? $defaults[0] : $defaults;
+          } else {
+            $form_element['#default_value'] = $sp_value;
+          }
+        } elseif ($component['type'] == 'smg_email' && sizeof($contact) > 0) {
+          $form_element['#default_value'] = $key;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Prepopulate a form with the given submission data
+ */
+function playbook_fields_prepopulate_fields(&$form, $submission) {
+  //$form['submitted']['email']['#default_value'] = 'hello';
+  //ddl($form['submitted']);
+  foreach ($form['submitted'] as &$form_element) {
+    if(is_array($form_element) && array_key_exists('#webform_component', $form_element)){
+      $component = $form_element['#webform_component'];
+      $key = $component['form_key'];
+
+      if (array_key_exists('prepopulate', $component['extra']) && $component['extra']['prepopulate'] == TRUE && array_key_exists($key, $submission)) {
+        if ($component['type'] == 'smg_select') {
+          $form_element['#default_value'] = $submission[$key]['values'];
+        } else {
+          $form_element['#default_value'] = $submission[$key]['values'][0];
+        }
+      }
+    }
+  }
+}
+
+
+/**
+ * Generate an array representation of field dependencies from text
+ */
+function playbook_fields_extract_dependencies($text, &$dependees) {
+  static $cache = array();
+
+  // Keep each processed dependency in an array indexed by the MD5 hash of the text
+  $md5 = md5($text);
+
+  // Check if this dependency block has been previously processed.
+  if (!isset($cache[$md5])) {
+    $cache[$md5][0] = playbook_fields_parse_dependency(trim($text), $dependees);
+  }
+
+  // Recover cached values
+  $return = $cache[$md5][0];
+
+  // Return our dependency array from the cache
+  return $return;
+}
+
+/**
+ * Recursive helper function for playbook_fields_extract_dependencies
+ *
+ * Dependency grammar:
+ *
+ * <dependency rule>: <phrase>
+ * <phrase>: (<phrase>) <logic operator> (<phrase>)
+ * <phrase>: <predicate>
+ * <logic operator>: and | or
+ * <predicate>: <field> <operator> <trigger value>
+ * <field>: '<letter><char>...'
+ * <operator>: = | != | ^= | !^=
+ * <trigger value>: '<char>...' | ''
+ * <char>: <letter> | <digit> | - | _
+ * <letter>: a-z | A-Z
+ * <digit>: 0-9
+ */
+function playbook_fields_parse_dependency($str, &$dependees) {
+  $return = array();
+
+  // Match a <phrase>
+  if (preg_match('/\(((?>[^()]+)|(?R))\)\s+(and|or)\s+\(((?>[^()]+)|(?R))\)/', $str, $matches)) { //yay recursive regex (http://php.net/manual/en/regexp.reference.recursive.php)
+    /// If we found "(<phrase>) <logic operator> (<phrase>)", run recursively on the <phrase>s
+    $p1 = playbook_fields_parse_dependency($matches[1], $dependees);
+    $p2 = playbook_fields_parse_dependency($matches[3], $dependees);
+    if ($p1 && $p2) {
+      $return = array(
+        $matches[2] == 'and' ? '__and__' : '__or__',
+        $p1,
+        $p2,
+      );
+    }
+  // Match a <predicate>
+  } elseif (preg_match('/\'([a-zA-Z][\w-]+)\'\s+(=|!=|\^=|!\^=|checked)\s+\'([^\']*)\'/', $str, $matches)) {
+    $op = '__eq__';
+    // switch on the matched operator
+    switch ($matches[2]) {
+      // equals
+      case '=':
+        $op = '__eq__';
+        break;
+      // does not equal
+      case '!=':
+        $op = '__ne__';
+        break;
+      // begins with
+      case '^=':
+        $op = '__bw__';
+        break;
+      // does not begin with
+      case '!^=':
+        $op = '__nbw__';
+        break;
+      case 'checked':
+        $op = '__checked__';
+        break;
+    }
+    $return = array(
+      $op,
+      $matches[1],
+      $matches[3],
+    );
+
+    //use the value as the key to ensure uniqueness
+    $dep_name = drupal_clean_css_identifier($matches[1]);
+    $dependees[$dep_name] = $dep_name;
+  }
+
+  return $return;
+}
+
+/**
+ * Determine if the field with dependencies defined in $deps should be required, given $submitted
+ */
+function playbook_fields_is_visible($submitted, $deps) {
+  return playbook_fields_parse_visible($submitted, $deps);
+}
+
+/**
+ * Recursive helper for playbook_fields_is_visible
+ */
+function playbook_fields_parse_visible($submitted, $d) {
+  switch ($d[0]) {
+    // predicate
+    case '__and__':
+      return playbook_fields_parse_visible($submitted, $d[1]) && playbook_fields_parse_visible($submitted, $d[2]);
+      break;
+    case '__or__':
+      return playbook_fields_parse_visible($submitted, $d[1]) || playbook_fields_parse_visible($submitted, $d[2]);
+      break;
+    // phrase
+    case '__eq__':
+      $value = isset($submitted[$d[1]]) ? $submitted[$d[1]] : '';
+      if (is_array($value)) {
+        return in_array($d[2], $value);
+      } else {
+        return $d[2] == $value;
+      }
+      break;
+    case '__ne__':
+      $value = isset($submitted[$d[1]]) ? $submitted[$d[1]] : '';
+      if (is_array($value)) {
+        return !in_array($d[2], $value);
+      } else {
+        return $d[2] != $value;
+      }
+      break;
+    case '__bw__':
+      $value = isset($submitted[$d[1]]) ? $submitted[$d[1]] : '';
+      if (is_array($value)) {
+        foreach ($value as $v) {
+          if (strpos($v, $d[2]) === 0) {
+            return TRUE;
+          }
+        }
+        return FALSE;
+      } else {
+        return strpos($value, $d[2]) === 0;
+      }
+      break;
+    case '__nbw__':
+      $value = isset($submitted[$d[1]]) ? $submitted[$d[1]] : '';
+      if (is_array($value)) {
+        $return = TRUE;
+        foreach ($value as $v) {
+          if (strpos($v, $d[2]) === 0) {
+            $return = FALSE;
+          }
+        }
+        return $return;
+      } else {
+        return strpos($value, $d[2]) !== 0;
+      }
+      break;
+  }
+}
+
+/**
+ * Convert a dependency array into appropriate javascript expressions
+ */
+function playbook_fields_dependency_js($d) {
+  switch ($d[0]) {
+    // predicate
+    case '__and__':
+    case '__or__':
+      $op = $d[0]=='__and__' ? '&&' : '||';
+      $return = '(' . playbook_fields_dependency_js($d[1]) . ') ' . $op . ' (' . playbook_fields_dependency_js($d[2]) . ')';
+      break;
+    // phrase
+    case '__eq__':
+    case '__ne__':
+      $op = $d[0]=='__eq__' ? '' : '!';
+      $form_id = drupal_clean_css_identifier('edit-submitted-' . strtolower($d[1]));
+      /// hasValue() is a JS function defined in playbook_fields_webform_component_render_alter
+      $return = "{$op}hasValue('{$d[2]}', '$form_id')";
+      break;
+    case '__bw__':
+    case '__nbw__':
+      $op = $d[0]=='__bw__' ? '' : '!';
+      $form_id = drupal_clean_css_identifier('edit-submitted-' . strtolower($d[1]));
+      /// beginsWith() is a JS function defined in playbook_fields_webform_component_render_alter
+      $return = "{$op}beginsWith('{$d[2]}', '$form_id')";
+      break;
+    case '__checked__':
+      $return = "$('#edit-submitted-{$d[1]}-{$d[2]}').is(':checked')";
+      break;
+  }
+
+  return $return;
+}
+
+/**
+ * Helper function.  It takes a given javascript string, and wraps it in a jQuery(document).ready()
+ * @param $js is a string of javascript code.  This will work best if the $js a set of javascript expressions
+ */
+function playbook_fields_jquery_wrap($js){
+  $jquery_wrapped = <<<JWRAP
+    jQuery(document).ready(function($){
+      $js
+    });
+JWRAP;
+  return $jquery_wrapped;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter
+ * Main functionality is delegated to two functions:
+ *   playbook_fields_dependencies
+ *   playbook_fields_prepopulate
+ *
+ * Adds javascript to handle dependencies and form validation
+ */
+function playbook_fields_form_webform_client_form_alter(&$form, &$form_state, $form_id) {
+
+  //js1_function is the dependency code
+  $js1_function = playbook_fields_dependencies($form, $form_state, FALSE); // playbook_fields_dependencies modifies $form
+  //Wrap js1_function in a jQuery(document).ready()
+  $js1 = playbook_fields_jquery_wrap($js1_function);
+
+  //js2_function is the validation code.
+  $js2_function = <<<JS
+      // We use the bindFirst function which we added in playbook_fields_page_alter.  It is a javascript function with global scope, its purpose
+      // is to add our submit event-handler before any other submit handlers.
+      // .content .webform-client-form,
+      try
+        {
+          var validationBind = function(event) {
+            var has_errors = false;
+            $(this).find('div.webform-component:visible, fieldset.webform-component:visible').has('.required').slice(0).each( function(i, e) {
+              if ($(e).find('input, select, textarea').not('.smg_password_hidden_textfield').val()) {
+                $(e).find('input, select, textarea, button').removeClass('error');
+                if($(e).hasClass("webform-component-select") && !($(e).parents("form.webform-client-form").hasClass("mobile-webform"))){
+                  var button = $(e).find('select').multiselect("getButton");
+                  button.removeClass("error");
+                }
+              } else {
+                $(e).find('input, select, textarea, button').addClass('error');
+                if($(e).find('.ui-select').length){
+                  $(e).find('.ui-select .ui-btn').addClass('error');
+                }
+                if($(e).hasClass("webform-component-select") && !($(e).parents("form.webform-client-form").hasClass("mobile-webform"))){
+                  var button = $(e).find('select').multiselect("getButton");
+                  button.addClass("error");
+                }
+                var id = $(e).attr('id');
+                has_errors = true;
+              }
+              if($(e).hasClass('password_fieldset')){
+                var passwordOne = ($(e).find('.password').val()) ? $(e).find('.password').val() : false;
+                var passwordTwo = ($(e).find('.password-validate').val()) ? $(e).find('.password-validate').val() : false;
+                if((passwordOne == false || passwordTwo == false) || (passwordOne != passwordTwo)){
+                  $(e).find('.password').addClass('error');
+                  $(e).find('.password-validate').addClass('error');
+                  if($(e).find('.mismatched-passwords').length == 0){
+                    var mismatchPasswordElement = $('<div class="mismatched-passwords">Passwords do not match!</div>');
+                    mismatchPasswordElement.css({'color':'red', 'font-size':'1.5em'});
+                    $(e).find('.fieldset-wrapper').prepend(mismatchPasswordElement);
+                  }
+                  has_errors = true;
+                }
+              }
+            });
+
+            $(this).find('div.webform-component-radios:visible').has('.required').slice(0).each(function(i,e){
+              var hasValue = false;
+              $(e).find('input[type="radio"]').each(function(i,el){
+                if($(el).is(':checked')){
+                  hasValue = true;
+                }
+              });
+              if(!hasValue){
+                $(e).addClass("error");
+                has_errors = true;
+              }
+              else {
+                $(e).removeClass("error");
+              }
+            });
+
+            required = $(this).find('div.webform-component:visible').has('.required').slice(0);
+            requiredWithError = required.has('.error');
+            if (requiredWithError.length > 0) {
+              firstError = requiredWithError.first();
+              $("html, body").animate({ scrollTop: $(firstError).offset().top - 150 });
+            }
+
+            if (has_errors) {
+              event.preventDefault();
+              event.stopPropagation();
+              event.stopImmediatePropagation();
+            }
+            else {
+              if($(this).hasClass("mobile-webform")){
+                $(this).find("input:submit").prop("disabled",true);
+              }
+            }
+          }
+          $('.webform-client-form').not('ctools-use-modal-processed').submit(validationBind);
+          if($('.webform-client-form.ctools-use-modal-processed').length)
+            $('.webform-client-form.ctools-use-modal-processed').bindFirst('submit', validationBind);
+        }
+      catch(err)
+        {
+          console.log(err);
+        }
+
+
+          /*
+      $('.webform-client-form').submit(function(e) {
+        var has_errors = false;
+
+        $(this).find('div.webform-component:visible').has('.required').slice(0).each( function(i, e) {
+          if ($(e).find('input, select, textarea').val()) {
+            $(e).find('input, select, textarea, button').removeClass('error');
+          } else {
+            $(e).find('input, select, textarea, button').addClass('error');
+            var id = $(e).attr('id');
+            has_errors = true;
+          }
+        });
+
+        required = $(this).find('div.webform-component:visible').has('.required').slice(0);
+        requiredWithError = required.has('.error');
+        if (requiredWithError.length > 0) {
+          firstError = requiredWithError.first();
+          $("html, body").animate({ scrollTop: $(firstError).offset().top - 150 });
+        }
+
+        if (has_errors) {
+          return false;
+        }
+      });*/
+JS;
+
+  $js2 = playbook_fields_jquery_wrap($js2_function);
+
+  // Check for a prepopulate option on the form and if set, look for, in order:
+  // A url token set by stage-one form, for new readers
+  // A url token set by silverpop mailing, containing reader ID
+  // A cookie, set following a previous form submission on the site
+
+  // Making sure that stage one forms don't prepopulate. Reason is that there
+  // can be multiple stage one forms on a page and it can increase the time to
+  // load a page just incase there is a silverpop slowdown.
+  $stage_one_form_checked = FALSE;
+  if(isset($form['#node']->field_stage_one_form['und'][0]['value']) && $form['#node']->field_stage_one_form['und'][0]['value'] == TRUE) {
+    $stage_one_form_checked = TRUE;
+    // On the subscription forms we do actually want to run the prepoulation
+    // functionality in order to send out the email to auto prepopulate.
+    if(arg(0) == 'node') {
+      switch(variable_get("site")) {
+        case 'aw':
+          if(arg(1) == 13046 && $form_id == 'webform_client_form_13043') {
+            $stage_one_form_checked = FALSE;
+          }
+          break;
+        case 'pw':
+          if(arg(1) == 54581 && $form_id == 'webform_client_form_54553') {
+            $stage_one_form_checked = FALSE;
+          }
+          break;
+        case 'hcp':
+          if(arg(1) == 10469 && $form_id == 'webform_client_form_10468') {
+            $stage_one_form_checked = FALSE;
+          }
+          break;
+      }
+    }
+  }
+
+  if ((empty($form['#node']->field_prepopulate) || $form['#node']->field_prepopulate['und'][0]['value'] == TRUE) && !$stage_one_form_checked) {
+    $cookie = isset($_COOKIE['reader_token'])?$_COOKIE['reader_token']:FALSE;
+    if (isset($_GET['sot'])) {
+      $query = db_select('stage_one_email', 'soe');
+      $query->fields('soe', array('email'));
+      $query->condition('soe.token', $_GET['sot']);
+      $result = $query->execute()->fetchAssoc();
+
+      if ($result) {
+        playbook_fields_prepopulate($form, $result['email']);
+
+        $query = db_delete('stage_one_email');
+        $query->condition('token', $_GET['sot']);
+        $query->execute();
+      }
+    } elseif (isset($_GET['spUserID']) || isset($_COOKIE['spUserID'])) {
+      $spUserID = isset($_GET['spUserID']) ? $_GET['spUserID'] : $_COOKIE['spUserID'];
+      playbook_fields_prepopulate($form, $spUserID, 'reader_id');
+    } elseif ($cookie) {
+      $query = db_select('cookie_email', 'c');
+      $query->fields('c', array('email'));
+      $query->condition('c.token', $cookie);
+      $result = $query->execute()->fetchAssoc();
+
+      if ($result) {
+        playbook_fields_prepopulate($form, $result['email']);
+
+        $query = db_update('cookie_email');
+        $query->fields(array(
+          'last_pulled' => date('Y-m-d H:i:s'),
+          'last_pulled_ip_address' => $_SERVER['REMOTE_ADDR'],
+          'last_pulled_user_agent' => $_SERVER['HTTP_USER_AGENT'],
+        ));
+        $query->condition('token', $cookie);
+        $query->execute();
+      }
+    }
+  }
+
+  // If we have form info passed from stage-one (probably just country), fill those in too (overwriting pre-population above)
+  if (isset($_SESSION['form_submission'])) {
+    // #2187 Josh originally commented this out because he taught this was causing the prepopulation problems but
+    // that was related to caching.  Since I disabled caching this won't be an issue.
+    playbook_fields_prepopulate_fields($form, $_SESSION['form_submission']);
+    unset($_SESSION['form_submission']);
+  }
+
+  $path = drupal_get_path('module', 'playbook_fields');
+
+  if($form['#node']->type != 'mobile_webform'){
+    $form['#attached']['css'][] = "$path/includes/jquery-ui.css";
+    $form['#attached']['css'][] = "$path/includes/jquery.multiselect.css";
+    $form['#attached']['js'][] = array(
+      'data' => "$path/includes/jquery-ui.min.js",
+      'type' => 'file',
+      'group' => JS_LIBRARY,
+    );
+    $form['#attached']['js'][] = "$path/includes/jquery.multiselect.js";
+  }
+
+  $form['#attached']['js'][$js1] = array(
+    'type' => 'inline',
+    'group' => JS_THEME,
+    'scope' => 'header',
+  );
+  $form['#attached']['js'][$js2] = array(
+    'type' => 'inline',
+    'group' => JS_THEME,
+    'scope' => 'header',
+  );
+
+  // Add the $js1_function and $js2_function variables.  They will be useful in other functions/modules (i.e. - smg_pop_up)
+  $form['#js_functions'] = array(
+    'js1' => $js1_function,
+    'js2' => $js2_function,
+  );
+
+  // #2294
+  // Add a new submit handler to check for app password field
+  array_unshift($form['#submit'], 'playbook_fields_app_password_email');
+
+}
+
+function playbook_fields_app_password_email(&$form, &$form_state){
+  global $language;
+
+  foreach($form['submitted'] as $key => $value){
+    if(is_array($value) && isset($value['#webform_component']) && $value['#webform_component']['type'] == 'smg_password'){
+      if(isset($form_state['input']['submitted'][$key]['password_primary']) && $form_state['input']['submitted'][$key]['password_primary'] !== 'Not applicable'){
+        $to = $form_state['input']['submitted']['email'];
+        $site_var = variable_get('smg_global_site','pw');
+        $params['site'] = ($site_var == 'pw') ? 'Packaging World' : (($site_var == 'aw') ? 'Automation World' : 'Healthcare Packaging');
+        $params['ios_url'] = '#'; // a default in case not set
+        if($site_var == 'pw'){
+          $params['site'] = 'Packaging World';
+          $params['address_book_url'] = 'http://www.packworld.com/thank-you?type=newsletter';
+          $params['ios_url'] = 'https://itunes.apple.com/us/app/packaging-world/id876401280?mt=8';
+        }
+        elseif($site_var == 'aw'){
+          $params['site'] = 'Automation World';
+          $params['address_book_url'] = 'http://www.automationworld.com/thank-you?type=newsletter';    
+          $params['ios_url'] = 'https://itunes.apple.com/us/app/automation-world/id887460513?mt=8';
+        }
+        else {
+          $params['site'] = 'Healthcare Packaging';
+          $params['address_book_url'] = 'http://page.healthcarepackaging.com/form/confirmation?type=post';
+          $params['ios_url'] = 'https://itunes.apple.com/us/app/healthcare-packaging/id860100066?mt=8&uo=4';
+        }
+        $params['from'] = ($site_var == 'pw') ? 'webmaster@packworld.com' : ($site_var == 'aw') ? 'webmaster@automationworld.com' : 'webmaster@healthcarepackaging.com';
+        $params['username'] = $form_state['input']['submitted']['email'];
+        $params['password'] = $form_state['input']['submitted'][$key]['password_primary'];
+        drupal_mail('playbook_fields', 'app_reg_confirmation', $to, $language, $params);
+
+        // Also add a URL query parameter to the redirect/confirmation page http://dev.summitpublish.com/ticket/2294#comment:3
+        $redirect = $form['#node']->webform['redirect_url'];
+        if($redirect !== '<confirmation>' && $redirect !== '<none>'){
+          $redirect .= (strpos($redirect, '?')) ? '&app_reg=true' : '?app_reg=true';
+          $form['#node']->webform['redirect_url'] = $redirect;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * implements hook_page_alter
+ * attempt to enable Silverpop web tracking code
+ */
+/*function playbook_fields_page_alter(&$page) {
+  $nodes = element_children($page['content']['system_main']['nodes']);
+  $node = (count($nodes) == 1)?$page['content']['system_main']['nodes'][$nodes[0]]:FALSE;
+  $page_name = $node?$node['field_webtracking_name']['#items'][0]['safe_value']:FALSE;
+
+  if ($page_name) {
+    //configure page load event
+    /*$js = "ewt.track({name:'page_load', type:'$event_name'});\n";
+    $js = '';
+
+    //configure form submit event
+    if (isset($page['content']['system_main']['nodes'][$nodes[0]]['field_engage_form_submit_event'])) {
+      $event_name = $page['content']['system_main']['nodes'][$nodes[0]]['field_engage_form_submit_event']['#items'][0]['safe_value'];
+      $js .= "$('.webform-client-form').submit(function() {
+                return ewt.trackFormSubmit({name:'form submit', type:'form'});
+              });";
+    }
+
+    $domain_tag = array(
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'name' => 'com.silverpop.brandeddomains',
+        'content' => 'www.pages05.net,automationworld.com,greenerpackage.com,healthcarepackaging.com,packworld.com,page.automationworld.com,page.biz-library.com,page.healthcarepackaging.com,page.packworld.com,theautomationconference.com,totallyintegratedautomation.com',
+      ),
+    );
+    $page_tag = array(
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'name' => 'com.silverpop.pagename',
+        'content' => $page_name,
+      ),
+    );
+
+    drupal_add_html_head($domain_tag, 'engage_webtracking');
+    drupal_add_html_head($page_tag, 'engage_webtracking_page_name');
+    drupal_add_js('http://content.mkt51.net/lp/static/js/iMAWebCookie.js?5872ae98-13481d0a159-d7c8ec57ae636c7258d3eb0ef0e531f2&h=www.pages05.net', 'external');
+    //drupal_add_js("jQuery(document).ready(function($){\n" . $js . "\n});", 'inline');
+  }
+}*/
+
+/**
+ * Implements hook_permission
+ */
+function playbook_fields_permission() {
+  return array(
+    'view cookies' => array(
+      'title' => t('View Cookies'),
+      'description' => t('Access the page \'playbooks-mod/view-cookies\'.'),
+    ),
+    'view selects' => array(
+      'title' => t('View Selects'),
+      'description' => t('Access the page \'playbooks-mod/view-selects\'.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu
+ *
+ * Provides:
+ * Thank-you page for playbook form submissions
+ * Static link for current playbook cover image
+ * Playbook forward-to-friends page
+ */
+function playbook_fields_menu() {
+  $items['playbooks-mod/%/thank-you'] = array(
+    'title' => 'Download Playbook',
+    'page callback' => 'playbook_fields_thankyou',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/%playbook_fields_pdf/auto-download'] = array(
+    'page callback' => 'playbook_fields_download_playbook',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/%/cover-image'] = array(
+    'title' => 'Automation World Playbook Cover Image',
+    'page callback' => 'playbook_fields_cover_image',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/%/forward'] = array(
+    'title' => 'Forward Playbook',
+    'description' => 'Forward a Playbook via email',
+    'page callback' => 'playbook_forward',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/%/download'] = array(
+    'title' => 'Download Playbook',
+    'description' => 'Playbook download',
+    'page callback' => 'playbook_download',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/stage-two'] = array(
+    'title' => 'Register for ' . variable_get('site_name'),
+    'page callback' => 'registration_stage_two',
+    'page arguments' => array(),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['webinars/%/thank-you'] = array(
+    'title' => 'Thank you for registering',
+    'page callback' => 'webinar_thankyou',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['forms/%/thank-you'] = array(
+    'title' => 'Thank you!',
+    'page callback' => 'simple_thankyou',
+    'page arguments' => array(1),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/view-cookies'] = array(
+    'title' => 'Cookie Count',
+    'page callback' => 'view_cookies',
+    'page arguments' => array(),
+    'access arguments' => 'view cookies',
+    'type' => MENU_CALLBACK,
+  );
+  $items['playbooks-mod/view-selects'] = array(
+    'title' => 'View all smg_select fields',
+    'page callback' => 'view_selects',
+    'page arguments' => array(),
+    'access arguments' => 'view selects',
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+/**
+ * Generates playbook signup thank-you page
+ */
+function playbook_fields_thankyou($entity_id) {
+  $query = db_select('field_data_field_playbook_name', 'name');
+  $query->join('node', 'node', 'name.entity_id = node.nid');
+  $query->join('field_data_field_playbook_pdf', 'pdf', 'name.entity_id = pdf.entity_id');
+  $query->join('field_data_field_cover_image', 'cover', 'name.entity_id = cover.entity_id');
+  //$query->leftJoin('field_data_field_webtracking_name', 'wtname', 'name.entity_id = wtname.entity_id');
+  $query->condition('name.entity_id', $entity_id);
+  $query->fields('name', array('field_playbook_name_value'));
+  $query->fields('node', array('created'));
+  $query->fields('pdf', array('field_playbook_pdf_fid'));
+  $query->fields('cover', array('field_cover_image_fid'));
+  //$query->fields('wtname', array('field_webtracking_name_value'));
+
+  $result = $query->execute()->fetchAssoc();
+
+  // Generate the help email link here so the error branch can use it
+  $help_link = theme('link', array(
+    'text' => 'bugs@summitmediagroup.com',
+    'path' => 'mailto:bugs@summitmediagroup.com',
+    'options' => array(
+      'attributes' => array('class' => 'playbook-thank-you'),
+      'html' => FALSE,
+    ),
+  ));
+
+  /// If we failed to select the playbook name, pdf, and cover image
+  /// Try again to select just the playbook name and display an error screen
+  if (! $result) {
+    $query2 = db_select('field_data_field_playbook_name', 'name');
+    $query2->condition('name.entity_id', $entity_id);
+    $query2->fields('name', array('field_playbook_name_value'));
+    $result2 = $query2->execute()->fetchAssoc();
+    if ($result2) {
+      $playbook_name = '"' . $result2['field_playbook_name_value'] . '"';
+    } else {
+      // Something is really wrong
+      $playbook_name = 'your Playbook';
+    }
+
+    return array(
+      'oops' => array(
+        '#markup' => theme('html_tag', array(
+          'element' => array(
+            '#tag' => 'p',
+            '#value' => t('Oops! Something went wrong trying to download ') . "$playbook_name.",
+            '#attributes' => array('class' => 'playbook-thank-you'),
+          ),
+        )),
+      ),
+      'help' => array(
+        '#markup' => theme('html_tag', array(
+          'element' => array(
+            '#tag' => 'p',
+            '#value' => t('Please email ') . "$help_link " . t('so we can correct this problem quickly and send you your Playbook.'),
+            '#attributes' => array('class' => 'playbook-thank-you'),
+          ),
+        )),
+      ),
+    );
+  }
+
+  /// The DB query was successful. Extract relevant bits
+  $playbook_name = $result['field_playbook_name_value'];
+  $cover_image_file = file_load($result['field_cover_image_fid']);
+  $cover_url = image_style_url('playbook_cover_image', $cover_image_file->uri);
+  $pdf_fid = $result['field_playbook_pdf_fid'];
+  $pdf_url = file_create_url( file_load($pdf_fid)->uri );
+
+  $pdf_link = theme('link', array(
+    'text' => t('download the playbook'),
+    'path' => $pdf_url,
+    'options' => array(
+      'attributes' => array('class' => 'playbook-thank-you playbook-file'),
+      'html' => FALSE,
+    ),
+  ));
+  $adobe_link = theme('link', array(
+    'text' => t('Download the free reader'),
+    'path' => 'http://get.adobe.com/reader/',
+    'options' => array(
+      'attributes' => array('class' => 'playbook-thank-you'),
+      'html' => FALSE,
+    ),
+  ));
+
+  //Set meta data to identify the page load to Engage and add tracking javascript
+  if (isset($result['field_webtracking_name_value'])) {
+    $wtname = $result['field_webtracking_name_value'];
+    $date = date('my', $result['created']);
+    $page_name = "playbook-$wtname-$date-finish";
+
+    $element = array(
+      '#tag' => 'meta',
+      '#attributes' => array(
+        'name' => 'com.silverpop.pagename',
+        'content' => $page_name,
+      ),
+    );
+
+    //drupal_add_html_head($element, 'engage_webtracking_page_name');
+    //drupal_add_js('http://content.mkt51.net/lp/static/js/iMAWebCookie.js?5872ae98-13481d0a159-d7c8ec57ae636c7258d3eb0ef0e531f2&h=www.pages05.net', 'external'); // commented this out on 10/22 b/c we're now adding this to every page, see ticket #2093 - Yevgeny Ananin
+  }
+
+
+  // #2281 Add Silverpop Engage inline javascript to change pagename
+  $inline_spop = '<script type="text/javascript">var ewt_pagename = \'Thank You: ' . $playbook_name . '\'; </script>';
+  $inline_spop_element = array(
+    '#type' => 'markup',
+    '#markup' => $inline_spop,
+  );
+  drupal_add_html_head($inline_spop_element, 'spop_playbook_tracking');
+
+  $click_link = <<<EOS
+    jQuery(document).ready(
+      function(){
+        jQuery(document).on('click', 'a.playbook-file', function(event){
+           var link = jQuery(this);
+           window.location = link.attr('href');
+           event.preventDefault();
+        });
+      }
+    );
+    jQuery(window).load(
+      function(){
+        setTimeout(function(){
+          //jQuery('p.playbook-thank-you a.playbook-file').trigger('click'); // We comment this out in favor of using the menu callback below
+          window.location = '/playbooks-mod/' + $pdf_fid + '/auto-download';
+        },200);
+      }
+    );
+EOS;
+  drupal_add_js($click_link, 'inline');
+
+  /// Success message
+  return array(
+    'cover' => array(
+      '#markup' => theme('image', array(
+        'path' => $cover_url,
+        'alt' => $playbook_name,
+        'title' => $playbook_name,
+      )),
+    ),
+    'title' => array(
+      '#markup' => theme('html_tag', array(
+        'element' => array(
+          '#tag' => 'h2',
+          '#value' => $playbook_name,
+          '#attributes' => array('class' => 'playbook-thank-you'),
+        ),
+      )),
+    ),
+    'link' => array(
+      '#markup' => theme('html_tag', array(
+        'element' => array(
+          '#tag' => 'p',
+          '#value' => t('Thank you for requesting ') . "\"$playbook_name\". " . t('Your download should begin shortly. If not, you can ') . "$pdf_link " . t('now.') ,
+          '#attributes' => array('class' => 'playbook-thank-you'),
+        ),
+      )),
+    ),
+    'adobe' => array(
+      '#markup' => theme('html_tag', array(
+        'element' => array(
+          '#tag' => 'p',
+          '#value' => t('You will need Adobe Reader to view the Playbook.') . " $adobe_link",
+          '#attributes' => array('class' => 'playbook-thank-you'),
+        ),
+      )),
+    ),
+    'help' => array(
+      '#markup' => theme('html_tag', array(
+        'element' => array(
+          '#tag' => 'p',
+          '#value' => t('Problems downloading? Send an email to ') . "$help_link " . t('so we can fix it and send you your Playbook.'),
+          '#attributes' => array('class' => 'playbook-thank-you'),
+        ),
+      )),
+    ),
+  );
+}
+
+/**
+ * Auto Loader for PDF files
+ */
+function playbook_fields_pdf_load($fid){
+  return file_load($fid);
+}
+
+/**
+ * Menu callback for playbooks-mod/$fid/auto-download
+ *
+ * $fid File ID
+ */
+function playbook_fields_download_playbook($file){
+  if($file){
+    file_transfer($file->uri, array('Content-Type' => 'application/pdf', 'Content-disposition' => 'attachment; filename='.$file->filename, 'Content-Transfer-Encoding' => 'binary', 'Content-Length' => $file->filesize));
+  }
+  else {
+    return drupal_access_denied();
+  }
+}
+
+/**
+ * Generates playbook cover image url
+ */
+function playbook_fields_cover_image($entity_id, $style = 'playbook_cover_image') {
+  //Create url to entity_id playbook's cover image
+  $result = db_select('field_data_field_cover_image', 'f')
+    ->fields('f', array('field_cover_image_fid'))
+    ->condition('entity_id', $entity_id)
+    ->execute()
+    ->fetchAssoc();
+
+  $fid = $result['field_cover_image_fid'];
+  $file = file_load($fid);
+  $link = image_style_url($style, $file->uri);
+
+  drupal_goto($link);
+}
+
+/**
+ * Forward a Playbook.
+ */
+function playbook_forward($nid) {
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/playbook_forward.inc');
+
+  $title_res = db_select('node', 'f')
+    ->fields('f', array('title'))
+    ->condition('nid', $nid)
+    ->execute()
+    ->fetchAssoc();
+
+  $playbook_name = $title_res['title'];
+  $playbook_alias = 'node/' . $nid;
+  $form = drupal_get_form('playbook_forward_form', $playbook_name, $playbook_alias);
+
+  return $form;
+}
+
+/**
+ * Download a Playbook
+ */
+function playbook_download($entity_id) {
+  $query = db_select('field_data_field_playbook_pdf', 'pdf');
+  $query->condition('entity_id', $entity_id);
+  $query->fields('pdf', array('field_playbook_pdf_fid'));
+  $result = $query->execute()->fetchAssoc();
+  $pdf_url = file_create_url( file_load($result['field_playbook_pdf_fid'])->uri );
+
+  drupal_goto($pdf_url);
+}
+
+/**
+ * Implements hook_mail
+ */
+function playbook_fields_mail($key, &$message, $params) {
+
+  if($key == 'app_reg_confirmation'){
+    $message['from'] = $params['from'];
+    $message['subject'] = 'Mobile App Registration Confirmation';
+    if($params['site'] !== 'Automation World'){
+      $message['body'][] = 'This email is to confirm your mobile subscription to ' . $params['site'] . '.  You will receive a notification with the release of each issue.  In order to ensure you receive all related mailings, please consider <a href="' . $params['address_book_url'] . '">adding us to your address book</a>.  You can download the app here: <a href="' . $params['ios_url'] . '">iOS (Apple iPhone/iPad)</a>.  Please make note of your login credentials:<br><br><strong>Username:</strong> ' . $params['username'] . '<br><strong>Password:</strong> ' . $params['password'];
+    }
+    else {
+      $message['body'][] = 'This email is to confirm your mobile subscription to Automation World.  After a new issue is released, you will receive a notification to download and view the newest issue.  In order to ensure you receive all related mailings, please consider <a href="' . $params['address_book_url'] . '">adding us to your address book</a>.  You can download the app here: <a href="' . $params['ios_url'] . '">iOS (Apple iPhone/iPad)</a>.  Please make note of your login credentials:<br><br><strong>Username:</strong> ' . $params['username'] . '<br><strong>Password:</strong> ' . $params['password'];
+    }
+  }
+  else {
+    $message['from'] = $params['headers']['From'];
+    $message['subject'] = $params['subject'];
+    $message['body'] = $params['body'];
+    $message['headers']['Return-Path'] = $params['headers']['Reply-To'];
+
+    return $message;
+  }
+}
+
+/**
+ * Thank you page for registering for a webinar
+ */
+function webinar_thankyou($nid) {
+  $query = db_select('field_data_field_gotowebinar_webinar_name', 'name');
+  $query->join('node', 'node', 'name.entity_id = node.nid');
+  $query->join('field_data_field_gotowebinar_webinar_id', 'id', 'id.entity_id = name.entity_id');
+  $query->join('field_data_field_gotowebinar_webinar_date', 'date', 'date.entity_id = name.entity_id');
+  $query->leftJoin('field_data_field_viddler_id', 'viddler', 'viddler.entity_id = name.entity_id');
+  $query->leftJoin('field_data_field_content_pdf', 'pdf', 'pdf.entity_id = name.entity_id');
+  //$query->leftJoin('field_data_field_webtracking_name', 'wtname', 'name.entity_id = wtname.entity_id');
+  $query->condition('name.entity_id', $nid);
+  $query->fields('name', array('field_gotowebinar_webinar_name_value'));
+  $query->fields('node', array('created'));
+  $query->fields('id', array('field_gotowebinar_webinar_id_value'));
+  $query->fields('date', array('field_gotowebinar_webinar_date_value', 'field_gotowebinar_webinar_date_value2'));
+  $query->fields('viddler', array('field_viddler_id_embed_code'));
+  $query->fields('pdf', array('field_content_pdf_fid'));
+  //$query->fields('wtname', array('field_webtracking_name_value'));
+  $result = $query->execute()->fetchAssoc();
+
+  if ($result) {
+    //Set meta data to identify the page load to Engage and add tracking javascript
+    if (isset($result['field_webtracking_name_value'])) {
+      $wtname = $result['field_webtracking_name_value'];
+      $date = date('my', $result['created']);
+      $page_name = "webinar-$wtname-$date-finish";
+
+      $element = array(
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'name' => 'com.silverpop.pagename',
+          'content' => $page_name,
+        ),
+      );
+
+      drupal_add_html_head($element, 'engage_webtracking_page_name');
+      drupal_add_js('http://content.mkt51.net/lp/static/js/iMAWebCookie.js?5872ae98-13481d0a159-d7c8ec57ae636c7258d3eb0ef0e531f2&h=www.pages05.net', 'external');
+    }
+
+    $start_date = date('l, F d, Y', $result['field_gotowebinar_webinar_date_value']);
+    $end_date = date('l, F d, Y', $result['field_gotowebinar_webinar_date_value2']);
+    $start_time = date('g:i A T', $result['field_gotowebinar_webinar_date_value']);
+    $end_time = date('g:i A T', $result['field_gotowebinar_webinar_date_value2']);
+    if ($start_date == $end_date) {
+      $webinar_when = "$start_date, $start_time &ndash; $end_time";
+    } else {
+      $webinar_when = "$start_date, $start_time &mdash; $end_date, $end_time";
+    }
+
+    $cookie_name = 'webinar_' . $result['field_gotowebinar_webinar_id_value'] . '_access';
+
+    if ($_SESSION['webinar_access'] == TRUE && empty($_COOKIE[$cookie_name])) {
+      setcookie($cookie_name, 'true', time() + 60*60*24*30);
+    }
+
+    if ($_SESSION['webinar_access'] == TRUE || $_COOKIE[$cookie_name] == 'true') {
+      $registrant_key = isset($_SESSION['response']->registrantKey) ? $_SESSION['response']->registrantKey : '';
+      $join_url = isset($_SESSION['response']->joinUrl) ? $_SESSION['response']->joinUrl : '';
+
+      $output = array(
+        '#theme_wrappers' => array('container'),
+        '#attributes' => array(
+          'id' => 'webinar-thank-you',
+        ),
+        array(
+          '#prefix' => '<h1>',
+          '#markup' => t('Thank you for registering'),
+          '#suffix' => '</h1>',
+        ),
+        array(
+          '#prefix' => '<h2>',
+          '#markup' => t('You have successfully registered for the following Webinar:'),
+          '#suffix' => '</h2>',
+        ),
+        array(
+          '#prefix' => '<p class="webinar-name">',
+          '#markup' => $result['field_gotowebinar_webinar_name_value'],
+          '#suffix' => '</p>',
+        ),
+      );
+      // If we have passed the end date, show on-demand content
+      if (time() > $result['field_gotowebinar_webinar_date_value2']) {
+        $output[] = array(
+          '#prefix' => '<p>',
+          '#markup' => 'This webinar is available for immediate viewing.',
+          '#suffix' => '</p>',
+        );
+        // Embed Content PDF
+        if (isset($result['field_content_pdf_fid'])) {
+          $pdf_url = file_create_url( file_load($result['field_content_pdf_fid'])->uri );
+          $pdf_link = theme('link', array(
+            'text' => t('Download the PDF'),
+            'path' => $pdf_url,
+            'options' => array(
+              'attributes' => array('class' => 'pdf-download'),
+              'html' => FALSE,
+            ),
+          ));
+          $output[] = array(
+            '#prefix' => '<p>',
+            '#markup' => $pdf_link,
+            '#suffix' => '</p>',
+          );
+        }
+        // Embed Viddler Video
+        if (isset($result['field_viddler_id_embed_code'])) {
+          $output[] = array(
+            '#markup' => $result['field_viddler_id_embed_code'],
+          );
+        } else {
+          $output[] = array(
+            '#prefix' => '<p>',
+            '#markup' => 'Please check back soon for a video of the recorded webinar.',
+            '#suffix' => '</p>',
+          );
+        }
+      } else {
+        $output[] = array(
+          '#prefix' => '<p class="webinar-date">',
+          '#markup' => $webinar_when,
+          '#suffix' => '</p>',
+        );
+        if ($registrant_key) {
+          $output[] = array(
+            '#prefix' => '<p>',
+            '#markup' => l('Add to your Outlook calendar.', "https://www4.gotomeeting.com/synchOutlook?wid={$result['field_gotowebinar_webinar_id_value']}&uid=$registrant_key"),
+            '#suffix' => '</p>',
+          );
+        }
+        $output[] = array(
+          '#prefix' => '<p>',
+          '#markup' => 'Expect a confirmation email from GoToWebinar.',
+          '#suffix' => '</p>',
+        );
+        if ($join_url) {
+          $output[] = array(
+            '#prefix' => '<p>',
+            '#markup' => 'At the time above, click this link to join the webinar:',
+            '#suffix' => '</p>',
+          );
+          $output[] = array(
+            '#prefix' => '<p>',
+            '#markup' => l($join_url, $join_url),
+            '#suffix' => '</p>',
+          );
+        }
+      }
+    }
+  } else {
+    $to = 'jsalisbury@summitmediagroup.com';
+    $subject = 'Webinar form error!';
+    $body = array('No DB result', $nid, print_r($_SESSION['response'], TRUE));
+      $headers = array(
+        'From'      => $to,
+        'Reply-To'  => $to,
+      );
+    $params = array(
+      'to'      => $to,
+      'subject' => $subject,
+      'body'    => $body,
+      'headers' => $headers,
+    );
+
+    drupal_mail('playbook_fields', 'webinar_error', $to, language_default(), $params);
+  }
+
+  if (! isset($output)) {
+    $output = array(
+      '#theme_wrappers' => array('container'),
+      '#attributes' => array(
+        'id' => 'webinar-thank-you',
+      ),
+      array(
+        '#prefix' => '<h1>',
+        '#markup' => 'Error',
+        '#suffix' => '</h1>',
+      ),
+      array(
+        '#prefix' => '<p>',
+        '#markup' => 'There was an error processing your registration. The site administrators have been notified and we will resolve this problem as soon as possible. We apologize for any inconvenience.',
+        '#suffix' => '<p>',
+      ),
+    );
+  }
+
+  return $output;
+}
+
+/**
+ * Thank you page for registering with a simple lead-gen form
+ */
+function simple_thankyou($nid) {
+  $query = db_select('node', 'node');
+  $query->join('field_data_field_content_pdf', 'pdf', 'pdf.entity_id = node.nid');
+  //$query->leftJoin('field_data_field_webtracking_name', 'wtname', 'node.nid = wtname.entity_id');
+  $query->condition('node.nid', $nid);
+  $query->fields('node', array('created'));
+  $query->fields('pdf', array('field_content_pdf_fid'));
+  //$query->fields('wtname', array('field_webtracking_name_value'));
+  $result = $query->execute()->fetchAssoc();
+
+  if ($result) {
+    //Set meta data to identify the page load to Engage and add tracking javascript
+    if (isset($result['field_webtracking_name_value'])) {
+      $wtname = $result['field_webtracking_name_value'];
+      $date = date('my', $result['created']);
+      $page_name = "simple-$wtname-$date-finish";
+
+      $element = array(
+        '#tag' => 'meta',
+        '#attributes' => array(
+          'name' => 'com.silverpop.pagename',
+          'content' => $page_name,
+        ),
+      );
+
+      drupal_add_html_head($element, 'engage_webtracking_page_name');
+      drupal_add_js('http://content.mkt51.net/lp/static/js/iMAWebCookie.js?5872ae98-13481d0a159-d7c8ec57ae636c7258d3eb0ef0e531f2&h=www.pages05.net', 'external');
+    }
+
+    $pdf_url = file_create_url( file_load($result['field_content_pdf_fid'])->uri );
+    $pdf_link = theme('link', array(
+      'text' => t('download the PDF'),
+      'path' => $pdf_url,
+      'options' => array(
+        'attributes' => array('class' => 'pdf-download'),
+        'html' => FALSE,
+      ),
+    ));
+
+    drupal_add_http_header('Refresh', '0;URL=' . $pdf_url);
+
+    $output = array(
+      '#theme_wrappers' => array('container'),
+      '#attributes' => array(
+        'id' => 'lead-gen-thank-you',
+      ),
+      array(
+        '#prefix' => '<h1>',
+        '#markup' => 'Thank you for registering',
+        '#suffix' => '</h1>',
+      ),
+      array(
+        '#prefix' => '<p>',
+        '#markup' => t('Your download should begin shortly. If not, you can ') . "$pdf_link " . t('now.'),
+        '#suffix' => '</p>',
+      ),
+    );
+  } else {
+    $output = array(
+      '#theme_wrappers' => array('container'),
+      '#attributes' => array(
+        'id' => 'lead-gen-thank-you',
+      ),
+      array(
+        '#prefix' => '<h1>',
+        '#markup' => 'Error',
+        '#suffix' => '</h1>',
+      ),
+      array(
+        '#prefix' => '<p>',
+        '#markup' => 'There was an error processing your request. The site administrators have been notified and we will resolve this problem as soon as possible. We apologize for any inconvenience.',
+        '#suffix' => '<p>',
+      ),
+    );
+
+    $to = 'jsalisbury@summitmediagroup.com';
+    $subject = 'Form error!';
+    $body = array('No DB result', l($nid, "node/$nid"));
+      $headers = array(
+        'From'      => $to,
+        'Reply-To'  => $to,
+      );
+    $params = array(
+      'to'      => $to,
+      'subject' => $subject,
+      'body'    => $body,
+      'headers' => $headers,
+    );
+
+    drupal_mail('playbook_fields', 'lead_gen_error', $to, language_default(), $params);
+  }
+
+  return $output;
+}
+
+/**
+ * If a prepopulate email has been sent by the stage-one form, redirect the user to the notification page
+ * If not, redirect the user to the blank stage-two form
+ */
+function registration_stage_two() {
+  if ($_GET['sot']) {
+    drupal_goto('register', array('query' => array(
+      'sot' => $_GET['sot'],
+    )));
+  }
+
+  if ($_SESSION['stage_two_prepopulate'] == TRUE) {
+    unset($_SESSION['stage_two_prepopulate']);
+    drupal_goto('prepopulate-notice');
+  } else {
+    unset($_SESSION['stage_two_prepopulate']);
+    drupal_goto('register');
+  }
+}
+
+/**
+ * Show a summary page of the cookies issued by the site
+ */
+function view_cookies() {
+  require_once(drupal_get_path('module', 'playbook_fields') . '/includes/silverpop_xml_client.inc');
+  $client = new SilverpopXMLClient();
+
+  $query = db_select('cookie_email', 'c');
+  $query->fields('c', array('email', 'created', 'last_pulled'));
+  $res = $query->execute();
+
+  $cookies = array();
+  $status = array(
+    'has_name' => 0,
+    'no_name' => 0,
+    'not_found' => 0,
+    'email_only_yes' => 0,
+    'email_only_not_yes' => 0,
+  );
+  foreach($res as $row) {
+    $contact = $client->getContact($row->email);
+
+    if (empty($contact)) {
+      $status['not_found']++;
+      $cookies[] = array(
+        '#prefix' => '<p>',
+        '#markup' => $row->email . ' <span style="color:#f00">NOT FOUND</span>',
+        '#suffix' => '</p>',
+      );
+    } elseif (empty($contact['First name']) || empty($contact['Last name'])) {
+      $status['no_name']++;
+      $cookies[] = array(
+        '#prefix' => '<p>',
+        '#markup' => $row->email . ' <span style="color:#f00">NO NAME</span>',
+        '#suffix' => '</p>',
+      );
+    } else {
+      $status['has_name']++;
+      $cookies[] = array(
+        '#prefix' => '<p>',
+        '#markup' => $row->email,
+        '#suffix' => '</p>',
+      );
+    }
+
+    if ($contact['Email only'] == 'Yes') {
+      $status['email_only_yes']++;
+    } else {
+      $status['email_only_not_yes']++;
+    }
+  }
+
+  array_splice($cookies, 0, 0, array(
+    array(
+      '#markup' => '<p>Has name: ' . $status['has_name'] . '</p>',
+    ),
+    array(
+      '#markup' => '<p>No name: ' . $status['no_name'] . '</p>',
+    ),
+    array(
+      '#markup' => '<p>Not found: ' . $status['not_found'] . '</p>',
+    ),
+    array(
+      '#markup' => '<p>Email only = Yes: ' . $status['email_only_yes'] . '</p>',
+    ),
+    array(
+      '#markup' => '<p>Email only != Yes: ' . $status['email_only_not_yes'] . '</p>',
+    ),
+  ));
+
+  return $cookies;
+}
+
+/**
+ * Show a summary page of all smg_select fields' values
+ */
+function view_selects() {
+  $query = db_select('webform_component', 'wc');
+  $query->join('node', 'node', 'node.nid = wc.nid');
+  $query->fields('wc', array('extra'));
+  $query->fields('node', array('nid', 'title'));
+  $query->condition('wc.type', 'smg_select');
+  $res = $query->execute();
+
+  $nodes = array();
+  $return = array();
+
+  foreach ($res as $row) {
+    preg_match('/"silverpop_field";s:\d+:"([^"]+)"/', $row->extra, $sp_match);
+    preg_match('/"accela_id";s:\d+:"([^"]+)"/', $row->extra, $accela_match);
+    preg_match('/"salesforce_field";s:\d+:"([^"]+)"/', $row->extra, $sf_match);
+    preg_match('/"items";s:\d+:"([^"]+)"/', $row->extra, $items_match);
+
+    //
+    if (! array_key_exists($row->nid, $nodes)) {
+      $nodes[$row->nid] = array(
+        'title' => $row->title,
+        'selects' => array(), );
+    }
+
+    $nodes[$row->nid]['selects'][] = array(
+      'sp' => $sp_match[1],
+      'accela' => $accela_match[1],
+      'sf' => $sf_match[1],
+      'items' => $items_match[1],
+    );
+  }
+
+  foreach ($nodes as $nid => $node) {
+    $return[] = array(
+      '#markup' => "<a style=\"font-size:18px;\" href=\"/node/$nid\">{$node['title']}</a><br />",
+    );
+    foreach ($node['selects'] as $index => $c) {
+      $this_id = $nid . '-' . strtolower(str_replace(' ', '-', $i));
+      $return[] = array(
+        '#markup' => "<div onClick=\"jQuery('#$this_id').toggle()\">{$c['sp']} | {$c['accela']} | {$c['sf']}</div>",
+      );
+      $list = "<div id=\"$this_id\" style=\"display:none;\"><ul>";
+      foreach (explode("\n", $c['items']) as $l) {
+        $l = str_replace('<', '&lt;', $l);
+        $l = str_replace('>', '&gt;', $l);
+        $list .= '<li>' . $l . '</li>';
+      }
+      $list .= '</ul></div>';
+      $return[] = array(
+        '#markup' => $list,
+      );
+    }
+  }
+
+  return $return;
+}
+
+/**
+ * Implements hook_page_alter()
+ */
+function playbook_fields_page_alter(&$page){
+  // Add the bindFirst function to the global jQuery object.  [name] is the name of an event and [fn] is a
+  // handler function.  Please refer to:
+  // http://stackoverflow.com/questions/2360655/jquery-event-handlers-always-execute-in-order-they-were-bound-any-way-around-t
+  $bindFirstJS = <<<EOS
+  jQuery.fn.bindFirst = function(name, fn){
+    if(this.length != 0){
+      if(jQuery(this).hasClass('ctools-use-modal-processed')){
+        this.on(name, fn);
+        var handlers = this.data('events')[name.split('.')[0]];
+        var handler = handlers.pop();
+        handlers.splice(0, 0, handler);
+      }
+      else {
+        this.on(name, fn);
+      }
+    }
+  };
+EOS;
+  drupal_add_js($bindFirstJS, array('type'=>'inline', 'every_page'=>TRUE));
+
+
+  $menu_obj = menu_get_object();
+  if(is_object($menu_obj) && isset($menu_obj->nid) && drupal_get_path_alias('node/' . $menu_obj->nid) == 'apps'){
+      if(isset($_GET['csource'])){
+        $csource = '\'' . $_GET['csource'] . '\'';
+        // Inline javascript that will append csource to any link in body
+        $add_csource = <<<EOL
+        jQuery(document).ready(function(){
+          jQuery('#main-inner .field-name-body a').each(function(i,e){
+            href = jQuery(e).attr('href');
+            // Search for URL parameters
+            if(href.indexOf('?') == -1){
+              newHref = href + '?csource=' + $csource;
+              jQuery(e).attr("href", newHref);
+            }
+            else {
+              var query_string = {};
+              queryParams = href.substring(href.indexOf('?')+1);
+              queryParams = queryParams.split("&");
+              for ( var i=0; i < queryParams.length; i++){
+                var pair = queryParams[i].split("=");
+                query_string[pair[0]] = pair[1];
+              }
+              if ( !query_string.hasOwnProperty("csource") ){
+                newHref = href + '&csource=' + $csource;
+                jQuery(e).attr("href", newHref);
+              }
+            }
+          });
+        });
+EOL;
+        drupal_add_js($add_csource, 'inline');
+      }
+    }
+
+}
+

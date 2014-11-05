@@ -1,0 +1,4 @@
+#!/bin/bash
+cp -R ~/work/playbook_fields ~/aw/sites/default/modules/
+cp -R ~/work/playbook_fields ~/pw/sites/default/modules/
+cp -R ~/work/playbook_fields ~/hcp/sites/default/modules/
