@@ -49,7 +49,7 @@
     $('.field-name-field-smg-pop-data input').val(jsonPurf);
   }
 
-  CKEDITOR.plugins.add('smgPopUp', {
+  CKEDITOR.plugins.add('smgPopUpPlugin', {
     init: function(editor, pluginPath) {
       CKEDITOR.on('dialogDefinition', function(e){
         if((e.editor != editor) || (e.data.name != 'link')) return;

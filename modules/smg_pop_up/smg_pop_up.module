@@ -1017,11 +1017,11 @@ function smg_pop_up_page_alter(&$page){
                 break;
               case 'whitepaper':
                 $download_type = 'field_whitepaper';
-                break;                              
+                break;
             }
             // Get the URL of the document, then remove http or https
             $doc = file_create_url($node->{$download_type}['und'][0]['uri']);
-            $doc = preg_replace('|^https?://|','',$doc);            
+            $doc = preg_replace('|^https?://|','',$doc);
 
             // If $pop_data isn't an object, then there are no other PURF links on the page
             // #TODO account for case when $pop_data is an object
@@ -2146,7 +2146,7 @@ function smg_pop_up_auto_submit($token, $webform_nid, $leadworks_id, $referer_ni
     $referer_info = smg_pop_up_extract_referer_info($referer_nid, $extra, $extra_key); // Get info from the refering node
     smg_pop_up_inject_hidden_field_values($form, $referer_info); // Inject values into hidden fields
   }
-  
+
   smg_pop_up_remove_questions($form); // Remove certain hidden questions
 
   // If the adId url query string is set then use it, otherwise use the one provided in the field collection
@@ -2380,8 +2380,8 @@ function smg_pop_up_element_post_render($markup, $element){
  */
 function smg_pop_up_ckeditor_plugin(){
   return array(
-    'smg_pop_up' => array(
-      'name' => 'smgPopUp',
+    'smg_pop_up_plugin' => array(
+      'name' => 'smgPopUpPlugin',
       'desc' => 'Specify that a link should use a Pop Up Registration Form',
       'path' => drupal_get_path('module', 'smg_pop_up') . '/plugins/smg_pop_up/',
     ),
@@ -2394,7 +2394,7 @@ function smg_pop_up_ckeditor_plugin(){
 function smg_pop_up_wysiwyg_plugin($editor, $version){
   if($editor == 'ckeditor') {
     return array(
-      'smgPopUp' => array(
+      'smgPopUpPlugin' => array(
         'path' => drupal_get_path('module', 'smg_pop_up') . '/plugins/smg_pop_up',
         'load' => true,
         'extensions' => array('Link' => t('SMG PURF Link')),
